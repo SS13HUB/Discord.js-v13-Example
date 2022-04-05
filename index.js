@@ -2,7 +2,7 @@ const { Client, Collection, Intents } = require('discord.js');
 const handler = require("./handler/index");
 
 const client = new Client({
-    intents: [
+    intents: [  
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_BANS,
@@ -23,7 +23,7 @@ const client = new Client({
 const Discord = require('discord.js');
 
 // Call .env file to get Token
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = client;
 
@@ -31,11 +31,11 @@ module.exports = client;
 client.discord = Discord;
 client.commands = new Collection();
 client.slash = new Collection();
-client.config = require('./config')
+client.config = require('./config');
 
 // Records commands and events
 handler.loadEvents(client);
-handler.loadCommands(client);
+//handler.loadCommands(client);
 handler.loadSlashCommands(client);
 
 // Error Handling
@@ -43,9 +43,19 @@ handler.loadSlashCommands(client);
 process.on("uncaughtException", (err) => {
     console.log("Uncaught Exception: " + err);
 });
-  
+
 process.on("unhandledRejection", (reason, promise) => {
     console.log("[FATAL] Possibly Unhandled Rejection at: Promise ", promise, " reason: ", reason.message);
+});
+
+
+process.on('SIGINT', function() {
+    console.log("[SIGINT] Caught interrupt signal.");
+    client.user.setStatus("invisible");
+    /* client.guilds.cache.forEach(guild => {
+        if (client.playerManager.get(guild)) client.playerManager.leave(guild);
+    }); */
+    process.exit();
 });
 
 // Login Discord Bot Token
