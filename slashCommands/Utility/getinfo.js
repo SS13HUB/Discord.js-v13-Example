@@ -1,10 +1,15 @@
 
-async function _fetchInvite(invite) {
+async function _fetchInvite(client, invite) {
     try {
         const fetchedInvite = await client.fetchInvite(invite);
         return fetchedInvite;
     } catch (e) {
-        return false;
+        if (e.reason == 'Unknown Invite' || e.httpStatus == '404' || !e.ok) {
+            interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
+        } else {
+            throw e;
+        }
+        return e;
     }
 }
 
@@ -13,7 +18,7 @@ module.exports = {
     usage: '/getinfo <invite link>',
     options: [
         {
-            name: 'link',
+            name: 'invite',
             description: 'Invite link you want to me to lookup',
             type: 'STRING',
             required: true
@@ -24,38 +29,30 @@ module.exports = {
     ownerOnly: false,
     run: async (client, interaction) => {
         if (!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
-        const commandInt = interaction.options.getString("link");
-        if (!commandInt) {
+        const invite = interaction.options.getString("invite");
+        if (!invite) {
             return interaction.reply({ content: `There isn't any invite link!` });
         }
-        /* try {
-            await client.fetchInvite(args);
-        } catch (err) {
-            return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
-        } */
-        /* try {
-            const fetchedInvite = await client.fetchInvite(commandInt) //('https://discord.gg/djs')
-        } catch (e) {
-            if (e.reason == 'Unknown Invite' || !e.ok) { //e.httpStatus == '404') {
-                interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
-            } else {
-                throw e;
-            }
-        } */
-        
-        const fetchedInvite = await _fetchInvite(commandInt); //('https://discord.gg/djs')
-        if (fetchedInvite === false) {
-            return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
+        //const fetchedInvite = await _fetchInvite(client, invite); //('https://discord.gg/djs')
+        //const fetchedInvite = await client.fetchInvite(invite);
+        const fetchedInvite = await client.fetchInvite(invite)
+            .then((data) => {return data;})
+            //.catch(() => {return false;});
+        if (fetchedInvite === null) {
+            return interaction.reply({ content: `Error: ${fetchedInvite}` });
+            //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
         }
-        console.log(`Obtained invite with code: ${fetchedInvite.code}`);
-        console.log(fetchedInvite.ok);
-        const pingEmbed = new client.discord.MessageEmbed()
+        const embed = new client.discord.MessageEmbed()
             .setTitle(':chains: Invite link info')
-            .addField("Invite code", `${fetchedInvite.code}`, true)
+            .addField('Invite Code', `${fetchedInvite.code}`, true)
+            .addField('Server ID', `${fetchedInvite.guild.id}`, true)
+            .addField('Server Name', `${fetchedInvite.guild.name}`, true)
+            .addField('Server Member Count', `${fetchedInvite.presenceCount}`, true)
+            .addField('Invite Uses', `${fetchedInvite.uses}`, true)
             .setColor(client.config.embedColor)
             .setFooter({ text: `${client.config.embedfooterText}`, iconURL: `${client.user.displayAvatarURL()}` });
 
-        await interaction.reply({ embeds: [pingEmbed] });
+        await interaction.reply({ embeds: [embed] });
         
     },
 };

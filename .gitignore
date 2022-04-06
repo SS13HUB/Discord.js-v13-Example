@@ -198,3 +198,4 @@ $RECYCLE.BIN/
 
 package-lock.json
 .env
+config.js
