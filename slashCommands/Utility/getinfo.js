@@ -108,29 +108,34 @@ module.exports = {
             console.log(`[CMD] ${interaction.client.user.id} asks for invite info: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
             return interaction.reply({ embeds: [embed] });
         } */
-        //console.log(fetchedInvite);
-        const fetchedWidget = await fetchedInvite.guild.fetchWidget() //fetchWidgetSettings
-            .then((data) => {
-                return data;
-            })
-            .catch((e) => {
-                console.log(e);
-                return null;
-        });
-        //console.log(fetchedWidget);
-        //if (fetchedWidget !== null) {
-        const embedWidget = new client.discord.MessageEmbed()
-            .setColor(client.config.embedColor)
-            .setTitle(':mirror: ・ Widget info') // :anchor:
-            .setThumbnail(fetchedInvite.guild.iconURL())
-            .addField('id', `${fetchedWidget.id}`)
-            .addField('name', `${fetchedWidget.name}`)
-            .addField('instantInvite', `${await client.fetchInvite(fetchedWidget.instantInvite).then((d) => {return d}).catch((e) => {return e})}\n**Channels**:`)
-            for (let value of fetchedWidget.channels.map((channel) => [channel.id, channel.name])) {
-                embedWidget.addField(`\`<#${value[0]}>\``, `[${value[1]}](https://discord.com/channels/${fetchedInvite.guild.id}/${value[0]})`) //`${[...fetchedWidget.channels.keys()]}`)
-            }
-        //}
-        console.log(fetchedWidget.channels.map((channel) => [channel.id, channel.name]));
+        console.log(fetchedInvite.guild);
+        if (fetchedInvite.guild.fetchWidgetSettings().then((d) => {return d.enabled;}).catch((e) => {return e;})) {//.then(widget => console.log(`The widget is ${widget.enabled ? 'enabled' : 'disabled'}`))) {
+            const fetchedWidget = await fetchedInvite.guild.fetchWidget() //fetchWidgetSettings
+                .then((data) => {
+                    return data;
+                })
+                .catch((e) => {
+                    console.log(e);
+                    return null;
+            });
+            const embedWidget = new client.discord.MessageEmbed()
+                .setColor(client.config.embedColor)
+                .setTitle(':mirror: ・ Widget info') // :anchor:
+                .setThumbnail(fetchedInvite.guild.iconURL())
+                .addField('id', `${fetchedWidget.id}`)
+                .addField('name', `${fetchedWidget.name}`)
+                .addField('instantInvite', `${await client.fetchInvite(fetchedWidget.instantInvite).then((d) => {return d}).catch((e) => {return e})}\n**Channels**:`)
+                for (let value of fetchedWidget.channels.map((channel) => [channel.id, channel.name])) {
+                    embedWidget.addField(`\`<#${value[0]}>\``, `[${value[1]}](https://discord.com/channels/${fetchedInvite.guild.id}/${value[0]})`) //`${[...fetchedWidget.channels.keys()]}`)
+                }
+        } else {
+            const embedWidget = new client.discord.MessageEmbed()
+                .setColor(client.config.embedColor)
+                .setTitle(':mirror: ・ Widget info') // :anchor:
+                .addField('Widget Status', `N\\A`)
+        }
+        console.log(`[CMD] ${interaction.client.user.id} asks for widget info: ${fetchedWidget.id} (${fetchedInvite.guild.id})`);
+        //console.log(fetchedWidget.channels.map((channel) => [channel.id, channel.name]));
         //console.log(fetchedWidget.channels.mapValues((channel) => [channel.id, channel.name]));
         await interaction.reply({ embeds: [embedInvite, embedWidget] });
     },
