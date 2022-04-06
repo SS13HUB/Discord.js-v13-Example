@@ -33,5 +33,6 @@ module.exports = {
         } catch (e) {
             interaction.reply({ content: e.message });
         }
+        //console.log(`[CHAT] ${interaction.member.tag} asks for ${fetchedInvite.code} info.`);
     }
 }

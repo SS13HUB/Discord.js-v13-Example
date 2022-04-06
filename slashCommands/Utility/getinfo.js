@@ -1,5 +1,7 @@
 
-async function _fetchInvite(client, invite) {
+const { Permissions } = require('discord.js');
+
+/* async function _fetchInvite(client, invite) {
     try {
         const fetchedInvite = await client.fetchInvite(invite);
         return fetchedInvite;
@@ -11,7 +13,7 @@ async function _fetchInvite(client, invite) {
         }
         return e;
     }
-}
+} */
 
 module.exports = {
     name: "getinfo",
@@ -29,30 +31,61 @@ module.exports = {
     ownerOnly: false,
     run: async (client, interaction) => {
         if (!interaction.member.permissions.has("ADMINISTRATOR")) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
-        const invite = interaction.options.getString("invite");
-        if (!invite) {
-            return interaction.reply({ content: `There isn't any invite link!` });
-        }
-        //const fetchedInvite = await _fetchInvite(client, invite); //('https://discord.gg/djs')
-        //const fetchedInvite = await client.fetchInvite(invite);
-        const fetchedInvite = await client.fetchInvite(invite)
-            .then((data) => {return data;})
-            //.catch(() => {return false;});
-        if (fetchedInvite === null) {
-            return interaction.reply({ content: `Error: ${fetchedInvite}` });
+        const inviteCode = interaction.options.getString("invite");
+        if (!inviteCode) return interaction.reply({ content: `There isn't any invite link!` });
+        
+        //const fetchedInvite = await _fetchInvite(client, inviteCode); //('https://discord.gg/djs')
+        //const fetchedInvite = await client.fetchInvite(inviteCode);
+        const fetchedInvite = await client.fetchInvite(inviteCode)
+            .then((data) => {
+                return data;
+            })
+            .catch((e) => {
+                if (e.message == "Unknown Invite") return {"code": inviteCode, "message": e};
+                return null;
+        });
+        if (fetchedInvite.message == "Unknown Invite") {
+            const embed = new client.discord.MessageEmbed()
+                .setTitle(':chains: Invite link info')
+                .addField('Invite Code', `${fetchedInvite.code}`, true)
+                .addField('Invite Status', `[${fetchedInvite.message}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
+                .addField('Reason', `Provided invite link was killed or not created yet.`)
+                .setColor(client.config.embedColor)
+            return interaction.reply({ embeds: [embed] });
             //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
         }
-        const embed = new client.discord.MessageEmbed()
-            .setTitle(':chains: Invite link info')
-            .addField('Invite Code', `${fetchedInvite.code}`, true)
-            .addField('Server ID', `${fetchedInvite.guild.id}`, true)
-            .addField('Server Name', `${fetchedInvite.guild.name}`, true)
-            .addField('Server Member Count', `${fetchedInvite.presenceCount}`, true)
-            .addField('Invite Uses', `${fetchedInvite.uses}`, true)
-            .setColor(client.config.embedColor)
-            .setFooter({ text: `${client.config.embedfooterText}`, iconURL: `${client.user.displayAvatarURL()}` });
-
-        await interaction.reply({ embeds: [embed] });
+        if (fetchedInvite === null) {
+            return interaction.reply({ content: `Error: ${e}; message:${e.message}` });
+        }
         
+        const embed = new client.discord.MessageEmbed()
+            .setColor(client.config.embedColor)
+            .setTitle(':chains: Invite link info')
+            .setThumbnail(fetchedInvite.guild.iconURL())
+            .addField('Invite Code', `[${fetchedInvite.code}](${fetchedInvite.url})`) //discord://-/invite/discord-testers 
+            //.addField('Invite Type', `${fetchedInvite.type}`)
+            .addField('Expires at', `${(fetchedInvite.expiresTimestamp === 0 ? "never" : fetchedInvite.expiresTimestamp)}`)
+            //.addField('Invite max uses', `${fetchedInvite.maxUses}`)
+            .addField('Server: ID', `${fetchedInvite.guild.id}`)
+            .addField('Name', `${fetchedInvite.guild.name}`, true)
+            .addField('Server Members: Total, Online, Offline', 
+            `${fetchedInvite.memberCount}, ${fetchedInvite.presenceCount}, ${fetchedInvite.memberCount - fetchedInvite.presenceCount}`)
+            //.addField('Server Members Online', `${fetchedInvite.presenceCount}`)
+            //.addField('Server Members Offline', `${fetchedInvite.memberCount - fetchedInvite.presenceCount}`)
+            .addField('Inviter', `${fetchedInvite.inviter}`)
+            .addField('Open invite', `[Web browser](${fetchedInvite.url});\nSplash screen: <discord://-/invite/${fetchedInvite.code}>;\nDirect Go To: <discord://discord.gg/${fetchedInvite.code}>;`)
+            .addField(`Is this bot presense on server?`, `${(client.guilds.cache.get(fetchedInvite.guild.id) !== undefined ? "yes" : "no")}`)
+            .addField(`Is this bot can lookup invites on this server?`, `${(fetchedInvite.guild.me !== undefined ? (fetchedInvite.guild.me.permissions.has(Permissions.FLAGS.MANAGE_GUILD) ? "yes" : "no") : "not on server")}`); // MANAGE_GUILD
+            //.setImage(fetchedInvite.guild.iconURL())
+            //.setFooter({ text: `Open invite: [Web](${fetchedInvite.url}) [Splash screen](discord://-/invite/${fetchedInvite.code}) [Direct Go To](discord://discord.gg/${fetchedInvite.code})` });
+
+            console.log(`[CMD] ${interaction.client.user.id} asks for invite info: ${fetchedInvite.code} (${fetchedInvite.guild.id})`);
+            /* console.log(`${client.guilds.cache.get(854664216739577867)}`);
+            console.log(`${client.guilds.cache.get(fetchedInvite.guild.id)}`);
+            console.log(`${client.guilds.cache.get('854664216739577867')}`);
+            console.log(`${client.guilds.cache.get(toString(fetchedInvite.guild.id))}`);
+            console.log(`${client.guilds.cache.get("'"+fetchedInvite.guild.id+"'")}`); */
+            //console.log(fetchedInvite);
+        await interaction.reply({ embeds: [embed] });
     },
 };

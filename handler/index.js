@@ -15,9 +15,9 @@ const loadEvents = async function (client) {
             const event = require(`../events/${folder}/${file}`);
             
             if (event.name) {
-                console.log(chalk.bgBlueBright.black(` ✔️ => Event ${file} is being loaded `));
+                console.log(chalk.bgBlueBright.black(` ✔️ => Event is being loaded: "${file}"`));
             } else {
-                console.log(chalk.bgRedBright.black(` ❌ => Event ${file} missing a help.name or help.name is not in string `));
+                console.log(chalk.bgRedBright.black(` ❌ => Event missing a help.name or help.name is not in string: "${file}"`));
                 continue;
             }
             
@@ -45,9 +45,9 @@ const loadCommands = async function (client) {
             
             if (command.name) {
                 client.commands.set(command.name, command);
-                console.log(chalk.bgBlueBright.black(` ✔️ => Prefix Command ${file} is being loaded `));
+                console.log(chalk.bgBlueBright.black(` ✔️ => Prefix Command is being loaded: "${file}"`));
             } else {
-                console.log(chalk.bgRedBright.black(` ❌ => Prefix Command ${file} missing a help.name or help.name is not in string `));
+                console.log(chalk.bgRedBright.black(` ❌ => Prefix Command missing a help.name or help.name is not in string: "${file}"`));
                 continue;
             }
             
@@ -75,9 +75,9 @@ const loadSlashCommands = async function (client) {
             if (command.name) {
                 client.slash.set(command.name, command);
                 slash.push(command)
-                console.log(chalk.bgBlueBright.black(` ✔️ => SlashCommand ${file} is being loaded `));
+                console.log(chalk.bgBlueBright.black(` ✔️ => SlashCommand is being loaded: "${file}"`));
             } else {
-                console.log(chalk.bgRedBright.black(` ❌ => SlashCommand ${file} missing a help.name or help.name is not in string `));
+                console.log(chalk.bgRedBright.black(` ❌ => SlashCommand missing a help.name or help.name is not in string: "${file}"`));
                 continue;
             }
         }
