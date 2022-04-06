@@ -48,16 +48,20 @@ module.exports = {
         });
         if (fetchedInvite.message !== undefined) {
             if (fetchedInvite.message == "Unknown Invite" || fetchedInvite.message.code == 10006 || fetchedInvite.message.httpStatus == 404) {
-                const embed = new client.discord.MessageEmbed()
+                const embedInvite = new client.discord.MessageEmbed()
                     .setTitle(':chains: ・ Invite link info')
                     .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
-                    .addField('Reason', `[Provided invite link](https://discord.gg/${fetchedInvite.code}) was deleted or was not created yet.`)
-                    .addField('Possible Solution', `Ask for new one...
-                    OR: Check[WayBack Machine](https://web.archive.org/*/https://discord.gg/${fetchedInvite.code})... (ToDo)`)
+                    .addField('Reason', `[Provided invite link](https://discord.gg/${fetchedInvite.code}) was deleted by human, expired or not been created yet.`)
+                    .addField('Possible Solution', `Ask for new one... OR: 
+                    Check[WayBack Machine](https://web.archive.org/*/https://discord.gg/${fetchedInvite.code})... (ToDo)`)
                     .setColor(client.config.embedColor)
                 console.log(`[CMD] ${interaction.client.user.id} asks for invite info: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
-                return interaction.reply({ embeds: [embed] });
+                const embedWidget = new client.discord.MessageEmbed()
+                    .setColor(client.config.embedColor)
+                    .setTitle(':mirror: ・ Widget info') // :anchor:
+                    .addField('Widget Status', `N\\A`)
+                return interaction.reply({ embeds: [embedInvite, embedWidget] });
                 //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
             }
         }
@@ -104,6 +108,7 @@ module.exports = {
             console.log(`[CMD] ${interaction.client.user.id} asks for invite info: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
             return interaction.reply({ embeds: [embed] });
         } */
+        //console.log(fetchedInvite);
         const fetchedWidget = await fetchedInvite.guild.fetchWidget() //fetchWidgetSettings
             .then((data) => {
                 return data;
@@ -112,7 +117,7 @@ module.exports = {
                 console.log(e);
                 return null;
         });
-        console.log(fetchedWidget);
+        //console.log(fetchedWidget);
         /* const embedWidget = new client.discord.MessageEmbed()
             .setColor(client.config.embedColor)
             .setTitle(':mirror: ・ Widget info') // :anchor:
