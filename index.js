@@ -1,4 +1,4 @@
-const { Client, Collection, Intents, Permissions } = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
 const handler = require("./handler/index");
 
 const client = new Client({
