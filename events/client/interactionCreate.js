@@ -7,7 +7,7 @@ module.exports = {
      */
     async execute(interaction, client) {
         //if (!interaction) return; // for fix "Invalid interaction application command" error
-        if (!interaction.isCommand()) return; // !interaction.isButton()
+        if (!interaction.isCommand() && !interaction.isButton()) return;
         
         const command = client.slash.get(interaction.commandName);
         if (!command) return interaction.reply({ content: 'an Error check console' });
