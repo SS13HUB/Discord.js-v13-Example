@@ -10,8 +10,8 @@ module.exports = {
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId('primary')
-                    .setLabel('Primary')
+                    .setCustomId('pingbutton_primary')
+                    .setLabel('Click on me!')
                     .setStyle('PRIMARY'),
             );
 
