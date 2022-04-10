@@ -1,5 +1,6 @@
 const { Client, Collection, Intents } = require('discord.js');
 const handler = require("./handler/index");
+const chalkMy = require("./src/chalk");
 
 const client = new Client({
     intents: [  
@@ -40,17 +41,17 @@ handler.loadSlashCommands(client);
 
 // Error Handling
 
-process.on("uncaughtException", (err) => {
-    console.log("Uncaught Exception: " + err);
+process.on("uncaughtException", (e) => {
+    console.log(chalkMy.exct, `Uncaught Exception: ${e}`);
 });
 
 process.on("unhandledRejection", (reason, promise) => {
-    console.log("[FATAL] Possibly Unhandled Rejection at: Promise ", promise, " reason: ", reason.message);
+    console.log(chalkMy.fatal, `Possibly Unhandled Rejection at: Promise ${promise} reason: ${reason.message}`);
 });
 
 
-process.on('SIGINT', function() {
-    console.log("[SIGINT] Caught interrupt signal.");
+process.on('SIGINT', () => {
+    console.log(chalkMy.exit, `Caught interrupt signal.`);
     client.user.setStatus("invisible");
     /* client.guilds.cache.forEach(guild => {
         if (client.playerManager.get(guild)) client.playerManager.leave(guild);
@@ -58,5 +59,5 @@ process.on('SIGINT', function() {
     process.exit();
 });
 
-// Login Discord Bot Token
+// Login Discord via Bot Token
 client.login(process.env.TOKEN);

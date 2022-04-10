@@ -90,13 +90,20 @@ const loadSlashCommands = async function (client) {
         //    .get("YOUR_GUILD_ID")
         //    .commands.set(slash);
 
-        const register_or_purge = 0;
-        if (register_or_purge) {
-            console.log(chalkMy.log, chalkMy.ok, `Register Slash Commands for all the guilds.`);
+        const register = Boolean(1); // or purge, boolean in integer
+        if (register) {
+            console.log(chalkMy.load, `Registering Slash Commands for all guilds.`);
             await client.application.commands.set(slash);
+            /* await client.application.commands.fetch()
+                .then(() => console.log(chalkMy.log, chalkMy.ok, `Registered Slash Commands for all guilds:\n`, slash.keys())); */
+                //((command) => console.log(command.values()));
         } else {
             console.log(chalkMy.log, chalkMy.ok, `Purging all slash commands from old version of bot.`);
             // This takes ~1 hour to update
+            await client.application.commands.fetch().then((command) => {
+                console.log(command);
+                command.delete();
+            });
             await client.application.commands.set([]);
             // This updates immediately
             client.guilds.cache.get(process.env.LOG_SERVER_ID).commands.set([]);
