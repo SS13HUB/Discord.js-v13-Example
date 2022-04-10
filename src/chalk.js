@@ -9,4 +9,5 @@ module.exports = {
     exit  : chalk.bgRedBright.black(`[SIGINT]`),
     fatal : chalk.bgRedBright.black(`[FATAL]`),
     exct  : chalk.bgRedBright.black(`[Exception]`),
+    event : chalk.bgWhiteBright.black(`[EVENT]`),
 }
