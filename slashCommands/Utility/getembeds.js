@@ -1,26 +1,20 @@
 // Example of how to make a SlashCommand
 
 module.exports = {
-    name: "debug_command",
-    category: "Debug",
+    name: "getembeds",
+    category: "Utility",
     options: [
         {
-            name: 'param1',
-            description: 'no desc.',
+            name: 'id',
+            description: 'ID of message you want to me to lookup',
             type: 'STRING',
-            required: false
-        },
-        {
-            name: 'param2',
-            description: 'no desc.',
-            type: 'STRING',
-            required: false
+            required: true
         }
     ],
-    description: "Not for public use, sorry.",
+    description: "Get embeds from message.",
     ownerOnly: true,
     run: async (client, interaction) => {
-        const messageId = interaction.options.getString("param1"); // "id"
+        const messageId = interaction.options.getString("id");
         if (!messageId) return interaction.reply({ content: `There isn't any message IDs!` });
 
         await msg.channel.messages.fetch(messageId)
@@ -31,5 +25,6 @@ module.exports = {
             .setDescription(`In console.`);
 
         await interaction.reply({ embeds: [getEmbedsEmbed] });
+
     },
 };
