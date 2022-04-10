@@ -1,3 +1,6 @@
+
+const chalkMy = require("./../../src/chalk");
+
 module.exports = {
     name: 'ready',
     once: true,
@@ -14,6 +17,7 @@ module.exports = {
         });
         
         // Send a message on the console
-        console.log(`[LOG] ${client.user.tag} is now online!\n[LOG] Bot serving on Ready to serve in ${client.guilds.cache.size} servers\n[LOG] Bot serving ${client.users.cache.size} users`);
+        console.log(chalkMy.load, `We are now online! Logged in as "${client.user.tag}"`);
+        console.log(chalkMy.log, `Ready to serve in servers: ${client.guilds.cache.size}; serving online users: ${client.users.cache.size}.`);
     }
 }
