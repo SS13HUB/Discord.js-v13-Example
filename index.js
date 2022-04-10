@@ -1,4 +1,8 @@
+
 const { Client, Collection, Intents } = require('discord.js');
+const Discord = require('discord.js');
+const discordModals = require('discord-modals');
+
 const handler = require("./handler/index");
 const chalkMy = require("./src/chalk");
 
@@ -21,7 +25,7 @@ const client = new Client({
     ],
 });
 
-const Discord = require('discord.js');
+discordModals(client);
 
 // Call .env file to get Token
 require('dotenv').config();
