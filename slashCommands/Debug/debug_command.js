@@ -1,4 +1,5 @@
-// Example of how to make a SlashCommand
+
+const { Permissions, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
     name: "debug_command",
@@ -21,7 +22,7 @@ module.exports = {
     ownerOnly: true,
     run: async (client, interaction) => { // Permissions.FLAGS.ADMINISTRATOR?
         if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
-        const inviteCode = interaction.options.getString("invite");
+        const inviteCode = interaction.options.getString("param1");
         if (!inviteCode) return interaction.reply({ content: `There isn't any invite link!` });
         
         //const fetchedInvite = await _fetchInvite(client, inviteCode); //('https://discord.gg/djs')
@@ -56,14 +57,14 @@ module.exports = {
             .setColor(client.config.embedColor)
             .setTitle(':chains: ・ Invite link to button') // :anchor:
             .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
-            .setDescription(`Check button below.`);
+            //.setDescription(`Check button below.`);
 
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId('invite2button_primary')
+                    //.setCustomId('invite2button_primary')
                     .setLabel(fetchedInvite.code)
-                    .setURL(`${fetchedInvite.url}?with_counts=true&with_expiration=true`)
+                    .setURL(fetchedInvite.url) //`${fetchedInvite.url}?with_counts=true&with_expiration=true`
                     .setStyle('LINK'),
             );
 
