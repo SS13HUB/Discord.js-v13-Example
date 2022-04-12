@@ -17,6 +17,10 @@
     "fs": "^0.0.1-security",
     "glob": "^7.2.0"
   },
+  "engines": {
+    "node": "v17.8.0",
+    "npm": "8.3.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Expectatives/Discord.js-v13-Example.git"
