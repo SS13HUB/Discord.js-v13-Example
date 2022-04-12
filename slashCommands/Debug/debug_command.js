@@ -67,31 +67,32 @@ module.exports = {
                     .setStyle('LINK'),
                     new MessageButton()
                     //.setCustomId('invite2button_primary')
-                    .setLabel(fetchedInvite.url)
+                    .setLabel(fetchedInvite.code)
                     .setURL(fetchedInvite.url) //`${fetchedInvite.url}?with_counts=true&with_expiration=true`
                     .setStyle('LINK'),
                 new MessageButton()
-                    .setLabel("http://discord.gg/" + fetchedInvite.code)
+                    .setLabel(fetchedInvite.code)
                     .setURL("http://discord.gg/" + fetchedInvite.code)
                     .setStyle('LINK'),
                 new MessageButton()
-                    .setLabel("http://discord.com/invite/" + fetchedInvite.code)
+                    .setLabel(fetchedInvite.code)
                     .setURL("http://discord.com/invite/" + fetchedInvite.code)
                     .setStyle('LINK'),
                 new MessageButton()
-                    .setLabel("http://discord.com/invite/HMwbBZyEum")
+                    .setLabel(fetchedInvite.code + ";")
                     .setURL("http://discord.com/invite/HMwbBZyEum")
                     .setStyle('LINK'),
+                
                 new MessageButton()
-                    .setLabel("https://discord.gg/" + fetchedInvite.code)
+                    .setLabel(fetchedInvite.code)
                     .setURL("https://discord.gg/" + fetchedInvite.code)
                     .setStyle('LINK'),
                 new MessageButton()
-                    .setLabel("https://discord.com/invite/" + fetchedInvite.code)
+                    .setLabel(fetchedInvite.code)
                     .setURL("https://discord.com/invite/" + fetchedInvite.code)
                     .setStyle('LINK'),
                 new MessageButton()
-                    .setLabel("https://discord.com/invite/HMwbBZyEum")
+                    .setLabel(fetchedInvite.code)
                     .setURL("https://discord.com/invite/HMwbBZyEum")
                     .setStyle('LINK'),
                 
