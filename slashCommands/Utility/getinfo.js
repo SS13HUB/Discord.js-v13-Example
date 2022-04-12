@@ -21,13 +21,13 @@ module.exports = {
     options: [
         {
             name: 'invite',
-            description: 'Invite link you want to me to lookup',
+            description: 'Invite link you want to me to lookup\n(possiable formats: "https://discord.com/invite/CODE", "https://discord.gg/CODE" or just "CODE" without quotes)',
             type: 'STRING',
             required: true
         }
     ],
     category: "Utility",
-    description: "I will try to get information about your invite link.",
+    description: "I will try to get information about your invite link (few possiable formats avaliable, check option description).",
     ownerOnly: false,
     run: async (client, interaction) => { // Permissions.FLAGS.ADMINISTRATOR?
         if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
@@ -122,7 +122,7 @@ module.exports = {
             console.log(`[CMD] ${interaction.user.id} asks for invite info: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
             return interaction.reply({ embeds: [embed] });
         } */
-        console.log(fetchedInvite.guild);
+        //console.log(fetchedInvite.guild);
         if (fetchedInvite.guild !== undefined) {
             if (fetchedInvite.guild.widgetEnabled) { //fetchWidgetSettings().then((d) => {return d.enabled;}).catch((e) => {return e;})) {
                 //.then(widget => console.log(`The widget is ${widget.enabled ? 'enabled' : 'disabled'}`))) {

@@ -11,7 +11,7 @@ module.exports = {
     async execute(modal, interaction, client) {
         //let modal = interaction.fields[0];
         console.log(chalkMy.event, `Event fired: "modalSubmit".`);
-        console.log(modal);
+        //console.log(modal);
         if (modal.customId === 'modal-customid') {
             const firstResponse = modal.getTextInputValue('textinput-customid');
             //client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ content: `modalSubmit event fired`});

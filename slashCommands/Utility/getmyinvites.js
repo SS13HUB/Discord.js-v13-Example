@@ -46,7 +46,7 @@ module.exports = {
             }
         }
         else {
-            guildInvitesEmbed.setDescription(`No links detected by you as filer.`)
+            guildInvitesEmbed.setDescription(`No links detected by you as filer.`);
         }
 
     console.log(`[CMD] ${interaction.user.id} asks for invite fetch: (${interaction.guild.id})`);
