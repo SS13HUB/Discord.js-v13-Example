@@ -15,7 +15,7 @@ module.exports = {
             if (!command) return interaction.reply({ content: 'Error occured, check console.' });
             
             if (command.ownerOnly) {
-                if (interaction.user.id !== client.config.ownerID) {
+                if (interaction.user.id !== process.env.OWNER_ID) {
                     return interaction.reply({ content: "This command only for Bot Owner!", ephemeral: true });
                 }
             }

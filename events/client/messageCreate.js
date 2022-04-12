@@ -13,7 +13,7 @@ module.exports = {
         if (!command) return;
         
         if (command.ownerOnly) {
-            if (message.author.id !== client.config.ownerID) {
+            if (message.author.id !== process.env.OWNER_ID) {
                 return message.reply({ content: "This command only for Bot Owner!", allowedMentions: { repliedUser: false } });
             }
         }
