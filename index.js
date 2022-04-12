@@ -54,8 +54,17 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 
-process.on('SIGINT', () => { // + "SIGTERM", in heroku
+process.on('SIGINT', () => {
     console.log(chalkMy.exit, `Caught interrupt signal.`);
+    client.user.setStatus("invisible");
+    /* client.guilds.cache.forEach(guild => {
+        if (client.playerManager.get(guild)) client.playerManager.leave(guild);
+    }); */
+    process.exit();
+});
+
+process.on('SIGTERM', () => {
+    console.log(chalkMy.exit, `Caught termination signal.`);
     client.user.setStatus("invisible");
     /* client.guilds.cache.forEach(guild => {
         if (client.playerManager.get(guild)) client.playerManager.leave(guild);

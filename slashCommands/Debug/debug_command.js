@@ -62,11 +62,42 @@ module.exports = {
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
+                    .setLabel("google.ru")
+                    .setURL("https://www.google.ru/")
+                    .setStyle('LINK'),
+                    new MessageButton()
                     //.setCustomId('invite2button_primary')
-                    .setLabel(fetchedInvite.code)
+                    .setLabel(fetchedInvite.url)
                     .setURL(fetchedInvite.url) //`${fetchedInvite.url}?with_counts=true&with_expiration=true`
                     .setStyle('LINK'),
+                new MessageButton()
+                    .setLabel("http://discord.gg/" + fetchedInvite.code)
+                    .setURL("http://discord.gg/" + fetchedInvite.code)
+                    .setStyle('LINK'),
+                new MessageButton()
+                    .setLabel("http://discord.com/invite/" + fetchedInvite.code)
+                    .setURL("http://discord.com/invite/" + fetchedInvite.code)
+                    .setStyle('LINK'),
+                new MessageButton()
+                    .setLabel("http://discord.com/invite/HMwbBZyEum")
+                    .setURL("http://discord.com/invite/HMwbBZyEum")
+                    .setStyle('LINK'),
+                new MessageButton()
+                    .setLabel("https://discord.gg/" + fetchedInvite.code)
+                    .setURL("https://discord.gg/" + fetchedInvite.code)
+                    .setStyle('LINK'),
+                new MessageButton()
+                    .setLabel("https://discord.com/invite/" + fetchedInvite.code)
+                    .setURL("https://discord.com/invite/" + fetchedInvite.code)
+                    .setStyle('LINK'),
+                new MessageButton()
+                    .setLabel("https://discord.com/invite/HMwbBZyEum")
+                    .setURL("https://discord.com/invite/HMwbBZyEum")
+                    .setStyle('LINK'),
+                
             );
+
+        console.log("row:", row);
 
         /* if (client.guilds.cache.get(fetchedInvite.guild.id) === undefined) {
             const embedWidget = new client.discord.MessageEmbed()
