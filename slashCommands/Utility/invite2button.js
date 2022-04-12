@@ -66,7 +66,7 @@ module.exports = {
             .setColor(client.config.embedColor)
             .setTitle(':chains: ・ Invite link to button') // :anchor:
             .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
-            .setDescription(`Check button below.`);
+            //.setDescription(`Check button below.`);
 
         const row = new MessageActionRow()
             .addComponents(

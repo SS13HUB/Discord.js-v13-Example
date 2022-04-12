@@ -54,7 +54,7 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 
-process.on('SIGINT', () => {
+process.on('SIGINT', () => { // + "SIGTERM", in heroku
     console.log(chalkMy.exit, `Caught interrupt signal.`);
     client.user.setStatus("invisible");
     /* client.guilds.cache.forEach(guild => {
