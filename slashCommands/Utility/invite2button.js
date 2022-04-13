@@ -54,7 +54,7 @@ module.exports = {
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
                     .setColor(client.config.embedColor)
                 console.log(`[CMD] ${interaction.user.id} trigger invite2button: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
-                return interaction.reply({ embeds: [inviteToButtonInvite] });
+                return interaction.reply({ embeds: [inviteToButtonInvite], ephemeral: true });
                 //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
             }
         }
@@ -91,6 +91,6 @@ module.exports = {
         console.log(`[CMD] ${interaction.user.id} trigger invite2button: (${fetchedInvite.code})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
         //console.log(fetchedWidget.channels.map((channel) => [channel.id, channel.name]));
         //console.log(fetchedWidget.channels.mapValues((channel) => [channel.id, channel.name]));
-        await interaction.reply({ embeds: [inviteToButtonInvite], components: [row] });
+        await interaction.reply({ content: fetchedInvite.url, embeds: [inviteToButtonInvite], components: [row] });
     },
 };

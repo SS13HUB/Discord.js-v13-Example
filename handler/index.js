@@ -90,8 +90,8 @@ const loadSlashCommands = async function (client) {
         //    .get("YOUR_GUILD_ID")
         //    .commands.set(slash);
 
-        const register = Boolean(1); // or purge, boolean in integer
-        if (register) {
+        const register = 1; // or purge, boolean in integer
+        if (Boolean(register)) {
             console.log(chalkMy.load, `Registering Slash Commands for all guilds.`);
             await client.application.commands.set(slash);
             /* await client.application.commands.fetch()

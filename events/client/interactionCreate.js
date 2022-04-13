@@ -38,6 +38,7 @@ module.exports = {
             }
             
         } else if (interaction.isButton()) {
+            // if (modal.customId === 'modal-customid') {
             //console.log(interaction);
             return interaction.reply({ content: "Button received.", ephemeral: true });
         }
