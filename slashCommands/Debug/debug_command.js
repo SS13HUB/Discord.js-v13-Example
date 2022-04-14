@@ -65,7 +65,8 @@ module.exports = {
                     .setLabel("google.ru")
                     .setURL("https://www.google.ru/")
                     .setStyle('LINK'),
-                    new MessageButton()
+                
+                new MessageButton()
                     //.setCustomId('invite2button_primary')
                     .setLabel(fetchedInvite.code)
                     .setURL(fetchedInvite.url) //`${fetchedInvite.url}?with_counts=true&with_expiration=true`
@@ -98,7 +99,7 @@ module.exports = {
                 
             );
 
-        console.log("row:", row);
+        //console.log("row:", row);
 
         /* if (client.guilds.cache.get(fetchedInvite.guild.id) === undefined) {
             const embedWidget = new client.discord.MessageEmbed()
