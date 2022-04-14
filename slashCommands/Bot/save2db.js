@@ -3,13 +3,13 @@ const { Permissions, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
     name: "save2db",
-    category: "Database",
+    category: "Bot",
     options: [
         {
             name: 'invite_or_ID',
             description: 'invite (link or code), channel ID or server ID.', // ToDo: .fetchWebhook(idtoken)
             type: 'STRING',
-            required: false
+            required: true
         }
     ],
     description: "I will try to fetch it and save information in my database.",
