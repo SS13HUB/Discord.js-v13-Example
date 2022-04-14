@@ -29,7 +29,7 @@ module.exports = {
     category: "Utility",
     description: "I will try to get information about your invite link (few possiable formats avaliable, check option description).",
     ownerOnly: false,
-    run: async (client, interaction) => { // Permissions.FLAGS.ADMINISTRATOR?
+    run: async (client, interaction) => {
         if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteCode = interaction.options.getString("invite");
         if (!inviteCode) return interaction.reply({ content: `There isn't any invite link!` });
