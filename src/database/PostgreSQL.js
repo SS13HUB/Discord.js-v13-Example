@@ -4,37 +4,70 @@ const {sql} = require('@databases/pg');
 require('dotenv').config(); //({ path: './../../.env' });
 const connectionString = process.env.DB_URL;
 
+const base_path = './src/database/';
+const db_create = base_path + 'db_create.sql';
+const db_drop   = base_path + 'db_drop.sql';
+const db_insert = base_path + 'db_insert.sql';
+const db_select = base_path + 'db_select.sql';
+
+const settings = {
+    "db_recreate": true
+}
+
+//var sql = fs.readFileSync(db_create).toString();
 console.clear();
+//console.log(sql.file(db_create));
 
-const pool = new Pool({
-  connectionString,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+function doRequest(pool, _path) {
+    return new Promise((resolve, reject) => {
+        pool.query(
+            sql.file(_path)._items[0].text, (err, res, fields) => {
+            if (err) {console.error(err); process.exitCode = 1; return reject(error);} // throw err;
+            if (res) resolve("OK?"); //console.log("OK?\n", res);
+            //console.log(results[0].solution);
+        });
+    });
+}
 
-//console.log(sql.file('./src/database/PostgreSQL_create.sql'));
-pool.query(
-    sql.file('./src/database/PostgreSQL_create.sql')._items[0].text, (err, res) => {
-    if (err) {console.error(err); process.exitCode = 1;}
-    if (res) console.log("OK?\n", res);
-    pool.end();
-});
+async function mainLoop() {
+    const pool = new Pool({
+        connectionString,
+        ssl: {
+            rejectUnauthorized: false,
+        },
+    });
 
-/* const client = new Client({
-  connectionString,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-})
-client.connect()
-client.query('SELECT NOW()', (err, res) => {
-  console.log(err, res)
-  client.end()
-}) */
+    if (settings["db_recreate"]) {
+        console.log("db_recreate:");
+        await doRequest(pool, db_drop)
+            .then((val) => {console.log(val);})
+            .catch((err) => {console.error(err);});
+    }
+
+    console.log("db_create:");
+    await doRequest(pool, db_create)
+        .then((val) => {console.log(val);})
+        .catch((err) => {console.error(err);});
 
 
+    /* const client = new Client({
+    connectionString,
+    ssl: {
+        rejectUnauthorized: false,
+    },
+    })
+    client.connect()
+    client.query('SELECT NOW()', (err, res) => {
+    console.log(err, res)
+    client.end()
+    }) */
 
+    await pool.end()
+    .then((val) => {console.log(val);})
+    .catch((err) => {console.error(err);});
+};
+
+mainLoop();
 
 
 
