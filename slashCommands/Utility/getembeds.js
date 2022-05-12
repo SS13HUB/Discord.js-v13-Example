@@ -17,7 +17,7 @@ module.exports = {
         const messageId = interaction.options.getString("id");
         if (!messageId) return interaction.reply({ content: `There isn't any message IDs!` });
 
-        await msg.channel.messages.fetch(messageId)
+        await interaction.channel.messages.fetch(messageId)
             .then(message => console.log(message.content))
             .catch(console.error);
 

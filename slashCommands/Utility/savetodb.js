@@ -2,7 +2,8 @@
 const { Permissions, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
-    name: "save2db",
+    name: "savetodb",
+    usage: '/savetodb <invite link or ID>',
     category: "Utility",
     options: [
         {

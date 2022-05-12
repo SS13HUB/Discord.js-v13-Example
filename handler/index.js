@@ -74,6 +74,17 @@ const loadSlashCommands = async function (client) {
             const command = require(`../slashCommands/${folder}/${file}`);
             
             if (command.name) {
+                // https://discord.com/developers/docs/interactions/application-commands
+                if (command.name < 1 || command.name > 32) {
+                    console.log(chalkMy.err, `Warning: Command name not in range 1-32, skipping:`);
+                    console.log(command);
+                    continue;
+                }
+                if (command.description < 1 || command.description > 100) {
+                    console.log(chalkMy.err, `Warning: Command description not in range 1-100, skipping:`);
+                    console.log(command);
+                    continue;
+                }
                 client.slash.set(command.name, command);
                 slash.push(command);
                 console.log(chalkMy.log, chalkMy.ok, `SlashCommand is being loaded: "${file}"`);

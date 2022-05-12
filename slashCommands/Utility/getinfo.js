@@ -21,13 +21,13 @@ module.exports = {
     options: [
         {
             name: 'invite',
-            description: 'Invite link you want to me to lookup\n(possiable formats: "https://discord.com/invite/CODE", "https://discord.gg/CODE" or just "CODE" without quotes)',
+            description: 'Invite link you want to me to lookup\n("https://discord.gg/CODE" or "CODE" without quotes)',
             type: 'STRING',
             required: true
         }
     ],
     category: "Utility",
-    description: "I will try to get information about your invite link (few possiable formats avaliable, check option description).",
+    description: "I will try to get information about your invite link (few possiable formats avaliable).",
     ownerOnly: false,
     run: async (client, interaction) => {
         if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });

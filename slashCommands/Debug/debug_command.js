@@ -44,7 +44,7 @@ module.exports = {
                     .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
                     .setColor(client.config.embedColor)
-                console.log(`[CMD] ${interaction.user.id} trigger invite2button: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
+                console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
                 return interaction.reply({ embeds: [inviteToButtonInvite] });
                 //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
             }
@@ -67,7 +67,7 @@ module.exports = {
                     .setStyle('LINK'),
                 
                 new MessageButton()
-                    //.setCustomId('invite2button_primary')
+                    //.setCustomId('invitetobutton_primary')
                     .setLabel(fetchedInvite.code)
                     .setURL(fetchedInvite.url) //`${fetchedInvite.url}?with_counts=true&with_expiration=true`
                     .setStyle('LINK'),
@@ -109,10 +109,10 @@ module.exports = {
                 `[URL](https://discord.com/widget?id=${fetchedInvite.guild.id}&theme=dark), [API 1](https://discord.com/api/guilds/${fetchedInvite.guild.id}/widget.json), [API 2](https://discord.com/api/guilds/${fetchedInvite.guild.id}/embed.json)`, true)
                 .addField('Widget Status', `-`, true)
                 .setThumbnail(fetchedInvite.guild.iconURL())
-            console.log(`[CMD] ${interaction.user.id} trigger invite2button: (${fetchedInvite})`);
+            console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: (${fetchedInvite})`);
             return interaction.reply({ embeds: [embed] });
         } */
-        console.log(`[CMD] ${interaction.user.id} trigger invite2button: (${fetchedInvite.code})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
+        console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: (${fetchedInvite.code})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
         //console.log(fetchedWidget.channels.map((channel) => [channel.id, channel.name]));
         //console.log(fetchedWidget.channels.mapValues((channel) => [channel.id, channel.name]));
         await interaction.reply({ embeds: [inviteToButtonInvite], components: [row] });

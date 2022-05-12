@@ -16,18 +16,18 @@ const { Permissions } = require('discord.js');
 } */
 
 module.exports = {
-    name: "invite2button",
-    usage: '/invite2button <invite link>',
+    name: "invitetobutton",
+    usage: '/invitetobutton <invite link>',
     options: [
         {
             name: 'invite',
-            description: 'Invite link you want to me to convert to button\n(possiable formats: "https://discord.com/invite/CODE", "https://discord.gg/CODE" or just "CODE" without quotes)',
+            description: 'Invite you want to me to convert to button\n("https://discord.gg/CODE" or "CODE" without quotes)',
             type: 'STRING',
             required: true
         }
     ],
     category: "Utility",
-    description: "I will try to convert your invite link to button (few possiable formats avaliable, check option description).",
+    description: "I will try to convert your invite link to button (few possiable formats avaliable).",
     ownerOnly: false,
     run: async (client, interaction) => {
         if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
@@ -53,7 +53,7 @@ module.exports = {
                     .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
                     .setColor(client.config.embedColor)
-                console.log(`[CMD] ${interaction.user.id} trigger invite2button: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
+                console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
                 return interaction.reply({ embeds: [inviteToButtonInvite], ephemeral: true });
                 //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
             }
@@ -71,7 +71,7 @@ module.exports = {
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId('invite2button_primary')
+                    .setCustomId('invitetobutton_primary')
                     .setLabel(fetchedInvite.code)
                     .setURL(`${fetchedInvite.url}?with_counts=true&with_expiration=true`)
                     .setStyle('LINK'),
@@ -85,10 +85,10 @@ module.exports = {
                 `[URL](https://discord.com/widget?id=${fetchedInvite.guild.id}&theme=dark), [API 1](https://discord.com/api/guilds/${fetchedInvite.guild.id}/widget.json), [API 2](https://discord.com/api/guilds/${fetchedInvite.guild.id}/embed.json)`, true)
                 .addField('Widget Status', `-`, true)
                 .setThumbnail(fetchedInvite.guild.iconURL())
-            console.log(`[CMD] ${interaction.user.id} trigger invite2button: (${fetchedInvite})`);
+            console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: (${fetchedInvite})`);
             return interaction.reply({ embeds: [embed] });
         } */
-        console.log(`[CMD] ${interaction.user.id} trigger invite2button: (${fetchedInvite.code})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
+        console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: (${fetchedInvite.code})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
         //console.log(fetchedWidget.channels.map((channel) => [channel.id, channel.name]));
         //console.log(fetchedWidget.channels.mapValues((channel) => [channel.id, channel.name]));
         await interaction.reply({ content: fetchedInvite.url, embeds: [inviteToButtonInvite], components: [row] });
