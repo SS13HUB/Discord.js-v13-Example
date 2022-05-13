@@ -52,7 +52,8 @@ process.on("uncaughtException", (e) => {
 
 process.on("unhandledRejection", (reason, promise) => {
     console.log(chalkMy.fatal, `Possibly Unhandled Rejection:`);
-    console.log(promise, reason);
+    console.log(promise);
+    console.log(reason);
     //console.log(`httpStatus: ${reason.httpStatus}, reason: ${reason.message}`);
     // ↓ for "DiscordAPIError: Invalid Form Body"
     if (reason.code == 50035 || reason.message == "Invalid Form Body") {

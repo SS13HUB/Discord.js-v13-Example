@@ -22,25 +22,26 @@ module.exports = {
 
         if (typeof param1 !== "string") para1 = `${param1}`;
 
-        var isInvite = client.fetchInvite(param1)
+        var isInvite = await client.fetchInvite(param1)
             .then((d) => {return d})
             .catch(() => {return false});
 
-        var isChannel = message.guild.channels.fetch(param1)
+        var isChannel = await client.channels.fetch(param1)
             .then((d) => {return d})
             .catch(() => {return false});
 
-        var isServer = client.guilds.fetch(param1)
+        var isServer = await client.guilds.fetch(param1)
             .then((d) => {return d})
             .catch(() => {return false});
 
         const savetodatabaseEmbed = new client.discord.MessageEmbed()
             .setTitle('Save to DB')
-            .addField("isInvite", `${isInvite}`)
-            .addField("isChannel", `${isChannel}`)
-            .addField("isServer", `${isServer}`)
+            .addField("isInvite", `${isInvite ? "yes" : "No invite detected"}`)
+            .addField("isChannel", `${isChannel ? "yes" : "No channel detected"}`)
+            .addField("isServer", `${isServer ? "yes" : "No server detected"}`)
             .setColor(client.config.embedColor);
 
+        //console.debug(isInvite, isChannel, isServer);
         console.log(`[CMD] ${interaction.user.id} trigger savetodatabaseEmbed: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
         //console.log(fetchedWidget.channels.map((channel) => [channel.id, channel.name]));
         //console.log(fetchedWidget.channels.mapValues((channel) => [channel.id, channel.name]));
