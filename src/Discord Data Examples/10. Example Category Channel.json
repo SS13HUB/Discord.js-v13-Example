@@ -1,0 +1,11 @@
+{
+  "name": "my-category",
+  "type": 4,
+  "id": 1
+}
+{
+  "name": "naming-things-is-hard",
+  "type": 0,
+  "id": 2,
+  "parent_id": 1
+}

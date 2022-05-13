@@ -16,9 +16,9 @@ const loadEvents = async function (client) {
             const event = require(`../events/${folder}/${file}`);
             
             if (event.name) {
-                console.log(chalkMy.log, chalkMy.ok, `Event is being loaded: "${file}"`);
+                console.log(chalkMy.load, chalkMy.ok, `Event: "${file}"`); // Event is being loaded:
             } else {
-                console.log(chalkMy.log, chalkMy.err, `Event missing a help.name or help.name is not in string: "${file}"`);
+                console.log(chalkMy.load, chalkMy.err, `Event missing a help.name or help.name is not in string: "${file}"`);
                 continue;
             }
             
@@ -46,9 +46,9 @@ const loadEvents = async function (client) {
             
             if (command.name) {
                 client.commands.set(command.name, command);
-                console.log(chalkMy.log, chalkMy.ok, `Prefix Command is being loaded: "${file}"`);
+                console.log(chalkMy.load, chalkMy.ok, `Prefix Command: "${file}"`); // Prefix Command is being loaded:
             } else {
-                console.log(chalkMy.log, chalkMy.err, `Prefix Command missing a help.name or help.name is not in string: "${file}"`);
+                console.log(chalkMy.load, chalkMy.err, `Prefix Command missing a help.name or help.name is not in string: "${file}"`);
                 continue;
             }
             
@@ -87,9 +87,9 @@ const loadSlashCommands = async function (client) {
                 }
                 client.slash.set(command.name, command);
                 slash.push(command);
-                console.log(chalkMy.log, chalkMy.ok, `SlashCommand is being loaded: "${file}"`);
+                console.log(chalkMy.load, chalkMy.ok, `SlashCommand: "${file}"`); // SlashCommand is being loaded:
             } else {
-                console.log(chalkMy.log, chalkMy.err, `SlashCommand missing a help.name or help.name is not in string: "${file}"`);
+                console.log(chalkMy.load, chalkMy.err, `SlashCommand missing a help.name or help.name is not in string: "${file}"`);
                 continue;
             }
         }

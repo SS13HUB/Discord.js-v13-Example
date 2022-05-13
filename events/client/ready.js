@@ -25,7 +25,7 @@ module.exports = {
         });
         
         // Send a message on the console
-        console.log(chalkMy.load, `We are now online! Logged in as "${client.user.tag}"`);
+        console.log(chalkMy.log, chalkMy.ok, `We are now online! Logged in as "${client.user.tag}"`);
         console.log(chalkMy.log, `Ready to serve in servers: ${client.guilds.cache.size}; serving online users: ${client.users.cache.size}.`);
     }
 }
