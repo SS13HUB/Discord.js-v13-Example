@@ -1,2 +1,2 @@
 
-DROP DATABASE IF EXISTS "Dicord_servers_meta";
+DROP DATABASE IF EXISTS "Discord_servers_meta";

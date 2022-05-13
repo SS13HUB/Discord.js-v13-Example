@@ -103,17 +103,17 @@ console.clear();  */
         if (err) throw err;
         const res = await client.query(
             /* sql.file('./PostgreSQL_create.sql')).catch(ex => {console.error(ex);process.exitCode = 1;}).then(() => db.dispose(); */
-            /* `CREATE TABLE IF NOT EXISTS public."Dicord_servers_meta"
+            /* `CREATE TABLE IF NOT EXISTS public."Discord_servers_meta"
             (
                 server_id integer NOT NULL,
                 server_name character(1) COLLATE pg_catalog."default",
                 invite_link character(1) COLLATE pg_catalog."default",
                 is_alive boolean,
-                CONSTRAINT "Dicord_servers_meta_pkey" PRIMARY KEY (server_id)
+                CONSTRAINT "Discord_servers_meta_pkey" PRIMARY KEY (server_id)
             )
             TABLESPACE pg_default;
             
-            ALTER TABLE IF EXISTS public."Dicord_servers_meta"
+            ALTER TABLE IF EXISTS public."Discord_servers_meta"
                 OWNER to current_user;`
         );
         done();
