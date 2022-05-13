@@ -1,5 +1,5 @@
 
 INSERT
-    INTO public."Discord_servers_meta"(server_id)
+    INTO public."Guilds"(id)
     VALUES (123)
     -- RETURNING *;

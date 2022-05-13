@@ -110,6 +110,13 @@ module.exports = {
             )}`, true);
 
         console.log(`[CMD] ${interaction.user.id} asks for invite info: ${fetchedInvite.code} (${fetchedInvite.guild.id})`);
+        if (interaction.guild) {
+            //let collection = fetchedInvite.guild
+            console.debug({...interaction.guild});
+            //console.debug(fetchedInvite.guild);
+            //console.debug(...tmp.values());
+            return;
+        }
 
         /* if (client.guilds.cache.get(fetchedInvite.guild.id) === undefined) {
             const embedWidget = new client.discord.MessageEmbed()

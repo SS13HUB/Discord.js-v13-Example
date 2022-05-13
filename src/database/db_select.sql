@@ -1,2 +1,2 @@
 
-SELECT * FROM "Discord_servers_meta";
+SELECT * FROM "Guilds";
