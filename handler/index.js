@@ -101,9 +101,17 @@ const loadSlashCommands = async function (client) {
         //    .get("YOUR_GUILD_ID")
         //    .commands.set(slash);
 
-        const register = 1; // or purge, boolean in integer
+        const register = 1; // or purge, bool in int
         if (Boolean(register)) {
             console.log(chalkMy.load, `Registering Slash Commands for all guilds.`);
+            //console.log(slash);
+            /* for (let i = 0; i < slash.length; i++) {
+                let cmd  = slash[i];
+                let ii   = i < 10 ? ` ${i}`: i;
+                let iii  = cmd.name.length < 10 ? ` ${cmd.name.length}`: cmd.name.length;
+                let iiii = cmd.description.length < 100 ? cmd.description.length < 10 ? `  ${cmd.description.length}`: ` ${cmd.description.length}`: cmd.description.length;
+                console.log(`[${ii}/${slash.length - 1}] (${iii}/32;${iiii}/100) "${cmd.name}", "${cmd.description}"`);
+            } */
             await client.application.commands.set(slash);
             /* await client.application.commands.fetch()
                 .then(() => console.log(chalkMy.log, chalkMy.ok, `Registered Slash Commands for all guilds:\n`, slash.keys())); */

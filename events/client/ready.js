@@ -11,9 +11,17 @@ module.exports = {
     async execute(client) {
         
         // Puts an activity
-        client.user.setActivity("Expectatives#1157", {
+        /* client.user.setActivity("Expectatives#1157", {
             type: "WATCHING",
             name: "Expectatives#1157"
+        }); */
+        // client.user.setStatus("online");
+        client.user.setPresence({
+            activities: [{ 
+                name: "/help", // Use slash command.
+                type: "WATCHING"
+            }],
+            status: "online"
         });
         
         // Send a message on the console
