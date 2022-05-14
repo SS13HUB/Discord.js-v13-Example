@@ -11,7 +11,7 @@ const db_guilds_insert = base_path + 'insert.sql';
 const db_guilds_select = base_path + 'select.sql';
 
 const settings = {
-    "db_recreate": true
+    "db_guilds_drop_before_create": true
 }
 
 //var sql = fs.readFileSync(db_guilds_create).toString();
@@ -22,7 +22,7 @@ function doRequest(pool, _path) {
     return new Promise((resolve, reject) => {
         pool.query(
             sql.file(_path)._items[0].text, (err, res, fields) => {
-            if (err) {console.error(err); process.exitCode = 1; return reject(error);} // throw err;
+            if (err) {console.error(err); process.exitCode = 1; return reject(err);} // throw err;
             if (res) resolve("OK?"); //console.log("OK?\n", res);
             //console.log(results[0].solution);
         });
@@ -37,8 +37,8 @@ async function mainLoop() {
         },
     });
 
-    if (settings["db_recreate"]) {
-        console.log("db_recreate:");
+    if (settings["db_guilds_drop_before_create"]) {
+        console.log("db_guilds_drop_before_create:");
         await doRequest(pool, db_guilds_drop)
             .then((val) => {console.log(val);})
             .catch((err) => {console.error(err);});

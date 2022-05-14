@@ -1,5 +1,5 @@
 
 INSERT
-    INTO public."Guilds"(id)
-    VALUES (123)
+    INTO public."Guilds"(key)
+    VALUES (value)
     -- RETURNING *;
