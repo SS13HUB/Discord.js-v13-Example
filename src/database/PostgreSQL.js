@@ -4,19 +4,19 @@ const {sql} = require('@databases/pg');
 require('dotenv').config(); //({ path: './../../.env' });
 const connectionString = process.env.DB_URL;
 
-const base_path = './src/database/';
-const db_create = base_path + 'db_create.sql';
-const db_drop   = base_path + 'db_drop.sql';
-const db_insert = base_path + 'db_insert.sql';
-const db_select = base_path + 'db_select.sql';
+const base_path = './src/database/Guilds/';
+const db_guilds_create = base_path + 'create.sql';
+const db_guilds_drop   = base_path + 'drop.sql';
+const db_guilds_insert = base_path + 'insert.sql';
+const db_guilds_select = base_path + 'select.sql';
 
 const settings = {
     "db_recreate": true
 }
 
-//var sql = fs.readFileSync(db_create).toString();
+//var sql = fs.readFileSync(db_guilds_create).toString();
 console.clear();
-//console.log(sql.file(db_create));
+//console.log(sql.file(db_guilds_create));
 
 function doRequest(pool, _path) {
     return new Promise((resolve, reject) => {
@@ -39,13 +39,13 @@ async function mainLoop() {
 
     if (settings["db_recreate"]) {
         console.log("db_recreate:");
-        await doRequest(pool, db_drop)
+        await doRequest(pool, db_guilds_drop)
             .then((val) => {console.log(val);})
             .catch((err) => {console.error(err);});
     }
 
-    console.log("db_create:");
-    await doRequest(pool, db_create)
+    console.log("db_guilds_create:");
+    await doRequest(pool, db_guilds_create)
         .then((val) => {console.log(val);})
         .catch((err) => {console.error(err);});
 
