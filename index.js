@@ -5,6 +5,7 @@ const discordModals = require('discord-modals');
 
 const handler = require("./handler/index");
 const chalkMy = require("./src/chalk");
+const path = require("path");
 
 const client = new Client({
     intents: [  
@@ -37,6 +38,7 @@ client.discord = Discord;
 client.commands = new Collection();
 client.slash = new Collection();
 client.config = require('./config');
+client.base_path = path.resolve();
 
 // Records commands and events
 handler.loadEvents(client);

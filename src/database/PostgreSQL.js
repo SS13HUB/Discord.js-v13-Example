@@ -63,8 +63,8 @@ async function mainLoop() {
     }) */
 
     await pool.end()
-    .then((val) => {console.log(val);})
-    .catch((err) => {console.error(err);});
+        .then((val) => {console.log(val);})
+        .catch((err) => {console.error(err);});
 };
 
 mainLoop();
