@@ -6,5 +6,6 @@ INSERT
         (value, CURRENT_TIMESTAMP)
     ON CONFLICT (id) DO UPDATE
     SET key = value, last_update = CURRENT_TIMESTAMP
-    WHERE "Guilds".id = id;
-    -- RETURNING *;
+    WHERE "Guilds".id = _id
+    -- RETURNING last_update
+;
