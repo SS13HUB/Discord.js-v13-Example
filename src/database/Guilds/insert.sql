@@ -1,10 +1,10 @@
 
 INSERT
     INTO public."Guilds"
-        (key)
+        (key, last_update)
     VALUES
-        (value)
-    ON CONFLICT (id) DO UPDATE SET
-        last_update = CURRENT_TIMESTAMP,
-        invite_link = 'Data';
+        (value, CURRENT_TIMESTAMP)
+    ON CONFLICT (id) DO UPDATE
+    SET key = value, last_update = CURRENT_TIMESTAMP
+    WHERE "Guilds".id = id;
     -- RETURNING *;

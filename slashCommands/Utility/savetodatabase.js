@@ -16,7 +16,7 @@ function doRequest(pool, sql) {
         pool.query(sql, (err, res) => {
             //console.log(err ? err.stack : res.rows[0].message)
             if (err) {console.error(err); process.exitCode = 1; return reject(err);} // throw err;
-            if (res) resolve("OK?"); //console.log("OK?\n", res);
+            if (res) resolve("Successfully saved to database."); //console.log("OK?\n", res);
         });
     });
 }
@@ -27,11 +27,28 @@ let db_guilds_drop   = base_path + 'drop.sql';
 let db_guilds_insert = base_path + 'insert.sql';
 let db_guilds_select = base_path + 'select.sql';
 
-fs.readFile(db_guilds_insert, 'utf8', (error, data) => {
+/* fs.readFile(db_guilds_insert, 'utf8', (error, data) => {
     if (error) throw error;
-    console.log(data.toString());
+    //console.log(data.toString());
     db_guilds_insert = data.toString();
-});
+}); */
+
+let FilesSQLtoRead = [db_guilds_create, db_guilds_drop, db_guilds_insert, db_guilds_select];
+
+function FilsqSQLtoCode(_FilesSQLtoRead) {
+    for (let i = 0; i < _FilesSQLtoRead.length; i++) {
+        let element = _FilesSQLtoRead[i];
+        fs.readFile(element, 'utf8', (error, data) => {
+            if (error) throw error;
+            //console.log(data.toString());
+            _FilesSQLtoRead[i] = data.toString();
+        });
+    }
+    return _FilesSQLtoRead;
+};
+
+FilesSQLtoRead = FilsqSQLtoCode(FilesSQLtoRead)
+
 
 module.exports = {
     name: "savetodatabase",
@@ -76,26 +93,53 @@ module.exports = {
         console.log(`[CMD] ${interaction.user.id} trigger savetodatabase: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
 
         if (isInvite) {
+            let amImOnServer = await client.guilds.cache.get(isInvite.guild.id) !== undefined;
             let savetodatabaseEmbed = new client.discord.MessageEmbed()
                 .setTitle('Save to DB')
                 .setDescription(`I detect invite. Saving to DB...`)
                 .setColor(client.config.embedColor);
             //const msg = await interaction.reply({ embeds: [savetodatabaseEmbed] });
-            const msg = await interaction.channel.send(`I detect invite. Saving to DB...`);
-            request = db_guilds_insert.replace('value', `'${isInvite.guild.id}', '${isInvite.guild.name}', '${isInvite.guild.icon}', '${new Date().toISOString()}', '${isInvite.code}'`);
-            console.log("request:", request);
-            let isSaved = await doRequest(pool, request)
-                .then((val) => {return [true, val];})
-                .catch((err) => {return [false, err];});
-            msg.delete();
-            await pool.end()
-                .then((val) => {console.log(val);})
-                .catch((err) => {console.error(err);});
-            savetodatabaseEmbed = new client.discord.MessageEmbed()
-                .setTitle('Save to DB')
-                .setDescription('I detect invite. Save to DB (' +Boolean(isSaved[0]) + '):\n```sql\n' + isSaved[1] +'```')
-                .setColor(client.config.embedColor);
-            return interaction.reply({ embeds: [savetodatabaseEmbed] });
+            if (amImOnServer) {
+                const msg = await interaction.channel.send(`Provided input is alive invite. Saving to DB...`);
+                request = FilesSQLtoRead[2]
+                    .replace('key, ', 'id, name, icon, invite_link, ')
+                    .replace('value, ', `${isInvite.guild.id}, '${isInvite.guild.name}', '${isInvite.guild.icon}', '${isInvite.code}', `)
+                    .replace('key = value', `id = ${isInvite.guild.id}, name = '${isInvite.guild.name}', icon = '${isInvite.guild.icon}', invite_link = '${isInvite.code}'`)
+                    .replace('.id = id', `.id = ${isInvite.guild.id}`);
+                console.log("request:", request);
+                let isSaved = await doRequest(pool, request)
+                    .then((val) => {return [true, val];})
+                    .catch((err) => {return [false, err];});
+                msg.delete();
+                await pool.end()
+                    .then((val) => {console.log(val);})
+                    .catch((err) => {console.error(err);});
+                savetodatabaseEmbed = new client.discord.MessageEmbed()
+                    .setTitle('Save to DB')
+                    .setDescription('I detect invite. Save to DB (' +Boolean(isSaved[0]) + '):\n```sql\n' + isSaved[1] +'```')
+                    .setColor(client.config.embedColor);
+                return interaction.reply({ embeds: [savetodatabaseEmbed] });
+            } else {
+                const msg = await interaction.channel.send(`Provided input is alive invite. Warning: I'm not on target server, so information is limited. Saving to DB...`);
+                request = FilesSQLtoRead[2]
+                    .replace('key, ', 'id, name, icon, invite_link, ')
+                    .replace('value, ', `'${isInvite.guild.id}', '${isInvite.guild.name}', '${isInvite.guild.icon}', '${isInvite.code}', `)
+                    .replace('key = value', `id = '${isInvite.guild.id}', name = '${isInvite.guild.name}', icon = '${isInvite.guild.icon}', invite_link = '${isInvite.code}'`)
+                    .replace('.id = id', `.id = '${isInvite.guild.id}'`);
+                console.log("request:", request);
+                let isSaved = await doRequest(pool, request)
+                    .then((val) => {return [true, val];})
+                    .catch((err) => {return [false, err];});
+                msg.delete();
+                await pool.end()
+                    .then((val) => {console.log(val);})
+                    .catch((err) => {console.error(err);});
+                savetodatabaseEmbed = new client.discord.MessageEmbed()
+                    .setTitle('Save to DB')
+                    .setDescription('I detect invite. Save to DB (' +Boolean(isSaved[0]) + '):\n```sql\n' + isSaved[1] +'```')
+                    .setColor(client.config.embedColor);
+                return interaction.reply({ embeds: [savetodatabaseEmbed] });
+            }
         // no way to search server → https://discord.js.org/#/docs/discord.js/stable/class/Channel
         /* } else if (isChannel) {
             const savetodatabaseEmbed = new client.discord.MessageEmbed()
