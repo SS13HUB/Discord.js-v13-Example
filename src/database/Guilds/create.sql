@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS public."Guilds"
     was_alive_on_update boolean,
     last_update timestamp with time zone,
     invite_link character(20) COLLATE pg_catalog."default",
+    ---
     CONSTRAINT "Guilds_pkey" PRIMARY KEY (id),
     CONSTRAINT id UNIQUE (id),
     CONSTRAINT snowflake_check CHECK (

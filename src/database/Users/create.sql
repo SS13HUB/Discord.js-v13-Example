@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS public."Users"
     public_flags smallint,
     ---
     last_update timestamp with time zone,
+    ---
     CONSTRAINT "Users_pkey" PRIMARY KEY (id),
     CONSTRAINT snowflake_check CHECK (
         id::numeric >= 0::numeric AND

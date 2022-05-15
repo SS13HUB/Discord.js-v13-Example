@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public."Economics"
     balance int, -- balance type: reputation or social credit
     ---
     last_update timestamp with time zone,
+    ---
     CONSTRAINT "Economics_pkey" PRIMARY KEY (record_id),
     CONSTRAINT snowflake_check CHECK (
         user_id::numeric >= 0::numeric AND

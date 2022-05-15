@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public."Projects"
     owner_id bigint, -- ToDo: owner_ids bigint[]
     ---
     last_update timestamp with time zone,
+    ---
     CONSTRAINT "Projects_pkey" PRIMARY KEY (id),
     CONSTRAINT snowflake_check CHECK (
         id::numeric >= 0::numeric AND

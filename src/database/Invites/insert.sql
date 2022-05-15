@@ -1,6 +1,6 @@
 
 INSERT
-    INTO public."Guilds"
+    INTO public."Invites"
         (key)
     VALUES
         (value)
