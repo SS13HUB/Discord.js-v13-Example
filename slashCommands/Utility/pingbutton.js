@@ -7,6 +7,7 @@ module.exports = {
     description: "Ping-pong, but with button!",
     ownerOnly: false,
     run: async (client, interaction) => {
+        await interaction.channel.sendTyping();
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()

@@ -46,9 +46,14 @@ CREATE TABLE IF NOT EXISTS public."Guilds"
     stickers character(255)[] COLLATE pg_catalog."default",
     premium_progress_bar_enabled boolean,
     ---
-    was_alive_on_update boolean,
+    --- Elite Dangerous Discovery scanner honk
+    discoverer_id bigint COLLATE pg_catalog."default",
+    discovery_date timestamp with time zone,
+    was_deleted boolean,
+    deleter_id bigint COLLATE pg_catalog."default",
+    delete_date timestamp with time zone,
+    updater_id bigint COLLATE pg_catalog."default",
     last_update timestamp with time zone,
-    invite_link character(20) COLLATE pg_catalog."default",
     ---
     CONSTRAINT "Guilds_pkey" PRIMARY KEY (id),
     CONSTRAINT id UNIQUE (id),

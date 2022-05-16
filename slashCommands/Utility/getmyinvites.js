@@ -7,6 +7,7 @@ module.exports = {
     description: "You can get your invites to this server.",
     ownerOnly: false,
     run: async (client, interaction) => {
+        await interaction.channel.sendTyping();
 
         if (interaction.guild === undefined) return interaction.channel.send(`Error: Guild undefined.`);
         if (interaction.guild.me === undefined) return interaction.channel.send(`Error: I'm not on the server.`);

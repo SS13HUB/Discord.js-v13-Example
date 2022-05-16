@@ -6,6 +6,7 @@ module.exports = {
     description: "Check the bot's ping!",
     ownerOnly: false,
     run: async (client, interaction) => {
+        await interaction.channel.sendTyping();
         const msg = await interaction.channel.send(`🏓 Pinging...`);
 
         const pingEmbed = new client.discord.MessageEmbed()

@@ -6,6 +6,7 @@ module.exports = {
     description: "Not for public use, sorry.",
     ownerOnly: false,
     run: async (client, interaction) => {
+        await interaction.channel.sendTyping();
 
         const _messages = await interaction.channel.messages.fetch()
             .then(messages => {

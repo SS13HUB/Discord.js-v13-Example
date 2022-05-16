@@ -69,9 +69,10 @@ module.exports = {
         }
     ],
     description: "I will try to fetch it and save information in my database.",
-    ownerOnly: true,
+    ownerOnly: false,
     run: async (client, interaction) => {
-        if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
+        await interaction.channel.sendTyping();
+        //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const param1 = interaction.options.getString("input");
         if (!param1) return interaction.reply({ content: `There isn't any invite link, channel ID or server ID!` });
 
@@ -146,6 +147,7 @@ module.exports = {
                 return interaction.reply({ embeds: [savetodatabaseEmbed] });
             }
         // no way to search server → https://discord.js.org/#/docs/discord.js/stable/class/Channel
+        // ToDO: or has way → https://discord.js.org/#/docs/discord.js/stable/class/TextChannel?scrollTo=guild
         /* } else if (isChannel) {
             const savetodatabaseEmbed = new client.discord.MessageEmbed()
                 .setTitle('Save to DB')
@@ -154,13 +156,13 @@ module.exports = {
             return interaction.reply({ embeds: [savetodatabaseEmbed] }); */
         } else if (isServer) {
             const savetodatabaseEmbed = new client.discord.MessageEmbed()
-                .setTitle('Save to DB — status')
+                .setTitle('Save to DB')
                 .setDescription(`I detect server.`)
                 .setColor(client.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         } else {
             const savetodatabaseEmbed = new client.discord.MessageEmbed()
-                .setTitle('Save to DB — status')
+                .setTitle('Save to DB')
                 .setDescription(`I detect no invite or server ID.`)
                 .setColor(client.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] });

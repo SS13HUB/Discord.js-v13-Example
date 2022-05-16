@@ -25,6 +25,7 @@ module.exports = {
         }
     ],
     run: async (client, interaction) => {
+        await interaction.channel.sendTyping();
         await interaction.reply("In development.");
     },
 };

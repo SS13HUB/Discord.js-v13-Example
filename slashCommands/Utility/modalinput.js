@@ -7,6 +7,7 @@ module.exports = {
     description: "Text input test!",
     ownerOnly: false,
     run: async (client, interaction) => {
+        await interaction.channel.sendTyping();
         const modal = new Modal() // We create a Modal
             .setCustomId('modal-customid')
             .setTitle('Test of Discord-Modals!')

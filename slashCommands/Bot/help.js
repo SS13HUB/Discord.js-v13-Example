@@ -17,6 +17,7 @@ module.exports = {
     description: "Return all commands, or one specific command!",
     ownerOnly: false,
     run: async (client, interaction) => {
+        await interaction.channel.sendTyping();
 
         // Buttons that take you to a link
         // If you want to delete them, remove this part of
