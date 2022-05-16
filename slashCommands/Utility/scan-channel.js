@@ -112,11 +112,11 @@ module.exports = {
 
         let savetodatabaseEmbed = new client.discord.MessageEmbed()
             .setTitle(`Scan channel — status (${fetchMessages ? "success" : "failure"})`)
-            .setDescription(`I detect channel. Please check console.\nLinks below detected only by search patterm and was not fetched for now.`) // \n\`\`\`${arr.join('\n')}\`\`\`
+            .setDescription(`I detect channel.\nLinks below detected only by search patterm\nand was not fetched for now.\n${arr.join('\n')}`)
             .setColor(client.config.embedColor);
-        for (let i = 0; i < arr.length; i++) {
+        /* for (let i = 0; i < arr.length; i++) {
             savetodatabaseEmbed.addField('Invite №' + (i + 1) + '/' + arr.length, `${arr[i]}`);
-        }
+        } */
         return interaction.reply({ embeds: [savetodatabaseEmbed] });
     },
 };

@@ -32,15 +32,23 @@ module.exports = {
             }
             
             try {
-                command.run(client, interaction, args)
+                return command.run(client, interaction, args);
             } catch (e) {
                 interaction.reply({ content: e.message });
             }
             
         } else if (interaction.isButton()) {
+            if (interaction.customId == "one-time-button") {
+                const command = client.slash.get("one-time-button");
+                try {
+                    return command.trigger(client, interaction); //, args
+                } catch (e) {
+                    interaction.reply({ content: e.message });
+                }
+            }
             // if (modal.customId === 'modal-customid') {
             //console.log(interaction);
-            return interaction.reply({ content: "Button received.", ephemeral: true });
+            return; // interaction.channel.send({ content: "Button received.", ephemeral: true });
         }
     }
 }
