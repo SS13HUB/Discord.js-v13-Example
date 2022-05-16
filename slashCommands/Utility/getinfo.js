@@ -33,7 +33,7 @@ module.exports = {
         await interaction.channel.sendTyping();
         //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteCode = interaction.options.getString("invite");
-        if (!inviteCode) return interaction.reply({ content: `There isn't any invite link!` });
+        if (!inviteCode) return interaction.reply({ content: `There is no any invite link!` });
         
         //const fetchedInvite = await _fetchInvite(client, inviteCode); //('https://discord.gg/djs')
         //const fetchedInvite = await client.fetchInvite(inviteCode);

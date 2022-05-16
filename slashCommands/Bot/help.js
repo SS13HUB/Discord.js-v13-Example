@@ -68,7 +68,7 @@ module.exports = {
 
             // This is what it sends when using the command with argument and it does not find the command
             if (!command) {
-                interaction.reply({ content: `There isn't any SlashCommand named "${commandInt}"` });
+                interaction.reply({ content: `There is no any SlashCommand named "${commandInt}"` });
             } else {
 
                 // This is what it sends when using the command with argument and if it finds the command

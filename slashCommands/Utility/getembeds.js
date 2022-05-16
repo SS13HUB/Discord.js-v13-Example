@@ -16,7 +16,7 @@ module.exports = {
     run: async (client, interaction) => {
         await interaction.channel.sendTyping();
         const messageId = interaction.options.getString("id");
-        if (!messageId) return interaction.reply({ content: `There isn't any message IDs!` });
+        if (!messageId) return interaction.reply({ content: `There is no any message IDs!` });
 
         await interaction.channel.messages.fetch(messageId)
             .then(message => console.log(message.content))

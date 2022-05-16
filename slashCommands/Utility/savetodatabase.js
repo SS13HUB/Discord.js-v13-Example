@@ -29,17 +29,12 @@ function doRequest(sql) {
     });
 }
 
-const base_path = process.cwd() + '/src/database/Guilds/';
-let db_guilds_create = base_path + 'create.sql';
-let db_guilds_drop   = base_path + 'drop.sql';
-let db_guilds_insert = base_path + 'insert.sql';
-let db_guilds_select = base_path + 'select.sql';
+const base_path = process.cwd() + '/src/database/';
+let db_guilds_create = base_path + 'Guilds/create.sql';
+let db_guilds_drop   = base_path + 'Guilds/drop.sql';
+let db_guilds_insert = base_path + 'Guilds/insert.sql';
+let db_guilds_select = base_path + 'Guilds/select.sql';
 
-/* fs.readFile(db_guilds_insert, 'utf8', (error, data) => {
-    if (error) throw error;
-    //console.log(data.toString());
-    db_guilds_insert = data.toString();
-}); */
 
 let FilesSQLtoRead = [db_guilds_create, db_guilds_drop, db_guilds_insert, db_guilds_select];
 
@@ -74,9 +69,9 @@ module.exports = {
         await interaction.channel.sendTyping();
         //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const param1 = interaction.options.getString("input");
-        if (!param1) return interaction.reply({ content: `There isn't any invite link, channel ID or server ID!` });
+        if (!param1) return interaction.reply({ content: `There is no any invite link, channel ID or server ID!` });
 
-        if (typeof param1 !== "string") para1 = `${param1}`;
+        if (typeof param1 !== "string") param1 = `${param1}`;
 
         FilesSQLtoRead = await FilsqSQLtoCode(FilesSQLtoRead)
             .catch(() => {console.error("Error: Cann't read SQL schema files!"); return FilesSQLtoRead});

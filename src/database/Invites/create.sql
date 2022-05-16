@@ -20,14 +20,14 @@ CREATE TABLE IF NOT EXISTS public."Invites"
     stage_instance text COLLATE pg_catalog."default",
     guild_scheduled_event text COLLATE pg_catalog."default",
     ---
-    --- Elite Dangerous Discovery scanner honk
+    --- https://youtu.be/vK_n9apIOlM
     discoverer_id bigint COLLATE pg_catalog."default",
     discovery_date timestamp with time zone,
     was_revoked boolean,
     revoker_id bigint COLLATE pg_catalog."default",
     revoke_date timestamp with time zone,
     updater_id bigint COLLATE pg_catalog."default",
-    last_update timestamp with time zone,
+    updated timestamp with time zone,
     ---
     CONSTRAINT "Invites_pkey" PRIMARY KEY (id),
     CONSTRAINT id UNIQUE (id),

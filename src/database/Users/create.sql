@@ -15,13 +15,13 @@ CREATE TABLE IF NOT EXISTS public."Users"
     premium_type smallint,
     public_flags smallint,
     ---
-    --- Elite Dangerous Discovery scanner honk
+    --- https://youtu.be/vK_n9apIOlM
     discoverer_id bigint COLLATE pg_catalog."default",
     discovery_date timestamp with time zone,
     was_deleted boolean,
     delete_date timestamp with time zone,
     updater_id bigint COLLATE pg_catalog."default",
-    last_update timestamp with time zone,
+    updated timestamp with time zone,
     ---
     CONSTRAINT "Users_pkey" PRIMARY KEY (id),
     CONSTRAINT snowflake_check CHECK (

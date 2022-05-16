@@ -59,7 +59,7 @@ module.exports = {
 
             // This is what it sends when using the command with argument and it does not find the command
             if (!command) {
-                message.reply({ content: `There isn't any command named "${args[0]}"`, allowedMentions: { repliedUser: false } });
+                message.reply({ content: `There is no any command named "${args[0]}"`, allowedMentions: { repliedUser: false } });
             } else {
 
                 // This is what it sends when using the command with argument and if it finds the command
