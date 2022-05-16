@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public."Guilds"
     afk_timeout integer,
     widget_enabled boolean,
     widget_channel_id bigint,
-    verification_level integer,
+    verification_level character(255) COLLATE pg_catalog."default",
     default_message_notifications integer,
     explicit_content_filter integer,
     roles text[] COLLATE pg_catalog."default",
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public."Guilds"
     approximate_member_count integer,
     approximate_presence_count integer,
     welcome_screen text COLLATE pg_catalog."default",
-    nsfw_level integer,
+    nsfw_level character(255) COLLATE pg_catalog."default",
     stickers character(255)[] COLLATE pg_catalog."default",
     premium_progress_bar_enabled boolean,
     ---

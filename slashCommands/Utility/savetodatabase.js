@@ -102,41 +102,47 @@ module.exports = {
                 .setColor(client.config.embedColor);
             //const msg = await interaction.reply({ embeds: [savetodatabaseEmbed] });
             if (amImOnServer) {
-                const msg = await interaction.channel.send(`Provided input is alive invite. Saving to DB...`);
+                const msg = (_local_debug ? await interaction.channel.send(`Provided input is alive invite. Saving to DB...`) : false);
                 request = FilesSQLtoRead[2]
-                    .replace('key, ', 'id, name, icon, invite_link, ')
-                    .replace('value, ', `${isInvite.guild.id}, '${isInvite.guild.name}', '${isInvite.guild.icon}', '${isInvite.code}', `)
-                    .replace('key = value', `id = ${isInvite.guild.id}, name = '${isInvite.guild.name}', icon = '${isInvite.guild.icon}', invite_link = '${isInvite.code}'`)
+                    .replace('key, ',   'id, ' +               'name, ' +                'icon, ' +                'features, ' +                                                                    'splash, ' +                'banner, ' +                'description, ' +                'verification_level, ' +               'vanity_url_code, ' +              'nsfw_level, ' +               'welcome_screen, ' +               'invite_link, ')
+                    .replace('value, ', `${isInvite.guild.id}, '${isInvite.guild.name}', '${isInvite.guild.icon}', '${JSON.stringify(isInvite.guild.features).replace('[', '{').replace(']', '}')}', '${isInvite.guild.splash}', '${isInvite.guild.banner}', '${isInvite.guild.description}', '${isInvite.guild.verificationLevel}', '${isInvite.guild.vanityURLCode}', '${isInvite.guild.nsfwLevel}', '${isInvite.guild.welcomeScreen}', '${isInvite.code}', `)
+                    .replace('key = value', `id = '${isInvite.guild.id}', name = '${isInvite.guild.name}', icon = '${isInvite.guild.icon}', features = '${JSON.stringify(isInvite.guild.features).replace('[', '{').replace(']', '}')}', splash = '${isInvite.guild.splash}', banner = '${isInvite.guild.banner}', verification_level = '${isInvite.guild.verificationLevel}', vanity_url_code = '${isInvite.guild.vanityURLCode}', nsfw_level = '${isInvite.guild.nsfwLevel}', welcome_screen = '${isInvite.guild.welcomeScreen}', invite_link = '${isInvite.code}'`)
                     .replace('_id', `${isInvite.guild.id}`);
                 if (_local_debug) console.log("request:", request);
                 let isSaved = await doRequest(request)
                     .then((val) => {return [true, val];})
                     .catch((err) => {return [false, err];});
                 console.log("SQL: " + isSaved[1]);
-                msg.delete();
+                if (_local_debug) {
+                    msg.delete();
+                }
                 savetodatabaseEmbed = new client.discord.MessageEmbed()
                     .setTitle('Save to DB — status (' + (isSaved[0] ? "success" : "failure") + ')')
                     .setDescription('Alive invite detected and processed.\nSaved server id: ' + isInvite.guild.id + '\n```sql\n' + isSaved[1] + '```')
                     .setColor(client.config.embedColor);
+                if (_local_debug) console.log("isInvite:", isInvite);
                 return interaction.reply({ embeds: [savetodatabaseEmbed] });
             } else {
-                const msg = await interaction.channel.send(`Provided input is alive invite. Warning: I'm not on target server, so information is limited. Saving to DB...`);
+                const msg = (_local_debug ? await interaction.channel.send(`Provided input is alive invite. Warning: I'm not on target server, so information is limited. Saving to DB...`) : false);
                 request = FilesSQLtoRead[2]
-                    .replace('key, ', 'id, name, icon, invite_link, ')
-                    .replace('value, ', `'${isInvite.guild.id}', '${isInvite.guild.name}', '${isInvite.guild.icon}', '${isInvite.code}', `)
-                    .replace('key = value', `id = '${isInvite.guild.id}', name = '${isInvite.guild.name}', icon = '${isInvite.guild.icon}', invite_link = '${isInvite.code}'`)
-                    .replace('.id = id', `.id = '${isInvite.guild.id}'`);
+                    .replace('key, ',   'id, ' +               'name, ' +                'icon, ' +                'features, ' +                                                                    'splash, ' +                'banner, ' +                'description, ' +                'verification_level, ' +               'vanity_url_code, ' +              'nsfw_level, ' +               'welcome_screen, ' +               'invite_link, ')
+                    .replace('value, ', `${isInvite.guild.id}, '${isInvite.guild.name}', '${isInvite.guild.icon}', '${JSON.stringify(isInvite.guild.features).replace('[', '{').replace(']', '}')}', '${isInvite.guild.splash}', '${isInvite.guild.banner}', '${isInvite.guild.description}', '${isInvite.guild.verificationLevel}', '${isInvite.guild.vanityURLCode}', '${isInvite.guild.nsfwLevel}', '${isInvite.guild.welcomeScreen}', '${isInvite.code}', `)
+                    .replace('key = value', `id = '${isInvite.guild.id}', name = '${isInvite.guild.name}', icon = '${isInvite.guild.icon}', features = '${JSON.stringify(isInvite.guild.features).replace('[', '{').replace(']', '}')}', splash = '${isInvite.guild.splash}', banner = '${isInvite.guild.banner}', verification_level = '${isInvite.guild.verificationLevel}', vanity_url_code = '${isInvite.guild.vanityURLCode}', nsfw_level = '${isInvite.guild.nsfwLevel}', welcome_screen = '${isInvite.guild.welcomeScreen}', invite_link = '${isInvite.code}'`)
+                    .replace('_id', `${isInvite.guild.id}`);
                 if (_local_debug) console.log("request:", request);
                 let isSaved = await doRequest(request)
                     .then((val) => {return [true, val];})
                     .catch((err) => {return [false, err];});
                 console.log("SQL: " + isSaved[1]);
-                msg.delete();
+                if (_local_debug) {
+                    msg.delete();
+                }
                 savetodatabaseEmbed = new client.discord.MessageEmbed()
                     .setTitle('Save to DB — status (' + (isSaved[0] ? "success" : "failure") + ')')
                     .setDescription('Alive invite detected and processed.\nSaved server id: ' + isInvite.guild.id + '\n```sql\n' + isSaved[1] + '```')
                     .setFooter({ text: `Warning: I'm not on target server, so saved information is limited. You can help me, if someone will invite me and repeat this command.` })
                     .setColor(client.config.embedColor);
+                if (_local_debug) console.log("isInvite:", isInvite);
                 return interaction.reply({ embeds: [savetodatabaseEmbed] });
             }
         // no way to search server → https://discord.js.org/#/docs/discord.js/stable/class/Channel

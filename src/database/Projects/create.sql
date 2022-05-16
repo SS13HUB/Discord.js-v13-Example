@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS public."Projects"
 (
     id bigint unsigned NOT NULL,
     name character(255) COLLATE pg_catalog."default",
+    fandom character(255) COLLATE pg_catalog."default",
     ---
     name_long character(255) COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
