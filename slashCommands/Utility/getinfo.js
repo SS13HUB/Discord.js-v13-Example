@@ -75,7 +75,7 @@ module.exports = {
             .setTitle(':chains: ・ Invite link info') // :anchor:
             .setThumbnail(fetchedInvite.guild !== undefined ? fetchedInvite.guild.iconURL() : "https://discord.js.org/static/djs_logo.png")
             .addField('Invite Code, Expires at',
-            `[${fetchedInvite.code}](${fetchedInvite.url}), ${(fetchedInvite.expiresTimestamp === 0 ? (fetchedInvite.guild.vanityURLCode === null ? "never" : "vanity links doesn't expires") : fetchedInvite.expiresTimestamp)}`) //discord://-/invite/discord-testers 
+            `[${fetchedInvite.code}](${fetchedInvite.url}), ${(fetchedInvite.expiresTimestamp === 0 ? (fetchedInvite.guild.vanityURLCode === null ? "∞" : "vanity links doesn't expires") : fetchedInvite.expiresTimestamp)}`) //discord://-/invite/discord-testers 
             //.addField('Invite Type', `${fetchedInvite.type}`)
             //.addField('Invite max uses', `${fetchedInvite.maxUses}`)
             .addField('Channel', `${fetchedInvite.channel}, \`<#${fetchedInvite.channel.id}>\``)

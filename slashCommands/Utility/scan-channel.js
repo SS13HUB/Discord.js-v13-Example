@@ -1,6 +1,24 @@
 
 const { SlashCommandBuilder } = require('@discordjs/builders'); // require('discord.js');
 
+/* async function _isInvite(client, _fetchMessages) {
+    _fetchMessages.forEach((message) => {
+        //if (message.embeds.length <= 0) return;
+        if (message.content.length <= 0) return;
+        let contents = message.content.split(' ');
+        for (let i = 0; i < contents.length; i++) {
+            if (i > 3) {return false;}
+            const content = contents[i];
+            let isInvite = client.fetchInvite(content)
+                .then(() => {return true})
+                .catch(() => {return false});
+            if (isInvite) {
+                console.log(message.url, content);
+            }
+        }
+    });
+} */
+
 module.exports = {
     name: "scan-channel",
     category: "Utility",
@@ -58,12 +76,35 @@ module.exports = {
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         }
 
+        console.log("isChannel.messages.fetch()");
+        let fetchMessages = await isChannel.messages.fetch()
+            .then((d) => {return d})
+            .catch(() => {return false});
+        //console.log("fetchMessages", fetchMessages);
+
+        console.log("map before");
+        //await _isInvite(client, fetchMessages);
+        let messagesContens = fetchMessages.map((i) => {return i.content});
+        console.log("map");
+        for (let i = 0; i < messagesContens.length; i++) {
+            let content = messagesContens[i]
+                .replace('\n', ' ')
+                .split(' ');
+            console.log("replace + split");
+            for (let ii = 0; ii < content.length; ii++) {
+                console.log("fetchInvite 2");
+                let isInvite = await client.fetchInvite(content[ii])
+                    .then(() => {return true})
+                    .catch(() => {return false});
+                console.log("messagesContens", isInvite, content[ii]);
+            }
+        }
+
+        console.log("end");
         const savetodatabaseEmbed = new client.discord.MessageEmbed()
-            .setTitle('Scan channel — status (success)')
+            .setTitle(`Scan channel — status (${fetchMessages ? "success" : "failure"})`)
             .setDescription(`I detect channel. Please check console.`)
             .setColor(client.config.embedColor);
-        let fetchInvites = await isChannel.fetchInvites( {"cache": false} );
-        console.log("fetchInvites", fetchInvites);
         return interaction.reply({ embeds: [savetodatabaseEmbed] });
     },
 };

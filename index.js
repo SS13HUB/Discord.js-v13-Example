@@ -58,9 +58,9 @@ process.on("unhandledRejection", (reason, promise) => {
     console.log(reason);
     //console.log(`httpStatus: ${reason.httpStatus}, reason: ${reason.message}`);
     // ↓ for "DiscordAPIError: Invalid Form Body"
+    if (!reason.requestData) return;
+    if (!reason.requestData["json"]) return;
     if (reason.code == 50035 || reason.message == "Invalid Form Body") {
-        if (!reason.requestData) return;
-        if (!reason.requestData["json"]) return;
         if (reason.requestData["json"] == []) return;
         if (!reason.requestData["json"][0].name || !reason.requestData["json"][0].description) return;
         for (let i = 0; i < reason.requestData["json"].length; i++) {
@@ -71,6 +71,8 @@ process.on("unhandledRejection", (reason, promise) => {
             console.log(`[${ii}/${reason.requestData["json"].length - 1}] (${iii}/32;${iiii}/100) "${cmd.name}", "${cmd.description}"`);
         }
         //console.log(reason.requestData["json"]);
+    } else {
+        console.log(reason.requestData["json"]);
     }
 });
 
