@@ -76,35 +76,47 @@ module.exports = {
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         }
 
-        console.log("isChannel.messages.fetch()");
         let fetchMessages = await isChannel.messages.fetch()
             .then((d) => {return d})
             .catch(() => {return false});
-        //console.log("fetchMessages", fetchMessages);
 
-        console.log("map before");
         //await _isInvite(client, fetchMessages);
         let messagesContens = fetchMessages.map((i) => {return i.content});
-        console.log("map");
+        let messagesURLs = fetchMessages.map((i) => {return i.url});
+        if (messagesContens.length == 0) console.log("No messages.");
+        let arr = [];
+        //console.log("map");
         for (let i = 0; i < messagesContens.length; i++) {
             let content = messagesContens[i]
                 .replace('\n', ' ')
                 .split(' ');
-            console.log("replace + split");
+            //console.log("split");
+            /* if (!(content.includes("discord") && (content.includes(".gg") || content.includes(".com"))))
+                continue; */
+            //console.log("possible invite");
             for (let ii = 0; ii < content.length; ii++) {
-                console.log("fetchInvite 2");
-                let isInvite = await client.fetchInvite(content[ii])
+                //console.log("fetchInvite 2");
+                /* let isInvite = await client.fetchInvite(content[ii])
                     .then(() => {return true})
-                    .catch(() => {return false});
-                console.log("messagesContens", isInvite, content[ii]);
+                    .catch(() => {return false}); */
+                if (content[ii].includes("discord.gg/") || content[ii].includes("discord.com/invite/")) {
+                    let processing = content[ii].replace('//', '/').split('/');
+                    let processing2 = content[ii].replace('https', 'http').replace('.com/invite/', '.gg/');
+                    if (processing.length >= 3 && processing.length <= 4) {
+                        console.log(messagesURLs[i] + ":", processing2, processing[processing.length - 1], "(" + ii + "/" + content.length + ")");
+                        arr.push(processing2); //content[ii].split('/')[content[ii].length - 1]);
+                    }
+                }
             }
         }
 
-        console.log("end");
-        const savetodatabaseEmbed = new client.discord.MessageEmbed()
+        let savetodatabaseEmbed = new client.discord.MessageEmbed()
             .setTitle(`Scan channel — status (${fetchMessages ? "success" : "failure"})`)
-            .setDescription(`I detect channel. Please check console.`)
+            .setDescription(`I detect channel. Please check console.\nLinks below detected only by search patterm and was not fetched for now.`) // \n\`\`\`${arr.join('\n')}\`\`\`
             .setColor(client.config.embedColor);
+        for (let i = 0; i < arr.length; i++) {
+            savetodatabaseEmbed.addField('Invite №' + (i + 1) + '/' + arr.length, `${arr[i]}`);
+        }
         return interaction.reply({ embeds: [savetodatabaseEmbed] });
     },
 };
