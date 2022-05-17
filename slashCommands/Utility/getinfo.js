@@ -113,10 +113,10 @@ module.exports = {
         console.log(`[CMD] ${interaction.user.id} asks for invite info: ${fetchedInvite.code} (${fetchedInvite.guild.id})`);
         if (interaction.guild) {
             //let collection = fetchedInvite.guild
-            console.debug({...interaction.guild});
+            //// console.debug({...interaction.guild});
             //console.debug(fetchedInvite.guild);
             //console.debug(...tmp.values());
-            return;
+            //// return;
         }
 
         /* if (client.guilds.cache.get(fetchedInvite.guild.id) === undefined) {

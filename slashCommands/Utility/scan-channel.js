@@ -104,15 +104,20 @@ module.exports = {
                     let processing2 = content[ii].replace('https', 'http').replace('.com/invite/', '.gg/');
                     if (processing.length >= 3 && processing.length <= 4) {
                         console.log(messagesURLs[i] + ":", processing2, processing[processing.length - 1], "(" + ii + "/" + content.length + ")");
-                        arr.push(processing2); //content[ii].split('/')[content[ii].length - 1]);
+                        arr.push([messagesURLs[i], processing2]); //content[ii].split('/')[content[ii].length - 1]);
                     }
                 }
             }
         }
 
+        let _desc = "";
+        for (let i = 0; i < arr.length; i++) {
+            _desc += `([M](${arr[i][0]})) ${arr[i][1]}\n`;
+        }
         let savetodatabaseEmbed = new client.discord.MessageEmbed()
             .setTitle(`Scan channel — status (${fetchMessages ? "success" : "failure"})`)
-            .setDescription(`I detect channel.\nLinks below detected only by search patterm\nand was not fetched for now.\n${arr.join('\n')}`)
+            .setDescription(_desc)
+            .setFooter({ text: `Warning: Links above detected only by search pattern and not fetched for now. There may be mistakes or some links may not be listed.` })
             .setColor(client.config.embedColor);
         /* for (let i = 0; i < arr.length; i++) {
             savetodatabaseEmbed.addField('Invite №' + (i + 1) + '/' + arr.length, `${arr[i]}`);
