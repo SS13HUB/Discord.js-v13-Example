@@ -38,16 +38,23 @@ module.exports = {
             }
             
         } else if (interaction.isButton()) {
-            if (interaction.customId == "one-time-button") {
-                const command = client.slash.get("one-time-button");
-                try {
-                    return command.trigger(client, interaction); //, args
-                } catch (e) {
-                    interaction.reply({ content: e.message });
+            //console.log(interaction);
+            const cmdsArr = [...client.slash.keys()];
+            for (let i = 0; i < cmdsArr.length; i++) {
+                const element = client.slash.get(cmdsArr[i]);
+                //console.log(element);
+                if (!element.triggers) continue;
+                if (element.triggers.includes(interaction.customId)) {
+                    const command = element; //client.slash.get("one-time-button");
+                    try {
+                        return command.trigger(client, interaction); //, args
+                    } catch (e) {
+                        interaction.reply({ content: e.message });
+                    }
                 }
             }
+            
             // if (modal.customId === 'modal-customid') {
-            //console.log(interaction);
             return; // interaction.channel.send({ content: "Button received.", ephemeral: true });
         }
     }

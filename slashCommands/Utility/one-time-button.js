@@ -2,11 +2,15 @@
 const { SlashCommandBuilder } = require('@discordjs/builders'); // require('discord.js');
 const { MessageActionRow, MessageButton } = require('discord.js');
 
-module.exports = {
+
+let self = module.exports = {
     name: "one-time-button",
     category: "Utility",
     description: "A button that will only work once and be destroyed.",
     ownerOnly: true,
+    triggers: [
+        'one-time-button'
+    ],
     trigger: async (client, interaction) => {
         await interaction.update({ content: 'Pinged', components: [], embeds: [] });
     },
@@ -15,7 +19,7 @@ module.exports = {
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId('one-time-button')
+                    .setCustomId(self.triggers[0])
                     .setLabel('Click on me!')
                     .setStyle('PRIMARY'),
             );
