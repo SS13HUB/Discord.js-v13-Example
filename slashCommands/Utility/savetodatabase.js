@@ -29,24 +29,45 @@ function doRequest(sql) {
     });
 }
 
-const base_path = process.cwd() + '/src/database/';
-let db_guilds_create = base_path + 'Guilds/create.sql';
-let db_guilds_drop   = base_path + 'Guilds/drop.sql';
-let db_guilds_insert = base_path + 'Guilds/insert.sql';
-let db_guilds_select = base_path + 'Guilds/select.sql';
+const base_path = process.cwd() + '\\src\\database\\';
+const db_guilds_create = base_path + 'Guilds\\create.sql';
+const db_guilds_drop   = base_path + 'Guilds\\drop.sql';
+const db_guilds_insert = base_path + 'Guilds\\insert.sql';
+const db_guilds_select = base_path + 'Guilds\\select.sql';
 
+
+let FilesSQLtoRead2 = {
+    "_isLoaded": false,
+    "Guilds": {
+        "Create": db_guilds_create,
+        "Drop":   db_guilds_drop,
+        "Insert": db_guilds_insert,
+        "Select": db_guilds_select
+    },
+    "Invites": {
+        "Create": db_guilds_create,
+        "Drop":   db_guilds_drop,
+        "Insert": db_guilds_insert,
+        "Select": db_guilds_select
+    },
+};
 
 let FilesSQLtoRead = [db_guilds_create, db_guilds_drop, db_guilds_insert, db_guilds_select];
+let isSQLloaded = false;
 
 async function FilsqSQLtoCode(_FilesSQLtoRead) {
-    for (let i = 0; i < _FilesSQLtoRead.length; i++) {
-        let element = _FilesSQLtoRead[i];
-        fs.readFile(element, 'utf8', (error, data) => {
-            if (error) throw error;
-            //console.log(data.toString());
-            _FilesSQLtoRead[i] = data.toString();
-        });
+    if (!isSQLloaded) {
+        for (let i = 0; i < _FilesSQLtoRead.length; i++) {
+            let element = _FilesSQLtoRead[i];
+            fs.readFile(element, 'utf8', (error, data) => {
+                if (error) throw error;
+                //console.log(data.toString());
+                _FilesSQLtoRead[i] = data.toString();
+            });
+        }
+        isSQLloaded = true;
     }
+    // _FilesSQLtoRead[0].includes(:\)
     return _FilesSQLtoRead;
 };
 
@@ -74,7 +95,8 @@ module.exports = {
         if (typeof param1 !== "string") param1 = `${param1}`;
 
         FilesSQLtoRead = await FilsqSQLtoCode(FilesSQLtoRead)
-            .catch(() => {console.error("Error: Cann't read SQL schema files!"); return FilesSQLtoRead});
+            .then((d) => {return d})
+            .catch((error) => {console.error("Error: Cann't read SQL schema files:\n", FilesSQLtoRead, "\n", error); return FilesSQLtoRead});
 
         let isInvite = await client.fetchInvite(param1)
             .then((d) => {return d})
@@ -91,12 +113,12 @@ module.exports = {
         console.log(`[CMD] ${interaction.user.id} trigger savetodatabase: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
 
         if (isInvite) {
-            let amImOnServer = await client.guilds.cache.get(isInvite.guild.id) !== undefined;
             let savetodatabaseEmbed = new client.discord.MessageEmbed()
                 .setTitle('Save to DB — status')
                 .setDescription(`I detect invite. Saving to DB...`)
                 .setColor(client.config.embedColor);
             //const msg = await interaction.reply({ embeds: [savetodatabaseEmbed] });
+            let amImOnServer = await client.guilds.cache.get(isInvite.guild.id) !== undefined;
             if (amImOnServer) {
                 const msg = (_local_debug ? await interaction.channel.send(`Provided input is alive invite. Saving to DB...`) : false);
                 request = FilesSQLtoRead[2]
@@ -154,7 +176,8 @@ module.exports = {
                 .setTitle('Save to DB')
                 .setDescription(`I detect server.`)
                 .setColor(client.config.embedColor);
-            return interaction.reply({ embeds: [savetodatabaseEmbed] });
+            //return interaction.reply({ embeds: [savetodatabaseEmbed] });
+            let amImOnServer = await client.guilds.cache.get(isServer.id) !== undefined;
         } else {
             const savetodatabaseEmbed = new client.discord.MessageEmbed()
                 .setTitle('Save to DB')

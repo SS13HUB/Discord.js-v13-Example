@@ -7,12 +7,12 @@ CREATE TABLE IF NOT EXISTS public."Invites"
 (
     id bigint NOT NULL, -- ToDo: unsigned; CHECK snowflake_check
     code character(102) COLLATE pg_catalog."default",
-    guild_id bigint COLLATE pg_catalog."default",
+    guild_id bigint,
     ---
-    channel_id bigint COLLATE pg_catalog."default",
-    inviter_id bigint COLLATE pg_catalog."default",
+    channel_id bigint,
+    inviter_id bigint,
     target_type integer,
-    target_user bigint COLLATE pg_catalog."default",
+    target_user bigint,
     target_application text COLLATE pg_catalog."default",
     approximate_presence_count integer,
     approximate_member_count integer,
@@ -21,12 +21,12 @@ CREATE TABLE IF NOT EXISTS public."Invites"
     guild_scheduled_event text COLLATE pg_catalog."default",
     ---
     --- https://youtu.be/vK_n9apIOlM
-    discoverer_id bigint COLLATE pg_catalog."default",
+    discoverer_id bigint,
     discovery_date timestamp with time zone,
     was_revoked boolean,
-    revoker_id bigint COLLATE pg_catalog."default",
+    revoker_id bigint,
     revoke_date timestamp with time zone,
-    updater_id bigint COLLATE pg_catalog."default",
+    updater_id bigint,
     updated timestamp with time zone,
     ---
     CONSTRAINT "Invites_pkey" PRIMARY KEY (id),
