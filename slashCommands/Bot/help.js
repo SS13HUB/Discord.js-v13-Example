@@ -17,7 +17,13 @@ module.exports = {
     description: "Return all commands, or one specific command!",
     ownerOnly: false,
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        console.log(interaction);
+        if (interaction.channel !== null) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
 
         // Buttons that take you to a link
         // If you want to delete them, remove this part of
@@ -40,7 +46,7 @@ module.exports = {
             // Get the slash commands of a Bot category
             const botCommandsList = [];
             readdirSync(`./slashCommands/Bot`).forEach((file) => {
-                const filen = require(`../../slashCommands/Bot/${file}`);
+                const filen = require(`${process.cwd()}/slashCommands/Bot/${file}`);
                 const name = `\`${filen.name}\``
                 botCommandsList.push(name);
             });
@@ -48,7 +54,7 @@ module.exports = {
             // Get the slash commands of a Utility category
             const utilityCommandsList = [];
             readdirSync(`./slashCommands/Utility`).forEach((file) => {
-                const filen = require(`../../slashCommands/Utility/${file}`);
+                const filen = require(`${process.cwd()}/slashCommands/Utility/${file}`);
                 const name = `\`${filen.name}\``
                 utilityCommandsList.push(name);
             });
@@ -56,7 +62,7 @@ module.exports = {
             // This is what it commands when using the command without arguments
             const helpEmbed = new client.discord.MessageEmbed()
                 .setTitle(`${client.user.username} SlashHelp`)
-                .setDescription(` Hello **<@${interaction.member.id}>**, I am <@${client.user.id}>.  \nYou can use \`/help <slash_command>\` to see more info about the SlashCommands!\n**Total Commands:** ${client.commands.size}\n**Total SlashCommands:** ${client.slash.size}`)
+                .setDescription(` Hello **<@${interaction.user.id}>**, I am <@${client.user.id}>.  \nYou can use \`/help <slash_command>\` to see more info about the SlashCommands!\n**Total Commands:** ${client.commands.size}\n**Total SlashCommands:** ${client.slash.size}`)
                 .addField("🤖 - Bot SlashCommands", botCommandsList.map((data) => `${data}`).join(", "), true)
                 .addField("🛠 - Utility SlashCommands", utilityCommandsList.map((data) => `${data}`).join(", "), true)
                 .setColor(client.config.embedColor)

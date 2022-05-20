@@ -31,7 +31,7 @@ module.exports = {
             // Get the commands of a Bot category
             const botCommandsList = [];
             readdirSync(`./commands/Bot`).forEach((file) => {
-                const filen = require(`../../commands/Bot/${file}`);
+                const filen = require(`${process.cwd()}/commands/Bot/${file}`);
                 const name = `\`${filen.name}\``
                 botCommandsList.push(name);
             });
@@ -39,7 +39,7 @@ module.exports = {
             // Get the commands of a Utility category
             const utilityCommandsList = [];
             readdirSync(`./commands/Utility`).forEach((file) => {
-                const filen = require(`../../commands/Utility/${file}`);
+                const filen = require(`${process.cwd()}/commands/Utility/${file}`);
                 const name = `\`${filen.name}\``
                 utilityCommandsList.push(name);
             });

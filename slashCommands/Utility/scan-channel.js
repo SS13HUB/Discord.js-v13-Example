@@ -101,7 +101,7 @@ module.exports = {
                     .catch(() => {return false}); */
                 if (content[ii].includes("discord.gg/") || content[ii].includes("discord.com/invite/")) {
                     let processing = content[ii].replace('//', '/').split('/');
-                    let processing2 = content[ii].replace('https', 'http').replace('.com/invite/', '.gg/');
+                    let processing2 = content[ii].replace('https', 'http').replace('.com/invite/', '.gg/');dw
                     if (processing.length >= 3 && processing.length <= 4) {
                         console.log(messagesURLs[i] + ":", processing2, processing[processing.length - 1], "(" + ii + "/" + content.length + ")");
                         arr.push([messagesURLs[i], processing2]); //content[ii].split('/')[content[ii].length - 1]);

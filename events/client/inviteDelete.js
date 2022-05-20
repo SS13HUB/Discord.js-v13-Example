@@ -4,7 +4,7 @@
     https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-inviteCreate
 */
 
-const chalkMy = require("./../../src/chalk");
+const chalkMy = require(process.cwd() + "/src/chalk");
 
 module.exports = {
     name: 'inviteDelete',

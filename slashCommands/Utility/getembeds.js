@@ -19,13 +19,27 @@ module.exports = {
         if (!messageId) return interaction.reply({ content: `There is no any message IDs!` });
 
         await interaction.channel.messages.fetch(messageId)
-            .then(message => console.log(message.content))
-            .catch(console.error);
+            .then(() => {return;})
+            .catch((e) => {return interaction.reply(`Error:\nCan not find message with this ID in this channel.`);});
+
+        let _message = await interaction.channel.messages.fetch(messageId)
+            .then((d) => {return [true, d]})
+            .catch((e) => {return [false, e]});
+
+        if (!_message[0]) {
+            return interaction.reply(`Error:\n\`\`\`${e}\`\`\``);
+        }
+
+        if (_message[1].embeds == []) {
+            return interaction.reply(`Error:\nNo embeds.`);
+        }
+
+        console.log(_message[1].embeds);
 
         const getEmbedsEmbed = new client.discord.MessageEmbed()
-            .setDescription(`In console.`);
+            .setDescription(`\`\`\`${JSON.stringify(_message[1].embeds, null, 4)}\`\`\``); // `In console.`
 
-        await interaction.reply({ embeds: [getEmbedsEmbed] });
+        return interaction.reply({ embeds: [getEmbedsEmbed] });
 
     },
 };

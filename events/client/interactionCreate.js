@@ -1,3 +1,6 @@
+
+const chalkMy = require(process.cwd() + "/src/chalk");
+
 module.exports = {
     name: 'interactionCreate',
 
@@ -31,6 +34,8 @@ module.exports = {
                 } else if (option.value) args.push(option.value);
             }
             
+            
+            console.log(chalkMy.cmd, `Command: "${command.name}" (who: "${interaction.id}", where: "${interaction.id}")`);
             try {
                 return command.run(client, interaction, args);
             } catch (e) {

@@ -1,6 +1,6 @@
 
 const { Formatters } = require('discord.js');
-const chalkMy = require("../../src/chalk");
+const chalkMy = require(process.cwd() + "/src/chalk");
 
 module.exports = {
     name: 'rateLimit',

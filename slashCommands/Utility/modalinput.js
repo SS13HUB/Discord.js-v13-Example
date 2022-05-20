@@ -15,11 +15,19 @@ module.exports = {
                 new TextInputComponent() // We create a Text Input Component
                     .setCustomId('textinput-customid')
                     .setLabel('Some text Here')
-                    .setStyle('SHORT') //IMPORTANT: Text Input Component Style can be 'SHORT' or 'LONG'
+                    .setStyle('SHORT') //IMPORTANT: 'SHORT' or 'LONG'
                     .setMinLength(4)
                     .setMaxLength(10)
                     .setPlaceholder('Write a text here')
-                    .setRequired(true) // If it's required or not
+                    .setRequired(true), // If it's required or not
+                new TextInputComponent()
+                    .setCustomId('textinput-customid-2')
+                    .setLabel('Some text Here')
+                    .setStyle('LONG')
+                    .setMinLength(4)
+                    .setMaxLength(10)
+                    .setPlaceholder('Write a text here')
+                    .setRequired(true)
             );
         //await interaction.reply({ content: 'Pong!', components: [row] });
         await showModal(modal, {

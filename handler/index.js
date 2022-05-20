@@ -1,19 +1,19 @@
 
 const fs = require("fs");
-const chalkMy = require("./../src/chalk");
+const chalkMy = require(process.cwd() + "/src/chalk");
 
 /**
  * Load Events
  */
 const loadEvents = async function (client) {
-    const eventFolders = fs.readdirSync("./events");
+    const eventFolders = fs.readdirSync(process.cwd() + "/events");
     for (const folder of eventFolders) {
         const eventFiles = fs
-        .readdirSync(`./events/${folder}`)
+        .readdirSync(`${process.cwd()}/events/${folder}`)
         .filter((file) => file.endsWith(".js"));
         
         for (const file of eventFiles) {
-            const event = require(`../events/${folder}/${file}`);
+            const event = require(`${process.cwd()}/events/${folder}/${file}`);
             
             if (event.name) {
                 console.log(chalkMy.load, chalkMy.ok, `Event: "${file}"`); // Event is being loaded:
@@ -23,9 +23,15 @@ const loadEvents = async function (client) {
             }
             
             if (event.once) {
-                client.once(event.name, (...args) => event.execute(...args, client));
+                client.once(event.name, (...args) => {
+                    //console.log(chalkMy.event, `Event fired (once): "${event.name}"`); // (${interaction !== null ? interaction : "null"})
+                    event.execute(...args, client);
+                });
             } else {
-                client.on(event.name, (...args) => event.execute(...args, client));
+                client.on(event.name, (...args) => {
+                    //console.log(chalkMy.event, `Event fired: "${event.name}"`, ...args.interaction);
+                    event.execute(...args, client);
+                });
             }
         }
     }
@@ -35,14 +41,14 @@ const loadEvents = async function (client) {
  * Load Prefix Commands
  */
 /* const loadCommands = async function (client) {
-    const commandFolders = fs.readdirSync("./commands");
+    const commandFolders = fs.readdirSync(process.cwd() + "/commands");
     for (const folder of commandFolders) {
         const commandFiles = fs
-            .readdirSync(`./commands/${folder}`)
+            .readdirSync(`${process.cwd()}/commands/${folder}`)
             .filter((file) => file.endsWith(".js"));
         
         for (const file of commandFiles) {
-            const command = require(`../commands/${folder}/${file}`);
+            const command = require(`${process.cwd()}/commands/${folder}/${file}`);
             
             if (command.name) {
                 client.commands.set(command.name, command);
@@ -64,14 +70,14 @@ const loadEvents = async function (client) {
 const loadSlashCommands = async function (client) {
     let slash = [];
 
-    const commandFolders = fs.readdirSync("./slashCommands");
+    const commandFolders = fs.readdirSync(process.cwd() + "/slashCommands");
     for (const folder of commandFolders) {
         const commandFiles = fs
-            .readdirSync(`./slashCommands/${folder}`)
+            .readdirSync(`${process.cwd()}/slashCommands/${folder}`)
             .filter((file) => file.endsWith(".js"));
         
         for (const file of commandFiles) {
-            const command = require(`../slashCommands/${folder}/${file}`);
+            const command = require(`${process.cwd()}/slashCommands/${folder}/${file}`);
             
             if (command.name) {
                 // https://discord.com/developers/docs/interactions/application-commands
@@ -103,7 +109,7 @@ const loadSlashCommands = async function (client) {
 
         const register = 1; // or purge, bool in int
         if (Boolean(register)) {
-            console.log(chalkMy.load, `Registering Slash Commands for all guilds.`);
+            console.log(chalkMy.load, `Registering ${slash.length} Slash Commands for all guilds.`);
             //console.log(slash);
             /* for (let i = 0; i < slash.length; i++) {
                 let cmd  = slash[i];
