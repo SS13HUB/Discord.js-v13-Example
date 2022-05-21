@@ -1,5 +1,6 @@
 
 const { Formatters } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const chalkMy = require(process.cwd() + "/src/chalk");
 
 module.exports = {
@@ -44,7 +45,27 @@ module.exports = {
             if (!isInvite) {
                 return interaction.reply({ ephemeral: true, content: `Error: There is no any alive invite link.` + Formatters.codeBlock('markdown', inviteIn) + Formatters.codeBlock('markdown', alive) + Formatters.codeBlock('markdown', language) });
             }
-            return modal.reply('Congrats! Powered by discord-modals.' + Formatters.codeBlock('markdown', inviteIn) + Formatters.codeBlock('markdown', alive) + Formatters.codeBlock('markdown', language));
+            const row = new MessageActionRow().addComponents(
+                new MessageButton()
+                    .setCustomId('submit-modal-form-echo')
+                    .setLabel('Echo')
+                    .setStyle('PRIMARY'),
+                );
+            const embed = new MessageEmbed()
+                .setTitle(':chains: ・ Invite link info')
+                .addField("Invite", `${inviteIn}`, true) // inviteIn.code
+                .addField("Is alive?", `${alive == "+" ? true : alive == "-" ? false : "unknown input"}`, true)
+                .addField("Language", `${language}`, true)
+                //.setColor(client.config.embedColor)
+                .setTimestamp()
+                .setFooter({ text: `ID: ${isInvite.guild.id}`, iconURL: `${isInvite.guild.iconURL()}` });
+            return modal.reply({ embeds: [embed], components: [row] });
+            /* return modal.reply(
+                'Congrats! Powered by discord-modals.' + 
+                Formatters.codeBlock('markdown', inviteIn) + 
+                Formatters.codeBlock('markdown', alive) + 
+                Formatters.codeBlock('markdown', language)
+            ); */
         }
     }
 }

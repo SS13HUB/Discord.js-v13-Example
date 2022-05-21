@@ -1,11 +1,35 @@
 
 const { Modal, TextInputComponent, showModal } = require('discord-modals'); // Now we extract the showModal method
+const { Permissions } = require('discord.js');
 
-module.exports = {
+self = module.exports = {
     name: "submit",
     category: "Utility",
     description: "Call form to input invite with server info to propose to publish.",
     ownerOnly: false,
+    triggers: [
+        'submit-modal-form-echo'
+    ],
+    trigger: async (client, interaction) => {
+        if (interaction.customId == self.triggers[0]) {
+            if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR) && !interaction.member.roles.resolveId(process.env.LIBRARIAN_ROLE_ID)) {
+                interaction.reply({ ephemeral: true, content: `Access denied: Only librarian or admin allowed to do this.`});
+            }
+            await interaction.update({ components: [] }); // Message.removeAttachments
+            if (interaction.message.content) {
+                return await interaction.channel.send({
+                    content: interaction.message.content, 
+                    embeds: interaction.message.embeds, 
+                    components: interaction.message.components
+                });
+            } else {
+                return await interaction.channel.send({
+                    embeds: interaction.message.embeds, 
+                    components: interaction.message.components
+                });
+            }
+        }
+    },
     run: async (client, interaction) => {
         await interaction.channel.sendTyping();
         const modal = new Modal() // We create a Modal
