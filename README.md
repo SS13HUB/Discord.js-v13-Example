@@ -1,4 +1,4 @@
-# Discord.js-v13-Example
+# ss13hub-bot
 This is an example bot to make commands with categories using discord.js v13, it contains examples for commands with prefix and slash commands.
 If you find an error or need support, go to my discord server and open a ticket > [Discord Server Here](https://dsc.gg/faithcommunity)
 
