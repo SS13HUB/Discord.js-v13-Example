@@ -1,7 +1,89 @@
 
+const { inlineCode, codeBlock } = require('@discordjs/builders');
 const { Formatters } = require('discord.js');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { Pool } = require('pg');
+const connectionString = process.env.DB_URL;
+const fs = require('fs').promises;
+
 const chalkMy = require(process.cwd() + "/src/chalk");
+
+const _local_debug = Boolean(1);
+
+function doRequest(sql) {
+    const pool = new Pool({
+        connectionString,
+        ssl: {
+            rejectUnauthorized: false,
+        },
+    });
+    return new Promise((resolve, reject) => {
+        /* pool.query(
+            sql.file(_path)._items[0].text, (err, res, fields) => {
+            if (err) {console.error(err); process.exitCode = 1; return reject(err);} // throw err;
+            if (res) resolve("OK?"); //console.log("OK?\n", res);
+            //console.log(results[0].solution);
+        }); */
+        pool.query(sql, (err, res) => {
+            //console.log(err ? err.stack : res.rows[0].message)
+            if (err) {console.error(err); process.exitCode = 1; return reject(err);} // throw err;
+            if (res) {resolve(res);} // "Query OK. Record successfully saved or updated." //resolve(res); //console.log("OK?\n", res);
+        });
+    });
+}
+
+const base_path = process.cwd() + '\\src\\database\\';
+const db_invites_create = base_path + 'Invites\\create.sql';
+const db_invites_drop   = base_path + 'Invites\\drop.sql';
+const db_invites_insert = base_path + 'Invites\\insert.sql';
+const db_invites_select = base_path + 'Invites\\select.sql';
+
+
+let FilesSQLtoRead2 = {
+    "_isLoaded": false,
+    "Guilds": {
+        "Create": db_invites_create,
+        "Drop":   db_invites_drop,
+        "Insert": db_invites_insert,
+        "Select": db_invites_select
+    },
+    "Invites": {
+        "Create": db_invites_create,
+        "Drop":   db_invites_drop,
+        "Insert": db_invites_insert,
+        "Select": db_invites_select
+    },
+};
+
+//let FilesSQLtoRead = [db_invites_create, db_invites_drop, db_invites_insert, db_invites_select];
+let FilesSQLtoRead = [db_invites_select];
+let isSQLloaded = false;
+
+async function FilsqSQLtoCode(_FilesSQLtoRead) {
+    if (!isSQLloaded) {
+        if (_local_debug) console.log("Reading SQL in first time. (length: " + _FilesSQLtoRead.length + ")");
+        for (let i = 0; i < _FilesSQLtoRead.length; i++) {
+            let element = _FilesSQLtoRead[i];
+            //if (_local_debug) console.log("[" + i + "/" + _FilesSQLtoRead.length + "]", element, "\n^", _FilesSQLtoRead[i]);
+            _FilesSQLtoRead[i] = await fs.readFile(element, 'utf8');
+            //_FilesSQLtoRead[i] = Buffer.from(data); // const data = 
+            /* fs.readFile(element, 'utf8', (error, data) => {
+                if (error) throw error;
+                //console.log(data.toString());
+                _FilesSQLtoRead[i] = data.toString();
+                if (_local_debug) console.log("data:", data);
+                if (_local_debug) console.log("data.toString():", data.toString());
+            }); */
+            if (_local_debug) console.log("[" + i + "/" + _FilesSQLtoRead.length + "]", element, "\n^", _FilesSQLtoRead[i]);
+        }
+        isSQLloaded = true;
+    } else {
+        if (_local_debug) console.log("SQL already readed.");
+    }
+    // _FilesSQLtoRead[0].includes(:\)
+    return _FilesSQLtoRead;
+};
+
 
 module.exports = {
     name: 'modalSubmit',
@@ -45,6 +127,49 @@ module.exports = {
             if (!isInvite) {
                 return interaction.reply({ ephemeral: true, content: `Error: There is no any alive invite link.` + Formatters.codeBlock('markdown', inviteIn) + Formatters.codeBlock('markdown', alive) + Formatters.codeBlock('markdown', language) });
             }
+            FilesSQLtoRead = await FilsqSQLtoCode(FilesSQLtoRead)
+                .then((d) => {return d})
+                .catch((error) => {console.error("Error: Cann't read SQL schema files:\n", FilesSQLtoRead, "\n", error); return FilesSQLtoRead});
+            //const msg = (_local_debug ? await interaction.channel.send(`Provided input is alive invite. Saving to DB...`) : false);
+            let request = FilesSQLtoRead[0]
+                .replace('-- WHERE', 'WHERE')
+                .replace('id = 123', `code = '${isInvite}'`);
+            //if (_local_debug) console.log("request:", request);
+            let isSaved = await doRequest(request)
+                .then((val) => {return [true, val];})
+                .catch((err) => {return [false, err];});
+            //console.log("SQL:", isSaved[1]);
+            console.log("rowCount:", isSaved[1].rowCount);
+            console.log("rows:", isSaved[1].rows);
+
+            // INSERTING BELOW
+            //console.log("modal:", modal);
+            //console.log("interaction:", interaction);
+            //console.log("client:", client);
+            //console.log("isInvite:", isInvite);
+            if (isSaved[1].rowCount < 1) {
+                FilesSQLtoRead = [db_invites_insert];
+                isSQLloaded = false;
+                FilesSQLtoRead = await FilsqSQLtoCode(FilesSQLtoRead)
+                    .then((d) => {return d})
+                    .catch((error) => {console.error("Error: Cann't read SQL schema files:\n", FilesSQLtoRead, "\n", error); return FilesSQLtoRead});
+                //const msg = (_local_debug ? await interaction.channel.send(`Provided input is alive invite. Saving to DB...`) : false);
+                //const now = new Date();
+                // console.log("date:", new Date(), "now:", now);
+                // THIS ----> console.log("toISOString:", new Date().toISOString() + "+00", "now:", now.toISOString() + "+00");
+                // console.log("toLocaleDateString:", new Date().toLocaleDateString('us'), "now:", now.toLocaleDateString('us'));
+                // console.log("toLocaleDateString2:", new Date().toLocaleDateString('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }), "now:", now.toLocaleDateString('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }));
+                let request = FilesSQLtoRead[0]
+                    .replace('code,', 'code, guild_id, discoverer_id,')
+                    .replace("'__REPLACE_ME__',", `'${isInvite.code}', ${isInvite.guild.id}, ${modal.user.id},`);
+                if (_local_debug) console.log("request:", request);
+                let isSaved2 = await doRequest(request)
+                    .then((val) => {return [true, val];})
+                    .catch((err) => {return [false, err];});
+                console.log("isSaved2:", isSaved2);
+            }
+            // INSERTING UPPER
+
             const row = new MessageActionRow().addComponents(
                 new MessageButton()
                     .setCustomId('submit-modal-form-echo')
@@ -52,13 +177,17 @@ module.exports = {
                     .setStyle('PRIMARY'),
                 );
             const embed = new MessageEmbed()
-                .setTitle(':chains: ・ Invite link info')
+                .setTitle(':chains: ・ Invite link submitting')
                 .addField("Invite", `${inviteIn}`, true) // inviteIn.code
                 .addField("Is alive?", `${alive == "+" ? true : alive == "-" ? false : "unknown input"}`, true)
                 .addField("Language", `${language}`, true)
+                .addField("Was saved by bot before:", isSaved[1].rowCount > 0 ? "Yes" : "No")
+                //.addField("Database:", '>', isSaved[1])
+                //.addField("rowCount:", '>', isSaved[1].rowCount)
+                //.addField("rows:", '>', isSaved[1].rows) // "```\n"
                 //.setColor(client.config.embedColor)
                 .setTimestamp()
-                .setFooter({ text: `ID: ${isInvite.guild.id}`, iconURL: `${isInvite.guild.iconURL()}` });
+                .setFooter({ text: `User: ${interaction.user.id}; Server: ${isInvite.guildId}`, iconURL: `${isInvite.guild.iconURL()}` });
             return modal.reply({ embeds: [embed], components: [row] });
             /* return modal.reply(
                 'Congrats! Powered by discord-modals.' + 

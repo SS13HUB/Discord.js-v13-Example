@@ -1,0 +1,2 @@
+
+TRUNCATE TABLE public."Invites"

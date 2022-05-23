@@ -5,8 +5,7 @@
 
 CREATE TABLE IF NOT EXISTS public."Invites"
 (
-    id bigint NOT NULL, -- ToDo: unsigned; CHECK snowflake_check
-    code character(102) COLLATE pg_catalog."default",
+    code character(102) NOT NULL COLLATE pg_catalog."default",
     guild_id bigint,
     ---
     channel_id bigint,
@@ -29,11 +28,11 @@ CREATE TABLE IF NOT EXISTS public."Invites"
     updater_id bigint,
     updated timestamp with time zone,
     ---
-    CONSTRAINT "Invites_pkey" PRIMARY KEY (id),
-    CONSTRAINT id UNIQUE (id),
+    CONSTRAINT "Invites_pkey" PRIMARY KEY (code),
+    CONSTRAINT code UNIQUE (code),
     CONSTRAINT snowflake_check CHECK (
-        id::numeric >= 0::numeric AND
-        id::numeric <= '9223372036854775808'::numeric
+        guild_id::numeric >= 0::numeric AND
+        guild_id::numeric <= 9223372036854775808::numeric
     ) NOT VALID
 )
 

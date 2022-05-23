@@ -51,7 +51,7 @@ self = module.exports = {
                     .setMinLength(1)
                     .setMaxLength(1)
                     .setPlaceholder('"+" or "-" without quotes')
-                    .setRequired(true),
+                    .setRequired(false),
                 new TextInputComponent()
                     .setCustomId('textinput-language')
                     .setLabel('List project languages')
@@ -59,7 +59,7 @@ self = module.exports = {
                     .setMinLength(2)
                     .setMaxLength(20)
                     .setPlaceholder('English, Russian')
-                    .setRequired(true)
+                    .setRequired(false)
             );
         await showModal(modal, {
             client: client, // Client to show the Modal through the Discord API.
