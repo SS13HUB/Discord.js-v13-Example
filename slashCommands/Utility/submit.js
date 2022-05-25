@@ -34,7 +34,12 @@ self = module.exports = {
         }
     },
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
         const modal = new Modal() // We create a Modal
             .setCustomId('submit-modal-form')
             .setTitle('Submit your invite')

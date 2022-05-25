@@ -1,5 +1,7 @@
 
 const { Permissions } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const chalkMy = require(process.cwd() + "/src/chalk");
 
 /* async function _fetchInvite(client, invite) {
     try {
@@ -30,7 +32,12 @@ module.exports = {
     description: "I will try to convert your invite link to button (few possiable formats avaliable).",
     ownerOnly: false,
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
         //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteCode = interaction.options.getString("invite");
         if (!inviteCode) return interaction.reply({ content: `There is no any invite link!` });
@@ -54,7 +61,7 @@ module.exports = {
                     .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
                     .setColor(client.config.embedColor)
-                console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
+                console.log(chalkMy.cmd, `${interaction.user.id} trigger invitetobutton: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
                 return interaction.reply({ embeds: [inviteToButtonInvite], ephemeral: true });
                 //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
             }
@@ -72,7 +79,7 @@ module.exports = {
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId('invitetobutton_primary')
+                    //.setCustomId('invitetobutton_primary')
                     .setLabel(fetchedInvite.code)
                     .setURL(`${fetchedInvite.url}?with_counts=true&with_expiration=true`)
                     .setStyle('LINK'),

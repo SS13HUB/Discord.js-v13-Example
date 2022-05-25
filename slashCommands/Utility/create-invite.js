@@ -46,7 +46,12 @@ let self = module.exports = {
         }
     },
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
         const row = new MessageActionRow().addComponents(
             new MessageButton()
                 .setCustomId(self.triggers[0])

@@ -18,7 +18,7 @@ module.exports = {
     ownerOnly: false,
     run: async (client, interaction) => {
         console.log(interaction);
-        if (interaction.channel !== null) {
+        if (interaction.channel) {
             await interaction.channel.sendTyping();
         } else {
             let _channel = await client.channels.fetch(interaction.channelId);

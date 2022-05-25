@@ -34,8 +34,14 @@ module.exports = {
                 } else if (option.value) args.push(option.value);
             }
             
-            
-            console.log(chalkMy.cmd, `Command: "${command.name}" (who: "${interaction.user.id}", where: "${interaction.guildId}")`);
+            let _where;
+            if (interaction.guildId) {
+                _where = interaction.guildId;
+            } else {
+                if (interaction.user.id != process.env.OWNER_ID) console.log("[Interaction]", interaction);
+                _where = interaction.type;
+            }
+            console.log(chalkMy.cmd, `Command: "${command.name}" (user "${interaction.user.id}" in "${_where}")`);
             try {
                 return command.run(client, interaction, args);
             } catch (e) {

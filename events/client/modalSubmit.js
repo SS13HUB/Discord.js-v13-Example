@@ -98,7 +98,19 @@ module.exports = {
         console.log(chalkMy.event, `Event fired: "modalSubmit".`);
         //console.log(modal);
         if (modal.customId === 'modal-customid') {
-            await interaction.channel.sendTyping();
+            if (interaction.channel) {
+                await interaction.channel.sendTyping();
+            } else {
+                try {
+                    let _channel = await interaction.channels.fetch(interaction.channelId);
+                    await _channel.sendTyping();
+                } catch (e) {
+                    // console.log("client:", client);
+                    // console.log("modal:", modal); // ModalSubmitInteraction
+                    // console.log("interaction:", interaction); // client
+                    console.error(chalkMy.exct, e);
+                }
+            }
             const firstResponse = modal.getTextInputValue('textinput-customid');
             if (!firstResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
             const secondResponse = modal.getTextInputValue('textinput-customid-2');

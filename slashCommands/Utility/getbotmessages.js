@@ -6,7 +6,12 @@ module.exports = {
     description: "Not for public use, sorry.",
     ownerOnly: false,
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
 
         const _messages = await interaction.channel.messages.fetch()
             .then(messages => {

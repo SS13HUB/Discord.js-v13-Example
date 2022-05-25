@@ -30,7 +30,12 @@ module.exports = {
     description: "I will try to get information about your invite link (few possiable formats avaliable).",
     ownerOnly: false,
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
         //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteCode = interaction.options.getString("invite");
         if (!inviteCode) return interaction.reply({ content: `There is no any invite link!` });
@@ -104,10 +109,16 @@ module.exports = {
                 )}`, true)
             .addField(`And can create new?`,
             `${(
-                interaction.guild.me !== undefined ?
-                    (interaction.guild.me.permissions.has([Permissions.FLAGS.MANAGE_GUILD, Permissions.FLAGS.MANAGE_CHANNELS, Permissions.FLAGS.CREATE_INSTANT_INVITE]) ?
-                        "yes" : "no") :
-                    "I'm not on the server"
+                interaction.guild ?
+                    interaction.guild.me !== undefined ?
+                        (interaction.guild.me.permissions.has([
+                                Permissions.FLAGS.MANAGE_GUILD,
+                                Permissions.FLAGS.MANAGE_CHANNELS,
+                                Permissions.FLAGS.CREATE_INSTANT_INVITE
+                            ]) ?
+                            "yes" : "no") :
+                        "I'm not on the server" :
+                    "There is no server. Is this DM?"
             )}`, true);
 
         console.log(`[CMD] ${interaction.user.id} asks for invite info: ${fetchedInvite.code} (${fetchedInvite.guild.id})`);

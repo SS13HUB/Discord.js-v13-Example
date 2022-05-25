@@ -21,7 +21,12 @@ module.exports = {
     description: "Not for public use, sorry.",
     ownerOnly: true,
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
         if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteCode = interaction.options.getString("param1");
         if (!inviteCode) return interaction.reply({ content: `There is no any invite link!` });

@@ -14,7 +14,12 @@ module.exports = {
     description: "Get embeds from message.",
     ownerOnly: false,
     run: async (client, interaction) => {
-        await interaction.channel.sendTyping();
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
         const messageId = interaction.options.getString("id");
         if (!messageId) return interaction.reply({ content: `There is no any message IDs!` });
 
