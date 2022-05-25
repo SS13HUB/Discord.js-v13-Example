@@ -8,7 +8,7 @@ const fs = require('fs').promises;
 
 const chalkMy = require(process.cwd() + "/src/chalk");
 
-const _local_debug = Boolean(1);
+const _local_debug = Boolean(0);
 
 function doRequest(sql) {
     const pool = new Pool({
@@ -100,18 +100,18 @@ module.exports = {
         if (modal.customId === 'modal-customid') {
             await interaction.channel.sendTyping();
             const firstResponse = modal.getTextInputValue('textinput-customid');
-            if (!firstResponse) return interaction.reply({ content: `Error: There is not enough variables, cancel command execution.` });
+            if (!firstResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
             const secondResponse = modal.getTextInputValue('textinput-customid-2');
-            if (!firstResponse) return interaction.reply({ content: `Error: There is not enough variables, cancel command execution.` });
-            //client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ content: `modalSubmit event fired`});
+            if (!firstResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
+            //client.channels.cache.get(process.env.MASTER_LOG).send({ content: `modalSubmit event fired`});
             return modal.reply('Congrats! Powered by discord-modals.' + Formatters.codeBlock('markdown', firstResponse) + Formatters.codeBlock('markdown', secondResponse));
         } else if (modal.customId === 'submit-modal-form') {
             const inviteIn = modal.getTextInputValue('textinput-invite');
-            if (!inviteIn) return interaction.reply({ content: `Error: There is not enough variables, cancel command execution.` });
-            const alive = modal.getTextInputValue('textinput-alive');
-            if (!alive) return interaction.reply({ content: `Error: There is not enough variables, cancel command execution.` });
-            const language = modal.getTextInputValue('textinput-language');
-            if (!language) return interaction.reply({ content: `Error: There is not enough variables, cancel command execution.` });
+            if (!inviteIn) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
+            const alive = "Unknown" || modal.getTextInputValue('textinput-alive');
+            //if (!alive) alive = "Unknown"; //return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
+            const language =  "Unknown" || modal.getTextInputValue('textinput-language');
+            //if (!language) language = "Unknown"; //return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
 
             // TypeError: Cannot read properties of undefined (reading 'fetchInvite')
             if (typeof inviteIn !== "string") inviteIn = `${inviteIn}`;
@@ -125,7 +125,8 @@ module.exports = {
                 .then((d) => {return d})
                 .catch(() => {return false});
             if (!isInvite) {
-                return interaction.reply({ ephemeral: true, content: `Error: There is no any alive invite link.` + Formatters.codeBlock('markdown', inviteIn) + Formatters.codeBlock('markdown', alive) + Formatters.codeBlock('markdown', language) });
+                // Formatters.codeBlock('markdown', inviteIn) + Formatters.codeBlock('markdown', alive) + Formatters.codeBlock('markdown', language)
+                return modal.reply({ ephemeral: true, content: `**Error**: There is no any alive invite link: \`${inviteIn}\`.` });
             }
             FilesSQLtoRead = await FilsqSQLtoCode(FilesSQLtoRead)
                 .then((d) => {return d})
@@ -133,7 +134,7 @@ module.exports = {
             //const msg = (_local_debug ? await interaction.channel.send(`Provided input is alive invite. Saving to DB...`) : false);
             let request = FilesSQLtoRead[0]
                 .replace('-- WHERE', 'WHERE')
-                .replace('id = 123', `code = '${isInvite}'`);
+                .replace("code = '__REPLACE_ME__'", `code = '${isInvite}'`);
             //if (_local_debug) console.log("request:", request);
             let isSaved = await doRequest(request)
                 .then((val) => {return [true, val];})
@@ -143,11 +144,15 @@ module.exports = {
             console.log("rows:", isSaved[1].rows);
 
             // INSERTING BELOW
-            //console.log("modal:", modal);
+            console.log("modal:", modal);
             //console.log("interaction:", interaction);
             //console.log("client:", client);
-            //console.log("isInvite:", isInvite);
-            if (isSaved[1].rowCount < 1) {
+            console.log("isInvite:", isInvite);
+            const invite_code = isInvite.code;
+            const invite_url = isInvite.url;
+            let isThisInviteAlreadyMemorized = new Boolean(!isSaved[1].rowCount > 0);
+            console.log("isThisInviteAlreadyMemorized:", isThisInviteAlreadyMemorized);
+            if (!isThisInviteAlreadyMemorized) {
                 FilesSQLtoRead = [db_invites_insert];
                 isSQLloaded = false;
                 FilesSQLtoRead = await FilsqSQLtoCode(FilesSQLtoRead)
@@ -172,29 +177,34 @@ module.exports = {
 
             const row = new MessageActionRow().addComponents(
                 new MessageButton()
-                    .setCustomId('submit-modal-form-echo')
-                    .setLabel('Echo')
+                    .setCustomId('submit-modal-form-post') // submit-modal-form-echo
+                    .setLabel('Post')
                     .setStyle('PRIMARY'),
                 );
             const embed = new MessageEmbed()
                 .setTitle(':chains: ・ Invite link submitting')
-                .addField("Invite", `${inviteIn}`, true) // inviteIn.code
-                .addField("Is alive?", `${alive == "+" ? true : alive == "-" ? false : "unknown input"}`, true)
+                .addField("Invite", `${inviteIn.code}`, true)
+                .addField("Is alive?", `${alive == "+" ? true : alive == "-" ? false : "Unknown"}`, true)
                 .addField("Language", `${language}`, true)
-                .addField("Was saved by bot before:", isSaved[1].rowCount > 0 ? "Yes" : "No")
+                .addField("Inviter:", `${interaction.user.id}`)
+                .addField("Is Already Memorized:", (((isSaved[0] != true) || (isSaved[1].rowCount !== undefined)) ? (isThisInviteAlreadyMemorized ? "Yes" : "No, saved") : "Query error"))
                 //.addField("Database:", '>', isSaved[1])
                 //.addField("rowCount:", '>', isSaved[1].rowCount)
                 //.addField("rows:", '>', isSaved[1].rows) // "```\n"
                 //.setColor(client.config.embedColor)
                 .setTimestamp()
-                .setFooter({ text: `User: ${interaction.user.id}; Server: ${isInvite.guildId}`, iconURL: `${isInvite.guild.iconURL()}` });
-            return modal.reply({ embeds: [embed], components: [row] });
+                .setFooter({ text: `You: ${modal.user.id}; Server: ${isInvite.guild.id}`, iconURL: `${modal.user.displayAvatarURL()}` }); //isInvite.guild.iconURL()
+            return modal.reply({ content: `http://discord.gg/${inviteIn}`, embeds: [embed], components: [row] });
             /* return modal.reply(
                 'Congrats! Powered by discord-modals.' + 
                 Formatters.codeBlock('markdown', inviteIn) + 
                 Formatters.codeBlock('markdown', alive) + 
                 Formatters.codeBlock('markdown', language)
             ); */
+        } else {
+            await modal.reply({ ephemeral: true, content: `**Error**: There is no any modals with this ID: \`${modal.customId}\`.` });
+            return await interaction.update({ components: [] }); // Message.removeAttachments
+            // return interaction.update({ content: 'Error occured, please check console.', components: [], embeds: [] });
         }
     }
 }

@@ -3,8 +3,8 @@ const { Client, Collection, Intents } = require('discord.js');
 const Discord = require('discord.js');
 const discordModals = require('discord-modals');
 
-const handler = require("./handler/index");
-const chalkMy = require("./src/chalk");
+const handler = require(process.cwd() + "/handler/index");
+const chalkMy = require(process.cwd() + "/src/chalk");
 const path = require("path");
 
 const client = new Client({

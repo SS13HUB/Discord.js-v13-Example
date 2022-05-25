@@ -57,6 +57,6 @@ module.exports = {
             )}`, true);
 
 
-        return client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ embeds: [eventEmbed] });
+        return client.channels.cache.get(process.env.MASTER_LOG).send({ embeds: [eventEmbed] });
     }
 }

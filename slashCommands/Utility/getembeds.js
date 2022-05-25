@@ -1,4 +1,4 @@
-// Example of how to make a SlashCommand
+
 
 module.exports = {
     name: "getembeds",

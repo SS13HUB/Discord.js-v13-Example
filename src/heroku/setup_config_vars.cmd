@@ -8,7 +8,9 @@ heroku login
 heroku config
 
 heroku config:set TOKEN=bot_token
-heroku config:set LOG_SERVER_ID=server_id
-heroku config:set LOG_CHANNEL_ID=lchannel_id
+heroku config:set MASTER_SERVER=server_id
+heroku config:set MASTER_LOG=lchannel_id
+heroku config:set MASTER_POSTING=lchannel_id
+heroku config:set LIBRARIANS=role_id
 
 PAUSE

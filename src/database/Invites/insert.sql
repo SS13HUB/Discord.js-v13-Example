@@ -10,8 +10,8 @@ INSERT
         CURRENT_TIMESTAMP
     )
     ON CONFLICT (code) DO UPDATE SET
-        updated = CURRENT_TIMESTAMP --, 
-        -- code = '__REPLACE_ME__'
+        -- code = '__REPLACE_ME__', 
+        updated = CURRENT_TIMESTAMP
     -- WHERE "Invites".code = '__REPLACE_ME__'
     ;
     -- RETURNING *;

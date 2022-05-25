@@ -35,7 +35,7 @@ module.exports = {
             }
             
             
-            console.log(chalkMy.cmd, `Command: "${command.name}" (who: "${interaction.id}", where: "${interaction.id}")`);
+            console.log(chalkMy.cmd, `Command: "${command.name}" (who: "${interaction.user.id}", where: "${interaction.guildId}")`);
             try {
                 return command.run(client, interaction, args);
             } catch (e) {
@@ -44,12 +44,14 @@ module.exports = {
             
         } else if (interaction.isButton()) {
             //console.log(interaction);
+            let triggerFounded = false;
             const cmdsArr = [...client.slash.keys()];
             for (let i = 0; i < cmdsArr.length; i++) {
                 const element = client.slash.get(cmdsArr[i]);
                 //console.log(element);
                 if (!element.triggers) continue;
                 if (element.triggers.includes(interaction.customId)) {
+                    triggerFounded = true;
                     const command = element; //client.slash.get("one-time-button");
                     try {
                         return command.trigger(client, interaction); //, args
@@ -58,7 +60,11 @@ module.exports = {
                     }
                 }
             }
-            
+            if (!triggerFounded) {
+                await client.users.cache.get(process.env.OWNER_ID).send(`**Warning**: User ${interaction.user.id} tries send me in ${interaction.guildId} button with unknown ID: \`${interaction.customId}\`.`);
+                await interaction.update({ components: [] }); // Message.removeAttachments
+                return await interaction.followUp({ ephemeral: true, content: `**Error**: There is no any buttons with this ID: \`${interaction.customId}\`.` });
+            }
             // if (modal.customId === 'modal-customid') {
             return; // interaction.channel.send({ content: "Button received.", ephemeral: true });
         }

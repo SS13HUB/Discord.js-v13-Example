@@ -131,7 +131,7 @@ const loadSlashCommands = async function (client) {
             });
             await client.application.commands.set([]);
             // This updates immediately
-            client.guilds.cache.get(process.env.LOG_SERVER_ID).commands.set([]);
+            client.guilds.cache.get(process.env.MASTER_SERVER).commands.set([]);
         }
     })
 }
