@@ -192,10 +192,14 @@ module.exports = {
                     .setCustomId('submit-modal-form-post') // submit-modal-form-echo
                     .setLabel('Post')
                     .setStyle('PRIMARY'),
+                new MessageButton()
+                    .setLabel(isInvite.code)
+                    .setURL(isInvite.url) // ?with_counts=true&with_expiration=true
+                    .setStyle('LINK'),
                 );
             const embed = new MessageEmbed()
                 .setTitle(':chains: ・ Invite link submitting')
-                .addField("Invite", `${inviteIn.code}`, true)
+                .addField("Invite", `${isInvite.code}`, true)
                 .addField("Is alive?", `${alive == "+" ? true : alive == "-" ? false : "Unknown"}`, true)
                 .addField("Language", `${language}`, true)
                 .addField("Inviter:", `${interaction.user.id}`)
@@ -206,10 +210,10 @@ module.exports = {
                 //.setColor(client.config.embedColor)
                 .setTimestamp()
                 .setFooter({ text: `You: ${modal.user.id}; Server: ${isInvite.guild.id}`, iconURL: `${modal.user.displayAvatarURL()}` }); //isInvite.guild.iconURL()
-            return modal.reply({ content: `http://discord.gg/${inviteIn}`, embeds: [embed], components: [row] });
+            return modal.reply({ content: isInvite.url, embeds: [embed], components: [row] });
             /* return modal.reply(
                 'Congrats! Powered by discord-modals.' + 
-                Formatters.codeBlock('markdown', inviteIn) + 
+                Formatters.codeBlock('markdown', isInvite) + 
                 Formatters.codeBlock('markdown', alive) + 
                 Formatters.codeBlock('markdown', language)
             ); */

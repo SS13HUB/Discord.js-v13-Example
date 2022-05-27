@@ -76,13 +76,12 @@ module.exports = {
             .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
             //.setDescription(`Check button below.`);
 
-        const row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    //.setCustomId('invitetobutton_primary')
-                    .setLabel(fetchedInvite.code)
-                    .setURL(`${fetchedInvite.url}?with_counts=true&with_expiration=true`)
-                    .setStyle('LINK'),
+        const row = new MessageActionRow().addComponents(
+            new MessageButton()
+                //.setCustomId('invitetobutton_primary')
+                .setLabel(fetchedInvite.code)
+                .setURL(`${fetchedInvite.url}?with_counts=true&with_expiration=true`)
+                .setStyle('LINK'),
             );
 
         /* if (client.guilds.cache.get(fetchedInvite.guild.id) === undefined) {

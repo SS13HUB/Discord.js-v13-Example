@@ -18,17 +18,23 @@ self = module.exports = {
             if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.LIBRARIANS))) {
                 return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
             }
-            await interaction.update({ components: [] }); // Message.removeAttachments
+            let _MessageActionRow = interaction.message.components;
+            //console.log("_MessageActionRow:", _MessageActionRow);
+            if (Object.keys(_MessageActionRow).length > 0) {
+                _MessageActionRow[0].spliceComponents(0, 1); // "Post" button
+            }
+            // submitted form clearing
+            await interaction.update({ components: _MessageActionRow }); // Message.removeAttachments
             if (interaction.message.content) {
                 return await _channel.send({
                     content: interaction.message.content, 
                     embeds: interaction.message.embeds, 
-                    components: interaction.message.components
+                    components: _MessageActionRow
                 });
             } else {
                 return await _channel.send({
                     embeds: interaction.message.embeds, 
-                    components: interaction.message.components
+                    components: _MessageActionRow
                 });
             }
         }
