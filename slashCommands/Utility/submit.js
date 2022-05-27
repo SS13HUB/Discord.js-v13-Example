@@ -9,7 +9,8 @@ self = module.exports = {
     description: "Call form to input invite with server info to propose to publish.",
     ownerOnly: false,
     triggers: [
-        'submit-modal-form-post' // submit-modal-form-echo
+        'submit-modal-form-post', // submit-modal-form-echo
+        'submit-modal-form-check',
     ],
     trigger: async (client, interaction) => {
         console.log(chalkMy.event, `Command triggered: "submit".`);
@@ -37,6 +38,23 @@ self = module.exports = {
                     components: _MessageActionRow
                 });
             }
+        } else if (interaction.customId == self.triggers[1]) {
+            let inviteCode = interaction.message.content;
+            const fetchedInvite = await client.fetchInvite(inviteCode)
+                .then((data) => {
+                    return data;
+                })
+                .catch((e) => {
+                    if (e.message == "Unknown Invite" || fetchedInvite.message.code == 10006 || e.message.httpStatus == '404') {
+                        return {"code": inviteCode, "message": e};
+                    }
+                    return null;
+            });
+            if (fetchedInvite === null) {
+                return await interaction.reply({ ephemeral: true, content: `**Error**: ${e}; message: ${e.message}`});
+            }
+            // if (fetchedInvite.message !== undefined) {}
+            return await interaction.reply({ ephemeral: true, content: `**Success**: Invite is alive.`});
         }
     },
     run: async (client, interaction) => {

@@ -196,6 +196,10 @@ module.exports = {
                     .setLabel(isInvite.code)
                     .setURL(isInvite.url) // ?with_counts=true&with_expiration=true
                     .setStyle('LINK'),
+                new MessageButton()
+                    .setCustomId('submit-modal-form-check') // submit-modal-form-echo
+                    .setLabel('Check')
+                    .setStyle('SECONDARY'),
                 );
             const embed = new MessageEmbed()
                 .setTitle(':chains: ・ Invite link submitting')
