@@ -50,11 +50,59 @@ self = module.exports = {
                     }
                     return null;
             });
-            if (fetchedInvite === null) {
-                return await interaction.reply({ ephemeral: true, content: `**Error**: ${e}; message: ${e.message}`});
+            if ((fetchedInvite === null) ||
+                (fetchedInvite.message.httpStatus != 200)) {
+                if ((fetchedInvite.message.httpStatus == 404) || (fetchedInvite.message.code == 10006) || (fetchedInvite.message == "DiscordAPIError: Unknown Invite")) {
+                    //console.log(interaction.guild.channels);
+                    const savedServerID = interaction.message.embeds[0].footer.text.split('Server: ')[1];
+                    //console.log("savedServerID:", savedServerID);
+                    /* if (!interaction.message[0]) {
+                        return interaction.reply(`**Error**:\n\`\`\``, e, `\`\`\``);
+                    } */
+                    /* if (interaction.message[1].embeds == []) {
+                        return interaction.reply(`**Error**:\nNo embeds.`);
+                    } */
+                    //await interaction.reply({ ephemeral: true, content: `**Error**: Invite is dead[.](<https://youtu.be/QO8yvDd3X-Q>)` });
+                    let isServer = await client.guilds.fetch(savedServerID)
+                        .then((d) => {return d})
+                        .catch(() => {return false});
+                    if (!isServer) {
+                        return await interaction.followUp({ ephemeral: true, content: `**Error**: Server is dead[.](<https://youtu.be/QO8yvDd3X-Q>)` });
+                    }
+                    //await interaction.followUp({ ephemeral: true, content: `**Success**: But server is alive.` });
+                    // .filter(chx => chx.type === "GUILD_TEXT").find(x => x.position === 0)
+                    const _arr = ["GUILD_TEXT", "GUILD_NEWS", "UNKNOWN"];
+                    let firstChannel = [...isServer.channels.cache.filter(chx => _arr.includes(chx.type)).keys()][0];
+                    // isServer.channels.cache.filter(chx => _arr.includes(chx.type)).keys()
+                    //.first() //.firstKey()
+                    //console.log("firstChannel:", firstChannel);
+                    //await interaction.followUp({ ephemeral: true, content: `**Target channel**: \`${firstChannel}\`.` });
+                    let targetChannel = await client.channels.cache.get(firstChannel);
+                    //console.log("targetChannel:", targetChannel);
+                    //let createdInvite = targetChannel.createInvite({ maxAge: 0 });
+                    let createdInvite = 'testHJGFUDBG';
+                    console.log("interaction.message.content:", interaction.message.content);
+                    console.log("interaction.message.embeds[0]:", interaction.message.embeds[0]);
+                    console.log("interaction.message.components[0].components:", interaction.message.components[0].components);
+                    let _savedMessage = interaction.message;
+                    _savedMessage.content = createdInvite;
+                    _savedMessage.embeds[0].fields[0] = { value: createdInvite, name: 'Invite', inline: true };
+                    _savedMessage.embeds[0].fields[4] = { value: 'No', name: 'Is Already Memorized:', inline: false };
+                    //console.log("_savedMessage:", _savedMessage);
+                    await interaction.update({
+                        content: _savedMessage.content, 
+                        embeds: _savedMessage.embeds, 
+                        components: _savedMessage.components
+                    }); // Message.removeAttachments
+                    await interaction.followUp({ ephemeral: true, content: `**Success**: Invite refreshed.` });
+                    return;
+                }
+                return await interaction.followUp({ ephemeral: true, content: `**Error**: ${JSON.stringify(fetchedInvite)}; message: ${fetchedInvite.message}`});
+            } else {
+                // if (fetchedInvite.message !== undefined) {}
+                console.log("fetchedInvite:", fetchedInvite);
+                return await interaction.reply({ ephemeral: true, content: `**Success**: Invite is alive.`});
             }
-            // if (fetchedInvite.message !== undefined) {}
-            return await interaction.reply({ ephemeral: true, content: `**Success**: Invite is alive.`});
         }
     },
     run: async (client, interaction) => {
