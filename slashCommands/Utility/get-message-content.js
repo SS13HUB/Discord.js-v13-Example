@@ -1,12 +1,14 @@
 
+const { MessageFlags } = require('discord.js');
+
 
 module.exports = {
     name: "get-message-content",
     category: "Utility",
     options: [
         {
-            name: 'id',
-            description: 'ID of message you want to me to lookup',
+            name: 'url',
+            description: 'URL of message you want to me to lookup',
             type: 'STRING',
             required: true
         }
@@ -20,65 +22,59 @@ module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        const messageId = interaction.options.getString("id");
-        if (!messageId) return await interaction.reply({ ephemeral: true, content: `**Error**: There is no any message IDs!` });
+        const messageLink = interaction.options.getString("url");
+        if (!messageLink) return await interaction.reply({ ephemeral: true, content: `**Error**: There is no any message IDs!` });
 
-        // Fetch all channels from the guild (excluding threads)
-        // message.guild.channels.fetch()
-        //console.log('interaction.guild.channels:', interaction.guild);
-        let _channels = [];
-        let channels = client.channels.cache
-            .filter((chx) => chx.type === "GUILD_TEXT");
-        //console.log('channels:', channels);
-        for (const channel of channels.values()) {
-            _channels.push(channel);
-            //console.log(channel.id);
-        }
-        //[...interaction.guild.channels];
-        // interaction.guild.channels.array()
-        //console.log('_channels:', _channels.map((chx) => chx.id));
-        console.log(`Searching in ${_channels.length} channels.`);
-        let _message;
-        for (let i = 0; i < _channels.length; i++) {
-            const _channel = _channels[i];
-            //console.log('_channel:', _channel);
-            //console.log('_channel.messages:', _channel.messages);
-            //_message = _channel.messages.resolve(messageId);
-            //console.log('_channel.messages.resolve(messageId):', _channel.guild.id, _channel.id, (i + 1), _channel.messages.resolve(messageId));
-            _message = await _channel.messages.fetch(messageId)
-                .then((d) => {return [true, d]})
-                .catch((e) => {return [false, e]});
-            if (_message[0]) break;
-            //if (_message !== null) break;
+        let messageSplitted = messageLink.split('/');
+        console.log('messageLink:', messageLink);
+        if (
+            (messageSplitted.length != 7) ||
+            (messageSplitted[2] != 'discord.com') ||
+            (messageSplitted[3] != 'channels')
+        ) {
+            return await interaction.reply({ ephemeral: true, content: `**Error**: Only supported format:\n\`https://discord.com/channels/guildId/channelId/messageId\`` });
         }
 
-        if (!_message[0]) return await interaction.reply({ ephemeral: true, content: `**Error**: Can not find message with this ID in this server.` });
-        console.log('_message[1]:', _message[1]);
-        /* await interaction.channel.messages.fetch(messageId)
-            .then(() => {return;})
-            .catch(async (e) => {
-                console.error(e);
-                return await interaction.reply({ ephemeral: true, content: `**Error**: Can not find message with this ID in this channel.` });
-            }); */
+        const _guild = client.guilds.cache.get(messageSplitted[4]);
+        if (_guild === undefined) {
+            return await interaction.reply({ ephemeral: true, content: `**Error**: I'm not on the server. Invite me first.` });
+        }
+        //console.log('_guild:', _guild);
 
-        /* let _message = await interaction.channel.messages.fetch(messageId)
+        const _channel = _guild.channels.cache.get(messageSplitted[5]);
+        if (_channel === undefined) {
+            return await interaction.reply({ ephemeral: true, content: `**Error**: Can not find channel.` });
+        }
+        //console.log('_channel:', _channel);
+
+        const _message = await _channel.messages.fetch(messageSplitted[6])
             .then((d) => {return [true, d]})
-            .catch((e) => {return [false, e]}); */
-
+            .catch((e) => {return [false, e]});
         if (!_message[0]) {
-            return interaction.reply(`Error:\n\`\`\`${e}\`\`\``);
+            console.log('_message[1]', _message[1]);
+            return await interaction.reply({ ephemeral: true, content: `**Error**: Can not find channel.` });
         }
+        //console.log('_message[1]:', _message[1]);
+        /* const getEmbedsEmbed = new client.discord.MessageEmbed()
+            //.setTitle(`Message "[${messageSplitted[6]}](${messageLink})"`)
+            .setDescription(`**Message [${messageSplitted[6]}](${messageLink})**\n\`\`\`json\n${JSON.stringify(_message[1], null, 1)}\`\`\``);
 
-        /* if (_message[1].embeds.length == 0) {
-            return interaction.reply(`Error:\nNo embeds.`);
-        } */
-
-        console.log(_message[1]); //.embeds
-
-        const getEmbedsEmbed = new client.discord.MessageEmbed()
-            .setDescription(`\`\`\`${JSON.stringify(_message[1].embeds, null, 4)}\`\`\``); // `In console.`
-
-        return interaction.reply({ embeds: [getEmbedsEmbed] });
-
+        return await interaction.reply({ embeds: [getEmbedsEmbed] }); */
+        const _messageToOut = JSON.stringify(_message[1], null, 1);
+            // .replace('discord.gg', '_invite_redacted_')
+            // .replace('discord.com/invite', '_invite_redacted_');
+        await interaction.reply({
+            flags: MessageFlags.FLAGS.SUPPRESS_EMBEDS,
+            content: `**Message [${messageSplitted[6]}](${messageLink})**\n\`\`\`json\n${_messageToOut}\`\`\``
+        });
+        const _mess = await interaction.channel.messages.fetch(interaction.channel.lastMessageId)
+            .then((d) => {return [true, d]})
+            .catch((e) => {return [false, e]});
+        //console.log('_mess:', _mess);
+        //console.log('_messageToOut:', _messageToOut);
+        if (!_mess[0]) {
+            return;
+        }
+        return await _mess[1].suppressEmbeds();
     },
 };
