@@ -6,6 +6,7 @@ const chalkMy = require(process.cwd() + "/src/chalk");
  * Load Events
  */
 const loadEvents = async function (client) {
+    console.log(chalkMy.log, `Preparing events…`);
     const eventFolders = fs.readdirSync(process.cwd() + "/events");
     for (const folder of eventFolders) {
         const eventFiles = fs
@@ -35,12 +36,14 @@ const loadEvents = async function (client) {
             }
         }
     }
+    console.log(chalkMy.log, chalkMy.ok, `Preparing events done.`);
 }
 
 /**
  * Load Prefix Commands
  */
 /* const loadCommands = async function (client) {
+    console.log(chalkMy.log, `Preparing commands…`);
     const commandFolders = fs.readdirSync(process.cwd() + "/commands");
     for (const folder of commandFolders) {
         const commandFiles = fs
@@ -62,12 +65,14 @@ const loadEvents = async function (client) {
                 command.aliases.forEach((alias) => client.aliases.set(alias, command.name));
         }
     }
+    console.log(chalkMy.log, chalkMy.ok, `Preparing commands done.`);
 } */
 
 /**
  * Load SlashCommands
  */
 const loadSlashCommands = async function (client) {
+    console.log(chalkMy.log, `Preparing slashes…`);
     let slash = [];
 
     const commandFolders = fs.readdirSync(process.cwd() + "/slashCommands");
@@ -100,6 +105,7 @@ const loadSlashCommands = async function (client) {
             }
         }
     }
+    // console.log(chalkMy.log, `Waiting for client readiness…`);
 
     client.on("ready", async() => {
         // Register Slash Commands for a single guild
@@ -134,6 +140,7 @@ const loadSlashCommands = async function (client) {
             client.guilds.cache.get(process.env.MASTER_SERVER).commands.set([]);
         }
     })
+    console.log(chalkMy.log, chalkMy.ok, `Preparing slashes done.`);
 }
 
 module.exports = {

@@ -16,8 +16,8 @@ const { Permissions } = require('discord.js');
 } */
 
 module.exports = {
-    name: "getinfo",
-    usage: '/getinfo <invite link>',
+    name: "get-info",
+    usage: '/get-info <invite link>',
     options: [
         {
             name: 'invite',

@@ -2,7 +2,7 @@
 const { MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
-    name: "pingbutton",
+    name: "ping-button",
     category: "Utility",
     description: "Ping-pong, but with button!",
     ownerOnly: false,

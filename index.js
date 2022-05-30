@@ -1,4 +1,6 @@
 
+console.log(`Booting up…`);
+
 const { Client, Collection, Intents } = require('discord.js');
 const Discord = require('discord.js');
 const discordModals = require('discord-modals');
@@ -48,8 +50,8 @@ handler.loadSlashCommands(client);
 // Error Handling
 
 process.on("uncaughtException", (e) => {
-    console.log(chalkMy.exct, `Uncaught Exception:`);
-    console.log(e);
+    console.error(chalkMy.exct, `Uncaught Exception:`);
+    console.error(e);
 });
 
 process.on("unhandledRejection", (reason, promise) => {
@@ -77,23 +79,41 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 
+async function clientLogin() {
+    // Login into Discord via Bot Token
+    console.log(chalkMy.log, `All preparations done, logging in…`);
+    await client.login(process.env.TOKEN);
+}
+
+clientLogin();
+
+
 process.on('SIGINT', () => {
     console.log(chalkMy.exit, `Caught interrupt signal.`);
-    if (client !== undefined) client.user.setStatus("invisible");
+    /* try {
+        client.user.setStatus("invisible");
+    } catch (e) {
+        console.log(chalkMy.fatal, `Can not set status.`);
+    } */
+    if (client.isReady()) client.user.setStatus("invisible");
     /* client.guilds.cache.forEach(guild => {
         if (client.playerManager.get(guild)) client.playerManager.leave(guild);
     }); */
+    client.destroy();
     process.exit();
 });
 
 process.on('SIGTERM', () => {
     console.log(chalkMy.exit, `Caught termination signal.`);
-    if (client !== undefined) client.user.setStatus("invisible");
+    /* try {
+        client.user.setStatus("invisible");
+    } catch (e) {
+        console.log(chalkMy.fatal, `Can not set status.`);
+    } */
+    if (client.isReady()) client.user.setStatus("invisible");
     /* client.guilds.cache.forEach(guild => {
         if (client.playerManager.get(guild)) client.playerManager.leave(guild);
     }); */
+    client.destroy();
     process.exit();
 });
-
-// Login Discord via Bot Token
-client.login(process.env.TOKEN);

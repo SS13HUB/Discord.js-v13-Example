@@ -1,7 +1,6 @@
 
 const { inlineCode, codeBlock } = require('@discordjs/builders');
-const { Formatters } = require('discord.js');
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed, Formatters } = require('discord.js');
 const { Pool } = require('pg');
 const connectionString = process.env.DB_URL;
 const fs = require('fs').promises;
@@ -114,16 +113,35 @@ module.exports = {
             const firstResponse = modal.getTextInputValue('textinput-customid');
             if (!firstResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
             const secondResponse = modal.getTextInputValue('textinput-customid-2');
-            if (!firstResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
+            if (!secondResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
             //client.channels.cache.get(process.env.MASTER_LOG).send({ content: `modalSubmit event fired`});
             return modal.reply('Congrats! Powered by discord-modals.' + Formatters.codeBlock('markdown', firstResponse) + Formatters.codeBlock('markdown', secondResponse));
         } else if (modal.customId === 'submit-modal-form') {
             const inviteIn = modal.getTextInputValue('textinput-invite');
             if (!inviteIn) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
-            const alive = "Unknown" || modal.getTextInputValue('textinput-alive');
+            const alive = modal.getTextInputValue('textinput-alive') || "Unknown";
             //if (!alive) alive = "Unknown"; //return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
-            const language =  "Unknown" || modal.getTextInputValue('textinput-language');
+            const language = modal.getTextInputValue('textinput-language') || "Unknown";
             //if (!language) language = "Unknown"; //return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
+            const submitter = modal.getTextInputValue('textinput-submitter') || "Unknown";
+            const timestamp = modal.getTextInputValue('textinput-timestamp'); // null to now
+            // Open Google Chrome, press F12, select Console, type "Math.floor(new Date().getTime()/1000.0)"
+            // or use "https://epochconverter.com/"
+            const byAdmin = (submitter != "Unknown" ? true : false);
+            let isSubmitter;
+            if (byAdmin) {
+                ////console.log("client:", client);
+                //console.log("modal:", modal);
+                //console.log("interaction:", interaction.users); // ← client!
+                //return;
+                isSubmitter = await interaction.users.fetch(submitter)
+                    .then((d) => {return d})
+                    .catch(() => {return false});
+                if (!isSubmitter) {
+                    return await modal.reply({ ephemeral: true, content: `**Error**: There is no any alive submitter: \`${submitter}\`.` });
+                }
+            }
+            
 
             // TypeError: Cannot read properties of undefined (reading 'fetchInvite')
             if (typeof inviteIn !== "string") inviteIn = `${inviteIn}`;
@@ -138,7 +156,7 @@ module.exports = {
                 .catch(() => {return false});
             if (!isInvite) {
                 // Formatters.codeBlock('markdown', inviteIn) + Formatters.codeBlock('markdown', alive) + Formatters.codeBlock('markdown', language)
-                return modal.reply({ ephemeral: true, content: `**Error**: There is no any alive invite link: \`${inviteIn}\`.` });
+                return await modal.reply({ ephemeral: true, content: `**Error**: There is no any alive invite link: \`${inviteIn}\`.` });
             }
             FilesSQLtoRead = await FilsqSQLtoCode(FilesSQLtoRead)
                 .then((d) => {return d})
@@ -156,7 +174,7 @@ module.exports = {
             console.log("rows:", isSaved[1].rows);
 
             // INSERTING BELOW
-            console.log("modal:", modal);
+            //console.log("modal:", modal);
             //console.log("interaction:", interaction);
             //console.log("client:", client);
             console.log("isInvite:", isInvite);
@@ -201,7 +219,7 @@ module.exports = {
                     .setLabel('Check')
                     .setStyle('SECONDARY'),
                 );
-            const embed = new MessageEmbed()
+            let embed = new MessageEmbed()
                 .setTitle(':chains: ・ Invite link submitting')
                 .addField("Invite", `${isInvite.code}`, true)
                 .addField("Is alive?", `${alive == "+" ? true : alive == "-" ? false : "Unknown"}`, true)
@@ -212,8 +230,8 @@ module.exports = {
                 //.addField("rowCount:", '>', isSaved[1].rowCount)
                 //.addField("rows:", '>', isSaved[1].rows) // "```\n"
                 //.setColor(client.config.embedColor)
-                .setTimestamp()
-                .setFooter({ text: `You: ${modal.user.id}; Server: ${isInvite.guild.id}`, iconURL: `${modal.user.displayAvatarURL()}` }); //isInvite.guild.iconURL()
+                .setTimestamp(timestamp)
+                .setFooter({ text: `Submitter: ${(byAdmin ? isSubmitter.id : modal.user.id)}; Server: ${isInvite.guild.id}`, iconURL: `${(byAdmin ? isSubmitter.displayAvatarURL() : modal.user.displayAvatarURL())}` }); //isInvite.guild.iconURL()
             return modal.reply({ content: isInvite.url, embeds: [embed], components: [row] });
             /* return modal.reply(
                 'Congrats! Powered by discord-modals.' + 

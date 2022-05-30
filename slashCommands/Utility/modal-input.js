@@ -2,7 +2,7 @@
 const { Modal, TextInputComponent, showModal } = require('discord-modals'); // Now we extract the showModal method
 
 module.exports = {
-    name: "modalinput",
+    name: "modal-input",
     category: "Utility",
     description: "Text input test!",
     ownerOnly: false,

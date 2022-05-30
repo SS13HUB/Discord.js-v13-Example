@@ -74,8 +74,8 @@ async function FilsqSQLtoCode(_FilesSQLtoRead) {
 
 
 module.exports = {
-    name: "savetodatabase",
-    usage: '/savetodatabase <invite link or ID>',
+    name: "save-to-database",
+    usage: '/save-to-database <invite link or ID>',
     category: "Utility",
     options: [
         {
@@ -116,7 +116,7 @@ module.exports = {
             .then((d) => {return d})
             .catch(() => {return false});
 
-        console.log(chalkMy.cmd, `${interaction.user.id} trigger savetodatabase: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
+        console.log(chalkMy.cmd, `${interaction.user.id} trigger save-to-database: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
 
         if (isInvite) {
             let savetodatabaseEmbed = new client.discord.MessageEmbed()

@@ -1,6 +1,6 @@
 
 const { Modal, TextInputComponent, showModal } = require('discord-modals'); // Now we extract the showModal method
-const { MessageButton } = require('discord.js');
+const { MessageButton, Permissions } = require('discord.js');
 const chalkMy = require(process.cwd() + "/src/chalk");
 
 self = module.exports = {
@@ -133,38 +133,92 @@ self = module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        const modal = new Modal() // We create a Modal
-            .setCustomId('submit-modal-form')
-            .setTitle('Submit your invite')
-            .addComponents(
-                new TextInputComponent()
-                    .setCustomId('textinput-invite')
-                    .setLabel('Your invite (as link or just code)')
-                    .setStyle('SHORT')
-                    .setMinLength(1)
-                    .setMaxLength(30)
-                    .setPlaceholder('http://discord.gg/123')
-                    .setRequired(true),
-                new TextInputComponent()
-                    .setCustomId('textinput-alive')
-                    .setLabel('Is this server active or not?')
-                    .setStyle('SHORT')
-                    .setMinLength(1)
-                    .setMaxLength(1)
-                    .setPlaceholder('"+" or "-" without quotes')
-                    .setRequired(false),
-                new TextInputComponent()
-                    .setCustomId('textinput-language')
-                    .setLabel('List project languages')
-                    .setStyle('SHORT')
-                    .setMinLength(2)
-                    .setMaxLength(20)
-                    .setPlaceholder('English, Russian')
-                    .setRequired(false)
-            );
-        await showModal(modal, {
-            client: client, // Client to show the Modal through the Discord API.
-            interaction: interaction // Show the modal with interaction data.
-        })
+        if ((interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || (interaction.member.roles.resolveId(process.env.LIBRARIANS))) {
+            const modal = new Modal() // We create a Modal
+                .setCustomId('submit-modal-form')
+                .setTitle('Submit your invite')
+                .addComponents(
+                    new TextInputComponent()
+                        .setCustomId('textinput-invite')
+                        .setLabel('Your invite (as link or just code)')
+                        .setStyle('SHORT')
+                        .setMinLength(1)
+                        .setMaxLength(30)
+                        .setPlaceholder('http://discord.gg/123')
+                        .setRequired(true),
+                    new TextInputComponent()
+                        .setCustomId('textinput-alive')
+                        .setLabel('Is this server active or not?')
+                        .setStyle('SHORT')
+                        .setMinLength(1)
+                        .setMaxLength(1)
+                        .setPlaceholder('"+" or "-" without quotes')
+                        .setRequired(false),
+                    new TextInputComponent()
+                        .setCustomId('textinput-language')
+                        .setLabel('List project languages')
+                        .setStyle('SHORT')
+                        .setMinLength(2)
+                        .setMaxLength(20)
+                        .setPlaceholder('English, Russian')
+                        .setRequired(false),
+                    new TextInputComponent()
+                        .setCustomId('textinput-submitter')
+                        .setLabel('Submitter')
+                        .setStyle('SHORT')
+                        .setMinLength(2)
+                        .setMaxLength(20)
+                        .setPlaceholder('Discord user ID')
+                        .setRequired(false),
+                    new TextInputComponent()
+                        .setCustomId('textinput-timestamp')
+                        .setLabel('Submit timestamp')
+                        .setStyle('SHORT')
+                        .setMinLength(2)
+                        .setMaxLength(20)
+                        .setPlaceholder('Date, number or null')
+                        .setRequired(false)
+                    // Open Google Chrome, press F12, select Console, type "Math.floor(new Date().getTime()/1000.0)"
+                    // or use "https://epochconverter.com/"
+                );
+            await showModal(modal, {
+                client: client, // Client to show the Modal through the Discord API.
+                interaction: interaction // Show the modal with interaction data.
+            });
+        } else {
+            const modal = new Modal() // We create a Modal
+                .setCustomId('submit-modal-form')
+                .setTitle('Submit your invite')
+                .addComponents(
+                    new TextInputComponent()
+                        .setCustomId('textinput-invite')
+                        .setLabel('Your invite (as link or just code)')
+                        .setStyle('SHORT')
+                        .setMinLength(1)
+                        .setMaxLength(30)
+                        .setPlaceholder('http://discord.gg/123')
+                        .setRequired(true),
+                    new TextInputComponent()
+                        .setCustomId('textinput-alive')
+                        .setLabel('Is this server active or not?')
+                        .setStyle('SHORT')
+                        .setMinLength(1)
+                        .setMaxLength(1)
+                        .setPlaceholder('"+" or "-" without quotes')
+                        .setRequired(false),
+                    new TextInputComponent()
+                        .setCustomId('textinput-language')
+                        .setLabel('List project languages')
+                        .setStyle('SHORT')
+                        .setMinLength(2)
+                        .setMaxLength(20)
+                        .setPlaceholder('English, Russian')
+                        .setRequired(false)
+                );
+            await showModal(modal, {
+                client: client, // Client to show the Modal through the Discord API.
+                interaction: interaction // Show the modal with interaction data.
+            });
+        }
     },
 };

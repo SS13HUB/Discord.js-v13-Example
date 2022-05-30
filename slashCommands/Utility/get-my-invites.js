@@ -2,7 +2,7 @@
 const { Permissions } = require('discord.js');
 
 module.exports = {
-    name: "getmyinvites",
+    name: "get-my-invites",
     category: "Utility",
     description: "You can get your invites to this server.",
     ownerOnly: false,

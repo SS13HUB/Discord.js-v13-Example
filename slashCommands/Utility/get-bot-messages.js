@@ -1,7 +1,7 @@
 
 
 module.exports = {
-    name: "messages",
+    name: "get-bot-messages",
     category: "Utility",
     description: "Not for public use, sorry.",
     ownerOnly: false,
