@@ -1,13 +1,13 @@
 
-const { Modal, TextInputComponent, showModal } = require('discord-modals'); // Now we extract the showModal method
+const { Modal, TextInputComponent, showModal } = require('discord-modals');
 const { MessageButton, Permissions } = require('discord.js');
 const chalkMy = require(process.cwd() + "/src/chalk");
 
 self = module.exports = {
-    name: "submit",
+    name: "submit-project",
     category: "Utility",
     description: "Call form to input invite with server info to propose to publish.",
-    ownerOnly: false,
+    ownerOnly: true,
     triggers: [
         'submit-modal-form-post', // submit-modal-form-echo
         'submit-modal-form-check',

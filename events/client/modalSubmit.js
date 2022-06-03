@@ -177,10 +177,10 @@ module.exports = {
             //console.log("modal:", modal);
             //console.log("interaction:", interaction);
             //console.log("client:", client);
-            console.log("isInvite:", isInvite);
+            //console.log("isInvite:", isInvite);
             const invite_code = isInvite.code;
             const invite_url = isInvite.url;
-            let isThisInviteAlreadyMemorized = new Boolean(!isSaved[1].rowCount > 0);
+            let isThisInviteAlreadyMemorized = (isSaved[1].rowCount > 0);
             console.log("isThisInviteAlreadyMemorized:", isThisInviteAlreadyMemorized);
             if (!isThisInviteAlreadyMemorized) {
                 FilesSQLtoRead = [db_invites_insert];
@@ -201,7 +201,9 @@ module.exports = {
                 let isSaved2 = await doRequest(request)
                     .then((val) => {return [true, val];})
                     .catch((err) => {return [false, err];});
-                console.log("isSaved2:", isSaved2);
+                //console.log("isSaved2:", isSaved2);
+                console.log("rowCount:", isSaved2[1].rowCount);
+                console.log("rows:", isSaved2[1].rows);
             }
             // INSERTING UPPER
 
@@ -211,7 +213,7 @@ module.exports = {
                     .setLabel('Post')
                     .setStyle('PRIMARY'),
                 new MessageButton()
-                    .setLabel(isInvite.code)
+                    .setLabel('Join')
                     .setURL(isInvite.url) // ?with_counts=true&with_expiration=true
                     .setStyle('LINK'),
                 new MessageButton()
@@ -221,18 +223,18 @@ module.exports = {
                 );
             let embed = new MessageEmbed()
                 .setTitle(':chains: ・ Invite link submitting')
-                .addField("Invite", `${isInvite.code}`, true)
+                //.addField("Invite", `${isInvite.code}`, true)
                 .addField("Is alive?", `${alive == "+" ? true : alive == "-" ? false : "Unknown"}`, true)
                 .addField("Language", `${language}`, true)
-                .addField("Inviter:", `${interaction.user.id}`)
-                .addField("Is Already Memorized:", (((isSaved[0] != true) || (isSaved[1].rowCount !== undefined)) ? (isThisInviteAlreadyMemorized ? "Yes" : "No, saved") : "Query error"))
+                //.addField("Inviter:", `${interaction.user.id}`)
+                //.addField("Is Already Memorized:", (((isSaved[0] != true) || (isSaved[1].rowCount !== undefined)) ? (isThisInviteAlreadyMemorized ? "Yes" : "No, saved") : "Query error"))
                 //.addField("Database:", '>', isSaved[1])
                 //.addField("rowCount:", '>', isSaved[1].rowCount)
                 //.addField("rows:", '>', isSaved[1].rows) // "```\n"
                 //.setColor(client.config.embedColor)
                 .setTimestamp(timestamp)
-                .setFooter({ text: `Submitter: ${(byAdmin ? isSubmitter.id : modal.user.id)}; Server: ${isInvite.guild.id}`, iconURL: `${(byAdmin ? isSubmitter.displayAvatarURL() : modal.user.displayAvatarURL())}` }); //isInvite.guild.iconURL()
-            return modal.reply({ content: isInvite.url, embeds: [embed], components: [row] });
+                .setFooter({ text: `Submitter: ${(byAdmin ? isSubmitter.id : modal.user.id)} • Server: ${isInvite.guild.id}`, iconURL: `${(byAdmin ? isSubmitter.displayAvatarURL() : modal.user.displayAvatarURL())}` }); //isInvite.guild.iconURL()
+            return modal.reply({ content: isInvite.url.replace('https://', 'http://'), embeds: [embed], components: [row] });
             /* return modal.reply(
                 'Congrats! Powered by discord-modals.' + 
                 Formatters.codeBlock('markdown', isInvite) + 

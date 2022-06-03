@@ -18,7 +18,8 @@ module.exports = {
                 new MessageButton()
                     .setCustomId('pingbutton_primary')
                     .setLabel('Click on me!')
-                    .setStyle('PRIMARY'),
+                    .setStyle('PRIMARY')
+                    .setEmoji('👋'),
             );
 
         await interaction.reply({ content: 'Pong!', components: [row] });
