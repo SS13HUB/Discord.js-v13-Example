@@ -114,7 +114,7 @@ module.exports = {
             if (!firstResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
             const secondResponse = modal.getTextInputValue('textinput-customid-2');
             if (!secondResponse) return modal.reply({ content: `Error: There is not enough variables, cancel command execution.` });
-            //client.channels.cache.get(process.env.MASTER_LOG).send({ content: `modalSubmit event fired`});
+            //client.channels.cache.get(process.env.MASTER_CHX_DEBUG_LOG).send({ content: `modalSubmit event fired`});
             return modal.reply('Congrats! Powered by discord-modals.' + Formatters.codeBlock('markdown', firstResponse) + Formatters.codeBlock('markdown', secondResponse));
         } else if (modal.customId === 'submit-modal-form') {
             const inviteIn = modal.getTextInputValue('textinput-invite');

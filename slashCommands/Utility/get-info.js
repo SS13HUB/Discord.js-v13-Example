@@ -72,7 +72,8 @@ module.exports = {
             }
         }
         if (fetchedInvite === null) {
-            return interaction.reply({ content: `Error: ${e}; message:${e.message}` });
+            console.log('Invite checked, it\'s not alive.');
+            return interaction.reply({ content: `Error: Message: ${e.message}\n${e}` });
         }
         
         const embedInvite = new client.discord.MessageEmbed()

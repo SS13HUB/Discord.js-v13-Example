@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders'); // require('disc
 const { MessageActionRow, MessageButton } = require('discord.js');
 
 
-let self = module.exports = {
+const self = module.exports = {
     name: "create-invite",
     category: "Utility",
     description: "Creates an invite to this guild channel.",

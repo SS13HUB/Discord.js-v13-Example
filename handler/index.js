@@ -98,7 +98,7 @@ const loadSlashCommands = async function (client) {
                 }
                 client.slash.set(command.name, command);
                 slash.push(command);
-                console.log(chalkMy.load, chalkMy.ok, `SlashCommand: "${file}"`); // SlashCommand is being loaded:
+                console.log(chalkMy.load, chalkMy.ok, `SlashCommand: "${file}"${((command.triggers) ? ('; "' + JSON.stringify(command.triggers) + '"') : (''))}`); // SlashCommand is being loaded:
             } else {
                 console.log(chalkMy.load, chalkMy.err, `SlashCommand missing a help.name or help.name is not in string: "${file}"`);
                 continue;

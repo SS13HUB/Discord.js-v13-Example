@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders'); // require('disc
 const { MessageActionRow, MessageButton } = require('discord.js');
 
 
-let self = module.exports = {
+const self = module.exports = {
     name: "one-time-button",
     category: "Utility",
     description: "A button that will only work once and be destroyed.",

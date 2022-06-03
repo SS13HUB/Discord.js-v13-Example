@@ -15,6 +15,6 @@ module.exports = {
      */
     async execute(interaction, client) {
         console.log(chalkMy.event, `Event fired: "inviteDelete" (${interaction})`);
-        return client.channels.cache.get(process.env.MASTER_LOG).send({ content: `inviteDelete event fired`});
+        return client.channels.cache.get(process.env.MASTER_CHX_DEBUG_LOG).send({ content: `inviteDelete event fired`});
     }
 }

@@ -1,6 +1,8 @@
 
 const chalkMy = require(process.cwd() + "/src/chalk");
 
+const _local_debug = Boolean(0);
+
 module.exports = {
     name: 'interactionCreate',
 
@@ -52,11 +54,14 @@ module.exports = {
             //console.log(interaction);
             let triggerFounded = false;
             const cmdsArr = [...client.slash.keys()];
+            if (_local_debug) console.log('Button hit, interaction.customId:', interaction.customId);
             for (let i = 0; i < cmdsArr.length; i++) {
                 const element = client.slash.get(cmdsArr[i]);
                 //console.log(element);
                 if (!element.triggers) continue;
+                if (_local_debug) console.log(`element: ${element.name}, trigger: ${element.triggers}`);
                 if (element.triggers.includes(interaction.customId)) {
+                    if (_local_debug) console.log(`hit`);
                     triggerFounded = true;
                     const command = element; //client.slash.get("one-time-button");
                     try {

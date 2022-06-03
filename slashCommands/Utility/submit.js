@@ -3,7 +3,7 @@ const { Modal, TextInputComponent, showModal } = require('discord-modals'); // N
 const { MessageButton, Permissions } = require('discord.js');
 const chalkMy = require(process.cwd() + "/src/chalk");
 
-self = module.exports = {
+const self = module.exports = {
     name: "submit",
     category: "Utility",
     description: "Call form to input invite with server info to propose to publish.",
@@ -14,9 +14,11 @@ self = module.exports = {
     ],
     trigger: async (client, interaction) => {
         console.log(chalkMy.event, `Command triggered: "submit".`);
-        const _channel = client.channels.cache.get(process.env.MASTER_POSTING);
+        console.log('self.triggers:', self.triggers);
+        console.log('interaction:', interaction);
+        const _channel = client.channels.cache.get(process.env.MASTER_CHX_POSTING);
         if (interaction.customId == self.triggers[0]) {
-            if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.LIBRARIANS))) {
+            if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
                 return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
             }
             let _MessageActionRow = interaction.message.components;
@@ -133,7 +135,7 @@ self = module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        if ((interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || (interaction.member.roles.resolveId(process.env.LIBRARIANS))) {
+        if ((interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || (interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
             const modal = new Modal() // We create a Modal
                 .setCustomId('submit-modal-form')
                 .setTitle('Submit your invite')

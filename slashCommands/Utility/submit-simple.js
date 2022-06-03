@@ -1,8 +1,15 @@
 
-const { MessageButton, Permissions, Formatters } = require('discord.js');
+const { MessageActionRow, MessageButton, Permissions, Formatters } = require('discord.js');
 const chalkMy = require(process.cwd() + "/src/chalk");
 
-self = module.exports = {
+/* const self = {
+    "triggers": [
+        'submit-simple-check',
+        'submit-simple-convert',
+    ],
+} */
+
+const self = module.exports = {
     name: "submit-simple",
     usage: '/submit-simple <invite link> <message url (optional)>',
     options: [
@@ -24,96 +31,105 @@ self = module.exports = {
     ownerOnly: true,
     triggers: [
         'submit-simple-check',
+        'submit-simple-convert',
     ],
     trigger: async (client, interaction) => {
         console.log(chalkMy.event, `Command triggered: "submit-simple".`);
-        const _channel = client.channels.cache.get(process.env.MASTER_CHX_POSTING);
+        if (interaction.channel) {
+            await interaction.channel.sendTyping();
+        } else {
+            let _channel = await client.channels.fetch(interaction.channelId);
+            await _channel.sendTyping();
+        }
+        if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
+            return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
+        }
         if (interaction.customId == self.triggers[0]) {
-            let inviteCode = interaction.message.content;
-            console.log('inviteCode:', inviteCode);
-            const fetchedInvite = await client.fetchInvite(inviteCode)
+            let messageContentParsed = {};
+            let _content = interaction.message.content
+                .split('\n');
+            for (let i = 0; i < _content.length; i++) { // .replaceAll('https', 'http')
+                const element = _content[i].replaceAll('**', '').split(': ');
+                messageContentParsed[element[0]] = element[1]; //messageContentParsed.push(element);
+            }
+            //console.log('messageContentParsed:', messageContentParsed);
+            //console.log('self.triggers:', self.triggers);
+            //console.log('interaction:', interaction);
+            //return;
+            const inviteFetched = await client.fetchInvite(messageContentParsed.Invite)
                 .then((val) => {return [true, val];})
                 .catch((err) => {return [false, err];});
-            //console.log('fetchedInvite:', fetchedInvite[1]);
-            if (fetchedInvite[0] == false) {
-                if ((fetchedInvite[1].httpStatus == 404) || (fetchedInvite[1].code == 10006) || (fetchedInvite[1].message == "DiscordAPIError: Unknown Invite")) {
-                    //console.log(interaction.guild.channels);
-                    const savedServerID = interaction.message.embeds[0].footer.text.split('Server: ')[1];
-                    //console.log("savedServerID:", savedServerID);
-                    /* if (!interaction.message[0]) {
-                        return interaction.reply(`**Error**:\n\`\`\``, e, `\`\`\``);
-                    } */
-                    /* if (interaction.message[1].embeds == []) {
-                        return interaction.reply(`**Error**:\nNo embeds.`);
-                    } */
-                    //await interaction.reply({ ephemeral: true, content: `**Error**: Invite is dead[.](<https://youtu.be/QO8yvDd3X-Q>)` });
-                    let isServer = await client.guilds.fetch(savedServerID)
-                        .then((d) => {return d})
-                        .catch(() => {return false});
-                    if (!isServer) {
-                        return await interaction.reply({ ephemeral: true, content: `**Error**: Server is dead[.](<https://youtu.be/QO8yvDd3X-Q>)` });
-                    }
-                    //await interaction.followUp({ ephemeral: true, content: `**Success**: But server is alive.` });
-                    // .filter(chx => chx.type === "GUILD_TEXT").find(x => x.position === 0)
-                    const _arr = ["GUILD_TEXT", "GUILD_NEWS", "UNKNOWN"];
-                    let firstChannel = [...isServer.channels.cache.filter(chx => _arr.includes(chx.type)).keys()][0];
-                    // isServer.channels.cache.filter(chx => _arr.includes(chx.type)).keys()
-                    //.first() //.firstKey()
-                    //console.log("firstChannel:", firstChannel);
-                    //await interaction.followUp({ ephemeral: true, content: `**Target channel**: \`${firstChannel}\`.` });
-                    let targetChannel = await client.channels.cache.get(firstChannel);
-                    //console.log("targetChannel:", targetChannel);
-                    //let createdInvite = targetChannel.createInvite({ maxAge: 0 });
-                    let createdInvite = await targetChannel.createInvite();
-                    //console.log('createdInvite:', createdInvite);
-                    /* createdInvite = await client.fetchInvite('PRCrgFPMNw')
-                        .then((val) => {return [true, val];})
-                        .catch((err) => {return [false, err];});
-                    if (createdInvite[0] == false) {
-                        console.error('createdInvite:', createdInvite[1]);
-                        return await interaction.reply({ content: `Error: ${createdInvite[1]}; message:${createdInvite[1].message}` });
-                    } */
-                    // createdInvite = createdInvite[1];
-                    //let createdInvite = 'testHJGFUDBG';
-                    //console.log("createdInvite:", createdInvite);
-                    //console.log("interaction.message.content:", interaction.message.content);
-                    //console.log("interaction.message.embeds[0]:", interaction.message.embeds[0]);
-                    //console.log("interaction.message.components[0].components:", interaction.message.components[0].components);
-                    let array = interaction.message.components[0].components;
-                    for (let i = 0; i < array.length; i++) {
-                        const element = array[i];
-                        if (element.url) {
-                            if (element.url.includes('//discord.gg/')) { // https://discord.
-                                interaction.message.components[0].components[i] = new MessageButton()
-                                    .setLabel('Join')
-                                    .setURL(createdInvite.url)
-                                    .setStyle('LINK');
-                                break;
-                            }
+            //console.log('inviteFetched:', inviteFetched[1]);
+            if (inviteFetched[0] == false) {
+                if ((inviteFetched[1].httpStatus == 404) || (inviteFetched[1].code == 10006) || (inviteFetched[1].message == "DiscordAPIError: Unknown Invite")) {
+                    //let _status1 = 'Unknown';
+                    /* _status1 = 'Cann\t fetch server from Discord API'
+                    _status1 = 'Cann\t get server from my cache'
+                    _status1 = 'Cann\t fetch server widget from Discord API' */
+                    //return console.log('client.fetchGuildWidget(messageContentParsed[\'Server ID\']:', await client.guilds.cache.get(messageContentParsed['Server ID'] + 3));
+                    let _server = await client.guilds.cache.get(messageContentParsed['Server ID']);
+                    if (_server === undefined) {
+                        console.log('Cache failed.');
+                        _server = await client.guilds.fetch(messageContentParsed['Server ID']);
+                        if (_server === undefined) {
+                            console.log('API Failed. R.I.P.');
+                            return await client.channels.cache.get(process.env.MASTER_CHX_POSTING_WANTED).send({ content:
+                                Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
+                                Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
+                                Formatters.bold('Status update') + `: Invite got revoked, and Discord server seems dead. R.I.P…\n` +
+                                Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                            });
                         }
+                        console.log('Cache failed, API OK.');
+                        return await client.channels.cache.get(process.env.MASTER_CHX_POSTING_WANTED).send({ content:
+                            Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
+                            Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
+                            Formatters.bold('Status update') + `: Invite got revoked, but I'm __not on the server__. **Manual refresh required**.\n` +
+                            Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                        });
+                    } else {
+                        console.log('Cache OK.');
+                        if (!_server.me.permissions.has([Permissions.FLAGS.CREATE_INSTANT_INVITE, Permissions.FLAGS.MANAGE_CHANNELS, Permissions.FLAGS.MANAGE_GUILD])) {
+                            return await client.channels.cache.get(process.env.MASTER_CHX_POSTING_WANTED).send({ content:
+                                Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
+                                Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
+                                Formatters.bold('Status update') + `: Invite got revoked, and I'm on the server but __without rights__ to create new invites. **Manual refresh required**.\n` +
+                                Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                            });
+                        }
+                        const _arr = ["GUILD_TEXT", "GUILD_NEWS", "UNKNOWN"];
+                        //console.log('filter:', JSON.stringify([..._server.channels.cache.keys()].sort((a, b) => {a - b})));
+                        const _channelsPrepared = _server.channels.cache.filter(chx => _arr.includes(chx.type));
+                        //console.log('_channelsPrepared:', _channelsPrepared);
+                        const _channelsCandidate = [..._channelsPrepared.keys()];
+                        //console.log('_channelsCandidate:', _channelsCandidate);
+                        const _channelCandidateIndex = [..._channelsPrepared.map(chx => chx.rawPosition)].indexOf(0);
+                        if (_channelCandidateIndex == -1) {
+                            return await client.channels.cache.get(process.env.MASTER_CHX_POSTING_WANTED).send({ content:
+                                Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
+                                Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
+                                Formatters.bold('Status update') + `: Invite got revoked, and I'm not on the server with rights to create new invites, but there is __no channels__ to invite to. **Manual refresh required**.\n` +
+                                Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                            });
+                        }
+                        //console.log('_channelCandidateIndex:', _channelCandidateIndex);
+                        const _channelCandidate = _channelsPrepared.get(_channelsCandidate[_channelCandidateIndex]);
+                        // console.log('_channelCandidate:', _channelCandidate);
+                        //return;
                     }
-                    let _savedMessage = interaction.message;
-                    _savedMessage.content = createdInvite.url;
-                    _savedMessage.embeds[0].fields[0] = { value: `${createdInvite.code}`, name: 'Invite', inline: true };
-                    //_savedMessage.embeds[0].fields[4] = { value: 'No', name: 'Is Already Memorized:', inline: false };
-                    //console.log("_savedMessage:", _savedMessage);
-                    await interaction.update({
-                        content: _savedMessage.content, 
-                        embeds: _savedMessage.embeds, 
-                        components: _savedMessage.components
-                    }); // Message.removeAttachments
-                    await interaction.followUp({ ephemeral: true, content: `**Success**: Invite refreshed.` });
-                    return;
                 } else {
                     //return await interaction.reply({ ephemeral: true, content: `**Exception**: Unknown error.`});
-                    console.log('fetchedInvite:', fetchedInvite[1]);
-                    return await interaction.reply({ ephemeral: true, content: `**Error**: ${JSON.stringify(fetchedInvite[1])}; message: ${fetchedInvite[1].message}`});
+                    console.log('inviteFetched:', inviteFetched[1]);
+                    return await interaction.reply({ content: `**Error**: ${JSON.stringify(inviteFetched[1])}; message: ${inviteFetched[1].message}`});
                 }
             } else {
-                // if (fetchedInvite[1].message !== undefined) {}
-                //console.log("fetchedInvite:", fetchedInvite[1]);
+                // if (inviteFetched[1].message !== undefined) {}
+                //console.log("inviteFetched:", inviteFetched[1]);
                 return await interaction.reply({ ephemeral: true, content: `**Success**: Invite is alive, refresh is not needed.`});
             }
+        } else if (interaction.customId == self.triggers[1]) {
+            console.log('dummy button clicked by:', interaction.user.id);
+            return await interaction.reply({ ephemeral: true, content: `Nope. Not now. It's dummy button for now, but in the future all of this will be done better. Sorry.`});
         }
     },
     run: async (client, interaction) => {
@@ -126,6 +142,8 @@ self = module.exports = {
         if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
             return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
         }
+        //console.log('self:', self);
+        //console.log('interaction:', interaction);
         
         //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteIn = interaction.options.getString("invite");
@@ -139,7 +157,7 @@ self = module.exports = {
             .catch(async (e) => {
                 console.log('Invite checked, it\'s not alive.\n', e);
                 await interaction.reply({ ephemeral: true, content: `Error occured.\nMessage: \`${e.message}\`\nFull:\n\`\`\`${e}\`\`\`` });
-                /* if (e.message == "Unknown Invite" || fetchedInvite.message.code == 10006 || e.message.httpStatus == '404') {
+                /* if (e.message == "Unknown Invite" || inviteFetched.message.code == 10006 || e.message.httpStatus == '404') {
                     //return {"code": inviteIn, "message": e};
                 } */
                 return null;
@@ -156,13 +174,26 @@ self = module.exports = {
         if (inviteFetched.temporary) {
             return await interaction.reply({ ephemeral: true, content: `Error occured.\nLink is temporary. I can not accept this.` });
         }
-        //client.channels.cache.get(process.env.MASTER_CHX_POSTING).send({ content: `inviteDelete event fired`});
-        client.channels.cache.get(process.env.MASTER_CHX_POSTING).send({
+        const row = new MessageActionRow().addComponents(
+            new MessageButton()
+                .setCustomId(self.triggers[0]) // 'submit-simple-check'
+                .setLabel('Check')
+                .setStyle('PRIMARY')
+                .setEmoji('🔬'),
+            new MessageButton()
+                .setCustomId(self.triggers[1]) // 'submit-simple-convert'
+                .setLabel('Convert')
+                .setStyle('SECONDARY')
+                .setEmoji('🚧'),
+        );
+
+        await client.channels.cache.get(process.env.MASTER_CHX_POSTING).send({
             content:
                 Formatters.bold('Server name') + `: ${inviteFetched.guild.name}\n` +
                 Formatters.bold('Server ID') + `: ${inviteFetched.guild.id}\n` +
                 ((messageLinkIn) ? (Formatters.bold('Source message: ') + `: ${messageLinkIn}\n`) : ('')) +
-                Formatters.bold('Invite') + `: ${((inviteFetched.url) || ((inviteFetched.code) ? (`http://discord.gg/` + inviteFetched.code) : (`http://discord.gg/` + inviteFetched)))}`
+                Formatters.bold('Invite') + `: ${((inviteFetched.url) || ((inviteFetched.code) ? (`http://discord.gg/` + inviteFetched.code) : (`http://discord.gg/` + inviteFetched)))}`,
+            components: [row]
         });
         return await interaction.reply({ ephemeral: true, content: `Ok.` });
     },
