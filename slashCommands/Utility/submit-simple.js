@@ -129,22 +129,49 @@ const self = module.exports = {
         } else if (interaction.customId == self.triggers[1]) {
             // console.log(`dummy button clicked by: "${interaction.user.id}", under "${interaction.message.id}"`);
             let messageContentParsed = {};
-            if (1) console.log('interaction.message.content:', interaction.message.content);
-            let _content = interaction.message.content.replaceAll(': **: ', '**: ').split('\n');
-            if (1) console.log('_content:', _content);
-            for (let i = 0; i < _content.length; i++) { // .replaceAll('https', 'http')
-                const element = _content[i].replaceAll('**', '').split(': ');
+            if (0) console.log('interaction.message.content:', interaction.message.content);
+            if ((interaction.message.content.includes(': **: ')) ||
+                (interaction.message.content.includes('https'))) {
+                console.log(chalkMy.log, 'Message contains some broken columns or data, fixing...');
+            }
+            let _content = interaction.message.content
+                .replaceAll(': **: ', '**: ')
+                .replaceAll('**:', ':')
+                .replaceAll('**', '')
+                .replaceAll('https', 'http')
+                .split('\n');
+            if (0) console.log('_content:', _content);
+            for (let i = 0; i < _content.length; i++) {
+                const element = _content[i].split(': ');
                 messageContentParsed[element[0]] = element[1]; //messageContentParsed.push(element);
             }
-            if (1) console.log('messageContentParsed:', messageContentParsed);
-            if (!(messageContentParsed['Server name'][0] == '`') && 
-                !(messageContentParsed['Server name'][messageContentParsed['Server name'].length - 1] == '`')) {
-                console.log('messageContentParsed (before):', messageContentParsed['Server name']);
-                messageContentParsed['Server name'] = '`' + messageContentParsed['Server name'] + '`';
-                console.log('messageContentParsed (after):', messageContentParsed['Server name']);
-                console.log('messageContentParsed:', messageContentParsed);
+            if (0) console.log('messageContentParsed:', messageContentParsed);
+            if ((messageContentParsed['Server name'][0] != '`') || 
+                (messageContentParsed['Server name'][messageContentParsed['Server name'].length - 1] != '`')) {
+                //console.log('messageContentParsed (before):', messageContentParsed['Server name']);
+                messageContentParsed['Server name'] = ((messageContentParsed['Server name'][0] != '`') ? ('`') : ('')) + messageContentParsed['Server name'];
+                messageContentParsed['Server name'] += ((messageContentParsed['Server name'][messageContentParsed['Server name'].length - 1] != '`') ? ('`') : (''));
+                //messageContentParsed['Server name'] = '`' + messageContentParsed['Server name'] + '`';
+                //console.log('messageContentParsed (after):', messageContentParsed['Server name']);
+                if (0) console.log('messageContentParsed:', messageContentParsed);
+                let _out = '';
+                for (const [key, value] of Object.entries(messageContentParsed)) {
+                    _out += `**${key}**: ${value}\n`;
+                }
+                if (0) console.log('_out:', _out);
+                await interaction.update({ content: _out });
+                return await interaction.followUp({ ephemeral: true, content: `Some fixing processed.`});
+            } else if (interaction.message.content.includes(': **: ')) {
+                if (0) console.log('messageContentParsed:', messageContentParsed);
+                let _out = '';
+                for (const [key, value] of Object.entries(messageContentParsed)) {
+                    _out += `**${key}**: ${value}\n`;
+                }
+                if (0) console.log('_out:', _out);
+                await interaction.update({ content: _out });
+                return await interaction.followUp({ ephemeral: true, content: `Some fixing processed.`});
             } else {
-                console.log('Name escaping not needed, passing.');
+                console.log(chalkMy.log, 'Name escaping not needed, passing.');
             }
             return await interaction.reply({ ephemeral: true, content: `Nope. Not now. It's dummy button for now, but in the future all of this will be done better. Sorry.`});
         }
