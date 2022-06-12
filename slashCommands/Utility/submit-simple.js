@@ -34,14 +34,13 @@ const self = module.exports = {
         'submit-simple-convert',
     ],
     trigger: async (client, interaction) => {
-        console.log(chalkMy.event, `Command triggered: "submit-simple".`);
         if (interaction.channel) {
             await interaction.channel.sendTyping();
         } else {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
+        if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
             return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
         }
         if (interaction.customId == self.triggers[0]) {
@@ -77,7 +76,7 @@ const self = module.exports = {
                                 Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
                                 Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
                                 Formatters.bold('Status update') + `: Invite got revoked, and Discord server seems dead. R.I.P…\n` +
-                                Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                                Formatters.bold('Source message') + `: ${interaction.message.url}`
                             });
                         }
                         console.log('Cache failed, API OK.');
@@ -85,7 +84,7 @@ const self = module.exports = {
                             Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
                             Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
                             Formatters.bold('Status update') + `: Invite got revoked, but I'm __not on the server__. **Manual refresh required**.\n` +
-                            Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                            Formatters.bold('Source message') + `: ${interaction.message.url}`
                         });
                     } else {
                         console.log('Cache OK.');
@@ -94,7 +93,7 @@ const self = module.exports = {
                                 Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
                                 Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
                                 Formatters.bold('Status update') + `: Invite got revoked, and I'm on the server but __without rights__ to create new invites. **Manual refresh required**.\n` +
-                                Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                                Formatters.bold('Source message') + `: ${interaction.message.url}`
                             });
                         }
                         const _arr = ["GUILD_TEXT", "GUILD_NEWS", "UNKNOWN"];
@@ -109,7 +108,7 @@ const self = module.exports = {
                                 Formatters.bold('Server name') + `: ${messageContentParsed['Server name']}\n` +
                                 Formatters.bold('Server ID') + `: ${messageContentParsed['Server ID']}\n` +
                                 Formatters.bold('Status update') + `: Invite got revoked, and I'm not on the server with rights to create new invites, but there is __no channels__ to invite to. **Manual refresh required**.\n` +
-                                Formatters.bold('Source message: ') + `: ${interaction.message.url}`
+                                Formatters.bold('Source message') + `: ${interaction.message.url}`
                             });
                         }
                         //console.log('_channelCandidateIndex:', _channelCandidateIndex);
@@ -128,7 +127,25 @@ const self = module.exports = {
                 return await interaction.reply({ ephemeral: true, content: `**Success**: Invite is alive, refresh is not needed.`});
             }
         } else if (interaction.customId == self.triggers[1]) {
-            console.log('dummy button clicked by:', interaction.user.id);
+            // console.log(`dummy button clicked by: "${interaction.user.id}", under "${interaction.message.id}"`);
+            let messageContentParsed = {};
+            if (1) console.log('interaction.message.content:', interaction.message.content);
+            let _content = interaction.message.content.replaceAll(': **: ', '**: ').split('\n');
+            if (1) console.log('_content:', _content);
+            for (let i = 0; i < _content.length; i++) { // .replaceAll('https', 'http')
+                const element = _content[i].replaceAll('**', '').split(': ');
+                messageContentParsed[element[0]] = element[1]; //messageContentParsed.push(element);
+            }
+            if (1) console.log('messageContentParsed:', messageContentParsed);
+            if (!(messageContentParsed['Server name'][0] == '`') && 
+                !(messageContentParsed['Server name'][messageContentParsed['Server name'].length - 1] == '`')) {
+                console.log('messageContentParsed (before):', messageContentParsed['Server name']);
+                messageContentParsed['Server name'] = '`' + messageContentParsed['Server name'] + '`';
+                console.log('messageContentParsed (after):', messageContentParsed['Server name']);
+                console.log('messageContentParsed:', messageContentParsed);
+            } else {
+                console.log('Name escaping not needed, passing.');
+            }
             return await interaction.reply({ ephemeral: true, content: `Nope. Not now. It's dummy button for now, but in the future all of this will be done better. Sorry.`});
         }
     },
@@ -139,7 +156,7 @@ const self = module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
+        if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
             return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
         }
         //console.log('self:', self);
@@ -189,9 +206,9 @@ const self = module.exports = {
 
         await client.channels.cache.get(process.env.MASTER_CHX_POSTING).send({
             content:
-                Formatters.bold('Server name') + `: ${inviteFetched.guild.name}\n` +
+                Formatters.bold('Server name') + `: \`${inviteFetched.guild.name}\`\n` +
                 Formatters.bold('Server ID') + `: ${inviteFetched.guild.id}\n` +
-                ((messageLinkIn) ? (Formatters.bold('Source message: ') + `: ${messageLinkIn}\n`) : ('')) +
+                ((messageLinkIn) ? (Formatters.bold('Source message') + `: ${messageLinkIn}\n`) : ('')) +
                 Formatters.bold('Invite') + `: ${((inviteFetched.url) || ((inviteFetched.code) ? (`http://discord.gg/` + inviteFetched.code) : (`http://discord.gg/` + inviteFetched)))}`,
             components: [row]
         });

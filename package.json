@@ -1,9 +1,9 @@
 {
-  "name": "discord.js-v13-example",
+  "name": "ss13hub-bot",
   "version": "1.0.0",
-  "description": "Discord.js v13 Example Bot by Expectatives#1157",
+  "description": "Bot for automatic revive of Discord servers' invites of Space Station 13 fandom. Developed by Gesugao-san, leader of SS13HUB project.",
   "main": "index.js",
-  "author": "Expectatives#1157",
+  "author": "Gesugao-san, Expectatives#1157",
   "scripts": {
     "start": "node index.js"
   },
@@ -25,8 +25,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Expectatives/Discord.js-v13-Example.git"
+    "url": "git+https://github.com/SS13HUB/ss13hub-bot.git"
   },
-  "bugs": "https://github.com/Expectatives/Discord.js-v13-Example/issues",
-  "homepage": "https://github.com/Expectatives/Discord.js-v13-Example#readme"
+  "bugs": "https://github.com/SS13HUB/ss13hub-bot/issues",
+  "homepage": "http://discord.gg/HMwbBZyEum"
 }

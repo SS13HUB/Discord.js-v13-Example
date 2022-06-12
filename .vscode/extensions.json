@@ -1,5 +1,7 @@
 {
     "recommendations": [
-        "uniquevision.vscode-plpgsql-lsp"
+        "gesugao-san.general-purpose-extension-pack",
+        "uniquevision.vscode-plpgsql-lsp",
+        "afractal.node-essentials"
     ]
 }

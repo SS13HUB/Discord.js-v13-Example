@@ -16,7 +16,7 @@ const self = module.exports = {
         console.log(chalkMy.event, `Command triggered: "submit-project".`);
         const _channel = client.channels.cache.get(process.env.MASTER_CHX_POSTING);
         if (interaction.customId == self.triggers[0]) {
-            if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) || !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
+            if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
                 return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
             }
             let _MessageActionRow = interaction.message.components;

@@ -62,12 +62,13 @@ module.exports = {
                 if (_local_debug) console.log(`element: ${element.name}, trigger: ${element.triggers}`);
                 if (element.triggers.includes(interaction.customId)) {
                     if (_local_debug) console.log(`hit`);
+                    console.log(chalkMy.event, `InteractionButton triggered: "${element.name}", "${interaction.customId}",\nby "${interaction.user.id}", unver "${interaction.message.id}".`);
                     triggerFounded = true;
                     const command = element; //client.slash.get("one-time-button");
                     try {
                         return command.trigger(client, interaction); //, args
                     } catch (e) {
-                        interaction.reply({ content: e.message });
+                        return interaction.reply({ content: e.message });
                     }
                 }
             }
