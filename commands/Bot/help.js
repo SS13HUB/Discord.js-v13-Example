@@ -8,6 +8,7 @@ module.exports = {
     usage: '!help <command>',
     category: "Bot",
     description: "Return all commands, or one specific command!",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, message, args) => {
 

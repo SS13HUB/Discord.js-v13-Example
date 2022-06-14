@@ -1,12 +1,11 @@
 
 const fs = require("fs");
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 /**
  * Load Events
  */
 const loadEvents = async function (client) {
-    console.log(chalkMy.log, `Preparing events…`);
+    console.log(client.chalk.log, `Preparing events…`);
     const eventFolders = fs.readdirSync(process.cwd() + "/events");
     for (const folder of eventFolders) {
         const eventFiles = fs
@@ -17,33 +16,33 @@ const loadEvents = async function (client) {
             const event = require(`${process.cwd()}/events/${folder}/${file}`);
             
             if (event.name) {
-                console.log(chalkMy.load, chalkMy.ok, `Event: "${file}"`); // Event is being loaded:
+                console.log(client.chalk.load, client.chalk.ok, `Event: "${file}"`); // Event is being loaded:
             } else {
-                console.log(chalkMy.load, chalkMy.err, `Event missing a help.name or help.name is not in string: "${file}"`);
+                console.log(client.chalk.load, client.chalk.err, `Event missing a help.name or help.name is not in string: "${file}"`);
                 continue;
             }
             
             if (event.once) {
                 client.once(event.name, (...args) => {
-                    //console.log(chalkMy.event, `Event fired (once): "${event.name}"`); // (${interaction !== null ? interaction : "null"})
+                    //console.log(client.chalk.event, `Event fired (once): "${event.name}"`); // (${interaction !== null ? interaction : "null"})
                     event.execute(...args, client);
                 });
             } else {
                 client.on(event.name, (...args) => {
-                    //console.log(chalkMy.event, `Event fired: "${event.name}"`, ...args.interaction);
+                    //console.log(client.chalk.event, `Event fired: "${event.name}"`, ...args.interaction);
                     event.execute(...args, client);
                 });
             }
         }
     }
-    console.log(chalkMy.log, chalkMy.ok, `Preparing events done.`);
+    console.log(client.chalk.log, client.chalk.ok, `Preparing events done.`);
 }
 
 /**
  * Load Prefix Commands
  */
 /* const loadCommands = async function (client) {
-    console.log(chalkMy.log, `Preparing commands…`);
+    console.log(client.chalk.log, `Preparing commands…`);
     const commandFolders = fs.readdirSync(process.cwd() + "/commands");
     for (const folder of commandFolders) {
         const commandFiles = fs
@@ -55,9 +54,9 @@ const loadEvents = async function (client) {
             
             if (command.name) {
                 client.commands.set(command.name, command);
-                console.log(chalkMy.load, chalkMy.ok, `Prefix Command: "${file}"`); // Prefix Command is being loaded:
+                console.log(client.chalk.load, client.chalk.ok, `Prefix Command: "${file}"`); // Prefix Command is being loaded:
             } else {
-                console.log(chalkMy.load, chalkMy.err, `Prefix Command missing a help.name or help.name is not in string: "${file}"`);
+                console.log(client.chalk.load, client.chalk.err, `Prefix Command missing a help.name or help.name is not in string: "${file}"`);
                 continue;
             }
             
@@ -65,14 +64,14 @@ const loadEvents = async function (client) {
                 command.aliases.forEach((alias) => client.aliases.set(alias, command.name));
         }
     }
-    console.log(chalkMy.log, chalkMy.ok, `Preparing commands done.`);
+    console.log(client.chalk.log, client.chalk.ok, `Preparing commands done.`);
 } */
 
 /**
  * Load SlashCommands
  */
 const loadSlashCommands = async function (client) {
-    console.log(chalkMy.log, `Preparing slashes…`);
+    console.log(client.chalk.log, `Preparing slashes…`);
     let slash = [];
 
     const commandFolders = fs.readdirSync(process.cwd() + "/slashCommands");
@@ -87,25 +86,25 @@ const loadSlashCommands = async function (client) {
             if (command.name) {
                 // https://discord.com/developers/docs/interactions/application-commands
                 if (command.name < 1 || command.name > 32) {
-                    console.log(chalkMy.err, `Warning: Command name not in range 1-32, skipping:`);
+                    console.log(client.chalk.err, `Warning: Command name not in range 1-32, skipping:`);
                     console.log(command);
                     continue;
                 }
                 if (command.description < 1 || command.description > 100) {
-                    console.log(chalkMy.err, `Warning: Command description not in range 1-100, skipping:`);
+                    console.log(client.chalk.err, `Warning: Command description not in range 1-100, skipping:`);
                     console.log(command);
                     continue;
                 }
                 client.slash.set(command.name, command);
                 slash.push(command);
-                console.log(chalkMy.load, chalkMy.ok, `SlashCommand: "${file}"${((command.triggers) ? ('; "' + JSON.stringify(command.triggers) + '"') : (''))}`); // SlashCommand is being loaded:
+                console.log(client.chalk.load, client.chalk.ok, `SlashCommand: "${file}"${((command.triggers) ? ('; "' + JSON.stringify(command.triggers) + '"') : (''))}`); // SlashCommand is being loaded:
             } else {
-                console.log(chalkMy.load, chalkMy.err, `SlashCommand missing a help.name or help.name is not in string: "${file}"`);
+                console.log(client.chalk.load, client.chalk.err, `SlashCommand missing a help.name or help.name is not in string: "${file}"`);
                 continue;
             }
         }
     }
-    // console.log(chalkMy.log, `Waiting for client readiness…`);
+    // console.log(client.chalk.log, `Waiting for client readiness…`);
 
     client.on("ready", async() => {
         // Register Slash Commands for a single guild
@@ -115,7 +114,7 @@ const loadSlashCommands = async function (client) {
 
         const register = 1; // or purge, bool in int
         if (Boolean(register)) {
-            console.log(chalkMy.load, `Registering ${slash.length} Slash Commands for all guilds.`);
+            console.log(client.chalk.load, `Registering ${slash.length} Slash Commands for all guilds.`);
             //console.log(slash);
             /* for (let i = 0; i < slash.length; i++) {
                 let cmd  = slash[i];
@@ -126,10 +125,10 @@ const loadSlashCommands = async function (client) {
             } */
             await client.application.commands.set(slash);
             /* await client.application.commands.fetch()
-                .then(() => console.log(chalkMy.log, chalkMy.ok, `Registered Slash Commands for all guilds:\n`, slash.keys())); */
+                .then(() => console.log(client.chalk.log, client.chalk.ok, `Registered Slash Commands for all guilds:\n`, slash.keys())); */
                 //((command) => console.log(command.values()));
         } else {
-            console.log(chalkMy.log, chalkMy.ok, `Purging all slash commands from old version of bot.`);
+            console.log(client.chalk.log, client.chalk.ok, `Purging all slash commands from old version of bot.`);
             // This takes ~1 hour to update
             await client.application.commands.fetch().then((command) => {
                 console.log(command);
@@ -140,7 +139,7 @@ const loadSlashCommands = async function (client) {
             client.guilds.cache.get(process.env.MASTER_SERVER).commands.set([]);
         }
     })
-    console.log(chalkMy.log, chalkMy.ok, `Preparing slashes done.`);
+    console.log(client.chalk.log, client.chalk.ok, `Preparing slashes done.`);
 }
 
 module.exports = {

@@ -5,7 +5,6 @@ const { Pool } = require('pg');
 const connectionString = process.env.DB_URL;
 const fs = require('fs').promises;
 
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 const _local_debug = Boolean(0);
 
@@ -94,7 +93,7 @@ module.exports = {
      */
     async execute(modal, interaction, client) {
         //let modal = interaction.fields[0];
-        console.log(chalkMy.event, `Event fired: "modalSubmit".`);
+        console.log(client.chalk.event, `Event fired: "modalSubmit".`);
         //console.log(modal);
         if (modal.customId === 'modal-customid') {
             if (interaction.channel) {
@@ -107,7 +106,7 @@ module.exports = {
                     // console.log("client:", client);
                     // console.log("modal:", modal); // ModalSubmitInteraction
                     // console.log("interaction:", interaction); // client
-                    console.error(chalkMy.exct, e);
+                    console.error(client.chalk.exct, e);
                 }
             }
             const firstResponse = modal.getTextInputValue('textinput-customid');

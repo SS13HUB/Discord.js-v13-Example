@@ -1,19 +1,19 @@
 
 const { Modal, TextInputComponent, showModal } = require('discord-modals'); // Now we extract the showModal method
 const { MessageButton, Permissions } = require('discord.js');
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 const self = module.exports = {
     name: "submit",
     category: "Utility",
     description: "Call form to input invite with server info to propose to publish.",
+    adminOnly: false,
     ownerOnly: false,
     triggers: [
         'submit-modal-form-post', // submit-modal-form-echo
         'submit-modal-form-check',
     ],
     trigger: async (client, interaction) => {
-        console.log(chalkMy.event, `Command triggered: "submit".`);
+        console.log(client.chalk.event, `Command triggered: "submit".`);
         console.log('self.triggers:', self.triggers);
         console.log('interaction:', interaction);
         const _channel = client.channels.cache.get(process.env.MASTER_CHX_POSTING);

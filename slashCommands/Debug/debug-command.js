@@ -19,6 +19,7 @@ module.exports = {
         }
     ],
     description: "Not for public use, sorry.",
+    adminOnly: false,
     ownerOnly: true,
     run: async (client, interaction) => {
         if (interaction.channel) {

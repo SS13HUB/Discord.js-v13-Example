@@ -7,6 +7,7 @@ const self = module.exports = {
     name: "create-invite",
     category: "Utility",
     description: "Creates an invite to this guild channel.",
+    adminOnly: false,
     ownerOnly: false,
     /* options: [
         {

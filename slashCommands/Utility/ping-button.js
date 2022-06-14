@@ -5,6 +5,7 @@ module.exports = {
     name: "ping-button",
     category: "Utility",
     description: "Ping-pong, but with button!",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {

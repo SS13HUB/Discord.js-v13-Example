@@ -7,6 +7,7 @@ const self = module.exports = {
     name: "one-time-button",
     category: "Utility",
     description: "A button that will only work once and be destroyed.",
+    adminOnly: false,
     ownerOnly: false,
     triggers: [
         'one-time-button'

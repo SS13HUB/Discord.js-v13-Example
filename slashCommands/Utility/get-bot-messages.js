@@ -4,6 +4,7 @@ module.exports = {
     name: "get-bot-messages",
     category: "Utility",
     description: "Not for public use, sorry.",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {

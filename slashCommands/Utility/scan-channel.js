@@ -23,6 +23,7 @@ module.exports = {
     name: "scan-channel",
     category: "Utility",
     description: "I'll scan the channel for invite links and save them.",
+    adminOnly: false,
     ownerOnly: false,
     options: [
         {
@@ -39,7 +40,6 @@ module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const channelInput = interaction.options.getString("channel");
         if (!channelInput) return interaction.reply({ content: `There is no any channel ID or link!` });
 

@@ -5,6 +5,7 @@ module.exports = {
     name: "get-my-invites",
     category: "Utility",
     description: "You can get your invites to this server.",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {

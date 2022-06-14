@@ -1,6 +1,5 @@
 
 const { MessageActionRow, MessageButton, Permissions, Formatters } = require('discord.js');
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 /* const self = {
     "triggers": [
@@ -28,6 +27,7 @@ const self = module.exports = {
     ],
     category: "Utility",
     description: "Like submit, but simple.",
+    adminOnly: false,
     ownerOnly: true,
     triggers: [
         'submit-simple-check',
@@ -132,7 +132,7 @@ const self = module.exports = {
             if (0) console.log('interaction.message.content:', interaction.message.content);
             if ((interaction.message.content.includes(': **: ')) ||
                 (interaction.message.content.includes('https'))) {
-                console.log(chalkMy.log, 'Message contains some broken columns or data, fixing...');
+                console.log(client.chalk.log, 'Message contains some broken columns or data, fixing...');
             }
             let _content = interaction.message.content
                 .replaceAll(': **: ', '**: ')
@@ -171,7 +171,7 @@ const self = module.exports = {
                 await interaction.update({ content: _out });
                 return await interaction.followUp({ ephemeral: true, content: `Some fixing processed.`});
             } else {
-                console.log(chalkMy.log, 'Name escaping not needed, passing.');
+                console.log(client.chalk.log, 'Name escaping not needed, passing.');
             }
             return await interaction.reply({ ephemeral: true, content: `Nope. Not now. It's dummy button for now, but in the future all of this will be done better. Sorry.`});
         }
@@ -189,7 +189,6 @@ const self = module.exports = {
         //console.log('self:', self);
         //console.log('interaction:', interaction);
         
-        //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteIn = interaction.options.getString("invite");
         if (!inviteIn) return interaction.reply({ ephemeral: true, content: `There is no any invite link!` });
         const messageLinkIn = interaction.options.getString("message");

@@ -5,6 +5,7 @@ module.exports = {
     aliases: ["pong", "latency"],
     category: "Utility",
     description: "Check the bot's ping!",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, message, args) => {
         const msg = await message.channel.send(`🏓 Pinging...`);

@@ -1,6 +1,4 @@
 
-const chalkMy = require(process.cwd() + "/src/chalk");
-
 const _local_debug = Boolean(0);
 
 module.exports = {
@@ -17,11 +15,17 @@ module.exports = {
         } else if (interaction.isCommand()) {
 
             const command = client.slash.get(interaction.commandName);
-            if (!command) return interaction.reply({ content: 'Error occured, check console.' });
+            if (!command) return await interaction.reply({ content: 'Error occured, check console.' });
             
             if (command.ownerOnly) {
                 if (interaction.user.id !== process.env.OWNER_ID) {
-                    return interaction.reply({ content: "This command only for Bot Owner!", ephemeral: true });
+                    return await interaction.reply({ content: "This command only for Bot Owner!", ephemeral: true });
+                }
+            }
+            if (command.adminOnly) {
+                if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+                    await client.users.cache.get(process.env.OWNER_ID).send(`**Warning**: User ${interaction.user.id} tries send me in ${interaction.guildId ? interaction.guildId : 'DM'} command without rights:\n\`${command}\`.`);
+                    return await interaction.reply({ ephemeral: true, content: `This command only for users with ADMINISTRATOR authorization.` });
                 }
             }
             
@@ -43,11 +47,21 @@ module.exports = {
                 if (interaction.user.id != process.env.OWNER_ID) console.log("[Interaction]", interaction);
                 _where = interaction.type;
             }
-            console.log(chalkMy.cmd, `Command: "${command.name}" (user "${interaction.user.id}" in "${_where}")`);
+            console.log(client.chalk.cmd, `Command: "${command.name}" (user "${interaction.user.id}" in "${_where}")`);
+            try {
+                if (interaction.channel) {
+                    await interaction.channel.sendTyping();
+                } else {
+                    let _channel = await client.channels.fetch(interaction.channelId);
+                    await _channel.sendTyping();
+                }
+            } catch (e) {
+                console.log('Can\'t send typing:', e);
+            }
             try {
                 return command.run(client, interaction, args);
             } catch (e) {
-                interaction.reply({ content: e.message });
+                return await interaction.reply({ content: e.message });
             }
             
         } else if (interaction.isButton()) {
@@ -62,13 +76,13 @@ module.exports = {
                 if (_local_debug) console.log(`element: ${element.name}, trigger: ${element.triggers}`);
                 if (element.triggers.includes(interaction.customId)) {
                     if (_local_debug) console.log(`hit`);
-                    console.log(chalkMy.event, `InteractionButton triggered: "${element.name}", "${interaction.customId}", by "${interaction.user.id}", under "${interaction.message.id}".`);
+                    console.log(client.chalk.event, `InteractionButton triggered: "${element.name}", "${interaction.customId}", by "${interaction.user.id}", under "${interaction.message.id}".`);
                     triggerFounded = true;
                     const command = element; //client.slash.get("one-time-button");
                     try {
                         return command.trigger(client, interaction); //, args
                     } catch (e) {
-                        return interaction.reply({ content: e.message });
+                        return await interaction.reply({ content: e.message });
                     }
                 }
             }

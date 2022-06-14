@@ -3,7 +3,6 @@ const { Permissions, MessageActionRow, MessageButton } = require('discord.js');
 const { Pool, Client } = require('pg');
 const {sql} = require('@databases/pg');
 const connectionString = process.env.DB_URL;
-const chalkMy = require(process.cwd() + "/src/chalk");
 const fs = require('fs');
 
 const _local_debug = Boolean(0);
@@ -86,6 +85,7 @@ module.exports = {
         }
     ],
     description: "I will try to fetch it and save information in my database.",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {
@@ -94,7 +94,6 @@ module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const param1 = interaction.options.getString("input");
         if (!param1) return interaction.reply({ content: `There is no any invite link, channel ID or server ID!` });
 
@@ -116,7 +115,7 @@ module.exports = {
             .then((d) => {return d})
             .catch(() => {return false});
 
-        console.log(chalkMy.cmd, `${interaction.user.id} trigger save-to-database: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
+        console.log(client.chalk.cmd, `${interaction.user.id} trigger save-to-database: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
 
         if (isInvite) {
             let savetodatabaseEmbed = new client.discord.MessageEmbed()

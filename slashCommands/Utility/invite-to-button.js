@@ -1,7 +1,6 @@
 
 const { Permissions } = require('discord.js');
 const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 /* async function _fetchInvite(client, invite) {
     try {
@@ -30,6 +29,7 @@ module.exports = {
     ],
     category: "Utility",
     description: "I will try to convert your invite link to button (few possiable formats avaliable).",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {
@@ -38,7 +38,6 @@ module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteCode = interaction.options.getString("invite");
         if (!inviteCode) return interaction.reply({ content: `There is no any invite link!` });
         
@@ -61,7 +60,7 @@ module.exports = {
                     .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
                     .setColor(client.config.embedColor)
-                console.log(chalkMy.cmd, `${interaction.user.id} trigger invitetobutton: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
+                console.log(client.chalk.cmd, `${interaction.user.id} trigger invitetobutton: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
                 return interaction.reply({ embeds: [inviteToButtonInvite], ephemeral: true });
                 //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
             }

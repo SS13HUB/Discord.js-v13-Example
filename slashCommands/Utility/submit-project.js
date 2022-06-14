@@ -1,19 +1,19 @@
 
 const { Modal, TextInputComponent, showModal } = require('discord-modals');
 const { MessageButton, Permissions } = require('discord.js');
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 const self = module.exports = {
     name: "submit-project",
     category: "Utility",
     description: "Call form to input invite with server info to propose to publish.",
+    adminOnly: false,
     ownerOnly: true,
     triggers: [
         'submit-project-post', // submit-modal-form-echo
         'submit-project-check',
     ],
     trigger: async (client, interaction) => {
-        console.log(chalkMy.event, `Command triggered: "submit-project".`);
+        console.log(client.chalk.event, `Command triggered: "submit-project".`);
         const _channel = client.channels.cache.get(process.env.MASTER_CHX_POSTING);
         if (interaction.customId == self.triggers[0]) {
             if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {

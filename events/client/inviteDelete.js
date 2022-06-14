@@ -4,8 +4,6 @@
     https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e-inviteCreate
 */
 
-const chalkMy = require(process.cwd() + "/src/chalk");
-
 module.exports = {
     name: 'inviteDelete',
 
@@ -14,7 +12,7 @@ module.exports = {
      * @param {Client} client 
      */
     async execute(interaction, client) {
-        console.log(chalkMy.event, `Event fired: "inviteDelete" (${interaction})`);
+        console.log(client.chalk.event, `Event fired: "inviteDelete" (${interaction})`);
         return client.channels.cache.get(process.env.MASTER_CHX_DEBUG_LOG).send({ content: `inviteDelete event fired`});
     }
 }

@@ -5,6 +5,7 @@ module.exports = {
     name: "modal-input",
     category: "Utility",
     description: "Text input test!",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {

@@ -4,6 +4,7 @@ module.exports = {
     name: "special-channel",
     category: "Utility",
     description: "Not for public use, sorry.",
+    adminOnly: false,
     ownerOnly: true,
     run: async (client, interaction) => {
         if (interaction.channel) {

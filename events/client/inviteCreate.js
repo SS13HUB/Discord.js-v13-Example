@@ -5,7 +5,6 @@
 */
 
 const { Permissions } = require('discord.js');
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 
 module.exports = {
@@ -16,7 +15,7 @@ module.exports = {
      * @param {Client} client 
      */
     async execute(interaction, client) {
-        console.log(chalkMy.event, `Event fired: "inviteCreate" (${interaction})`);
+        console.log(client.chalk.event, `Event fired: "inviteCreate" (${interaction})`);
 
         const eventEmbed = new client.discord.MessageEmbed()
             .setTitle(':signal_strength: Invite was created!')

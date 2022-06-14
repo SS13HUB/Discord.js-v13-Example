@@ -4,6 +4,7 @@ module.exports = {
     name: "ping",
     category: "Utility",
     description: "Check the bot's ping!",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {

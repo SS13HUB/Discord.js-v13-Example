@@ -5,6 +5,7 @@ module.exports = {
     name: "save",
     category: "Utility",
     description: "Save something.",
+    adminOnly: false,
     ownerOnly: true,
     options: [
         {

@@ -28,6 +28,7 @@ module.exports = {
     ],
     category: "Utility",
     description: "I will try to get information about your invite link (few possiable formats avaliable).",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         if (interaction.channel) {
@@ -36,7 +37,6 @@ module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        //if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return interaction.reply({ content: `You can only add servers with ADMINISTRATOR authorization.` });
         const inviteCode = interaction.options.getString("invite");
         if (!inviteCode) return interaction.reply({ content: `There is no any invite link!` });
         

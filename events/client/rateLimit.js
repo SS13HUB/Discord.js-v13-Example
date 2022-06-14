@@ -1,6 +1,5 @@
 
 const { Formatters } = require('discord.js');
-const chalkMy = require(process.cwd() + "/src/chalk");
 
 module.exports = {
     name: 'rateLimit',
@@ -10,7 +9,7 @@ module.exports = {
      */
     async execute(info) {
         // ToDo: https://discord.com/developers/docs/topics/gateway#privileged-intents
-        console.log(chalkMy.err, `Event fired: "rateLimit".`);
-        console.log(`Rate limit hit ${info.timeDifference ? info.timeDifference : info.timeout ? info.timeout: 'Unknown timeout '}`)
+        console.log(client.chalk.err, `Event fired: "rateLimit".`);
+        console.log(`Rate limit hit`, (info.timeDifference ? info.timeDifference : (info.timeout ? info.timeout : info))); //'Unknown timeout'
     }
 }

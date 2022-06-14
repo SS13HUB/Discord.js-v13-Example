@@ -15,6 +15,7 @@ module.exports = {
     ],
     category: "Bot",
     description: "Return all commands, or one specific command!",
+    adminOnly: false,
     ownerOnly: false,
     run: async (client, interaction) => {
         console.log(interaction);
