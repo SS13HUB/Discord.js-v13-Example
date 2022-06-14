@@ -6,14 +6,14 @@ const fs = require("fs");
  */
 const loadEvents = async function (client) {
     console.log(client.chalk.log, `Preparing events…`);
-    const eventFolders = fs.readdirSync(process.cwd() + "/events");
+    const eventFolders = fs.readdirSync(client.cwd + "/events");
     for (const folder of eventFolders) {
         const eventFiles = fs
-        .readdirSync(`${process.cwd()}/events/${folder}`)
+        .readdirSync(`${client.cwd}/events/${folder}`)
         .filter((file) => file.endsWith(".js"));
         
         for (const file of eventFiles) {
-            const event = require(`${process.cwd()}/events/${folder}/${file}`);
+            const event = require(`${client.cwd}/events/${folder}/${file}`);
             
             if (event.name) {
                 console.log(client.chalk.load, client.chalk.ok, `Event: "${file}"`); // Event is being loaded:
@@ -43,14 +43,14 @@ const loadEvents = async function (client) {
  */
 /* const loadCommands = async function (client) {
     console.log(client.chalk.log, `Preparing commands…`);
-    const commandFolders = fs.readdirSync(process.cwd() + "/commands");
+    const commandFolders = fs.readdirSync(client.cwd + "/commands");
     for (const folder of commandFolders) {
         const commandFiles = fs
-            .readdirSync(`${process.cwd()}/commands/${folder}`)
+            .readdirSync(`${client.cwd}/commands/${folder}`)
             .filter((file) => file.endsWith(".js"));
         
         for (const file of commandFiles) {
-            const command = require(`${process.cwd()}/commands/${folder}/${file}`);
+            const command = require(`${client.cwd}/commands/${folder}/${file}`);
             
             if (command.name) {
                 client.commands.set(command.name, command);
@@ -74,14 +74,14 @@ const loadSlashCommands = async function (client) {
     console.log(client.chalk.log, `Preparing slashes…`);
     let slash = [];
 
-    const commandFolders = fs.readdirSync(process.cwd() + "/slashCommands");
+    const commandFolders = fs.readdirSync(client.cwd + "/slashCommands");
     for (const folder of commandFolders) {
         const commandFiles = fs
-            .readdirSync(`${process.cwd()}/slashCommands/${folder}`)
+            .readdirSync(`${client.cwd}/slashCommands/${folder}`)
             .filter((file) => file.endsWith(".js"));
         
         for (const file of commandFiles) {
-            const command = require(`${process.cwd()}/slashCommands/${folder}/${file}`);
+            const command = require(`${client.cwd}/slashCommands/${folder}/${file}`);
             
             if (command.name) {
                 // https://discord.com/developers/docs/interactions/application-commands

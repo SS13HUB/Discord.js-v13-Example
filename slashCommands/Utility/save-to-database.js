@@ -29,7 +29,7 @@ function doRequest(sql) {
     });
 }
 
-const base_path = process.cwd() + '\\src\\database\\';
+const base_path = client.cwd + '\\src\\database\\';
 const db_guilds_create = base_path + 'Guilds\\create.sql';
 const db_guilds_drop   = base_path + 'Guilds\\drop.sql';
 const db_guilds_insert = base_path + 'Guilds\\insert.sql';

@@ -47,7 +47,7 @@ module.exports = {
             // Get the slash commands of a Bot category
             const botCommandsList = [];
             readdirSync(`./slashCommands/Bot`).forEach((file) => {
-                const filen = require(`${process.cwd()}/slashCommands/Bot/${file}`);
+                const filen = require(`${client.cwd}/slashCommands/Bot/${file}`);
                 const name = `\`${filen.name}\``
                 botCommandsList.push(name);
             });
@@ -55,7 +55,7 @@ module.exports = {
             // Get the slash commands of a Utility category
             const utilityCommandsList = [];
             readdirSync(`./slashCommands/Utility`).forEach((file) => {
-                const filen = require(`${process.cwd()}/slashCommands/Utility/${file}`);
+                const filen = require(`${client.cwd}/slashCommands/Utility/${file}`);
                 const name = `\`${filen.name}\``
                 utilityCommandsList.push(name);
             });

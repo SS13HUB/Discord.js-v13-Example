@@ -21,9 +21,9 @@ const { MessageButton, Permissions } = require('discord.js');
 const { Formatters } = require('discord.js'); */
 
 /// Declaring custom variables for local developments
-//const handler = require(process.cwd() + "/handler/index");
-//const chalkMy = require(process.cwd() + "/src/chalk");
-//const path    = require("path");
+//const handler = require(process.cwd() + '/handler/index');
+//const chalkMy = require(process.cwd() + '/src/chalk');
+//const path    = require('path');
 //const process = require('process');
 //const os      = require('os');
 
@@ -74,32 +74,32 @@ client.handler.loadSlashCommands(client);
 
 
 /// Error Handling
-process.on("uncaughtException", (e) => {
+process.on('uncaughtException', (e) => {
     console.error(client.chalk.exct, `Uncaught Exception:`);
     console.error(e);
 });
 
-process.on("unhandledRejection", (reason, promise) => {
+process.on('unhandledRejection', (reason, promise) => {
     console.error(client.chalk.fatal, `Possibly Unhandled Rejection:`);
     console.error(promise);
     console.error(reason);
     //console.error(`httpStatus: ${reason.httpStatus}, reason: ${reason.message}`);
-    /// Below - detailing for "DiscordAPIError: Invalid Form Body"
+    /// Below - detailing for 'DiscordAPIError: Invalid Form Body'
     if (!reason.requestData) return;
-    if (!reason.requestData["json"]) return;
-    if (reason.code == 50035 || reason.message == "Invalid Form Body") {
-        if (reason.requestData["json"] == []) return;
-        if (!reason.requestData["json"][0].name || !reason.requestData["json"][0].description) return;
-        for (let i = 0; i < reason.requestData["json"].length; i++) {
-            let cmd  = reason.requestData["json"][i];
+    if (!reason.requestData['json']) return;
+    if (reason.code == 50035 || reason.message == 'Invalid Form Body') {
+        if (reason.requestData['json'] == []) return;
+        if (!reason.requestData['json'][0].name || !reason.requestData['json'][0].description) return;
+        for (let i = 0; i < reason.requestData['json'].length; i++) {
+            let cmd  = reason.requestData['json'][i];
             let ii   = i < 10 ? ` ${i}`: i;
             let iii  = cmd.name.length < 10 ? ` ${cmd.name.length}`: cmd.name.length;
             let iiii = cmd.description.length < 100 ? cmd.description.length < 10 ? `  ${cmd.description.length}`: ` ${cmd.description.length}`: cmd.description.length;
-            console.error(`[${ii}/${reason.requestData["json"].length - 1}] (${iii}/32;${iiii}/100) "${cmd.name}", "${cmd.description}"`);
+            console.error(`[${ii}/${reason.requestData['json'].length - 1}] (${iii}/32;${iiii}/100) '${cmd.name}', '${cmd.description}'`);
         }
-        //console.error(reason.requestData["json"]);
+        //console.error(reason.requestData['json']);
     } else {
-        console.error(reason.requestData["json"]);
+        console.error(reason.requestData['json']);
     }
 });
 
@@ -117,11 +117,11 @@ clientLogin();
 process.on('SIGINT', () => {
     console.log(client.chalk.exit, `Caught interrupt signal.`);
     /* try {
-        client.user.setStatus("invisible");
+        client.user.setStatus('invisible');
     } catch (e) {
         console.log(client.chalk.fatal, `Can not set status.`);
     } */
-    if (client.isReady()) client.user.setStatus("invisible");
+    if (client.isReady()) client.user.setStatus('invisible');
     /* client.guilds.cache.forEach(guild => {
         if (client.playerManager.get(guild)) client.playerManager.leave(guild);
     }); */
@@ -132,11 +132,11 @@ process.on('SIGINT', () => {
 process.on('SIGTERM', () => {
     console.log(client.chalk.exit, `Caught termination signal.`);
     /* try {
-        client.user.setStatus("invisible");
+        client.user.setStatus('invisible');
     } catch (e) {
         console.log(client.chalk.fatal, `Can not set status.`);
     } */
-    if (client.isReady()) client.user.setStatus("invisible");
+    if (client.isReady()) client.user.setStatus('invisible');
     /* client.guilds.cache.forEach(guild => {
         if (client.playerManager.get(guild)) client.playerManager.leave(guild);
     }); */
