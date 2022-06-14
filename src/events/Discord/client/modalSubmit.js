@@ -30,7 +30,7 @@ function doRequest(sql) {
     });
 }
 
-const base_path = client.cwd + '\\src\\database\\';
+const base_path = require('process').cwd() + '\\data\\database\\';
 const db_invites_create = base_path + 'Invites\\create.sql';
 const db_invites_drop   = base_path + 'Invites\\drop.sql';
 const db_invites_insert = base_path + 'Invites\\insert.sql';

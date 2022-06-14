@@ -4,7 +4,7 @@ const {sql} = require('@databases/pg');
 require('dotenv').config(); //({ path: client.cwd + '/.env' });
 const connectionString = process.env.DB_URL;
 
-const base_path = './src/database/Guilds/';
+const base_path =require('process').cwd() + '\\data\\database\\Guilds\\';
 const db_guilds_create = base_path + 'create.sql';
 const db_guilds_drop   = base_path + 'drop.sql';
 const db_guilds_insert = base_path + 'insert.sql';
@@ -93,7 +93,7 @@ const pool = new Pool({
 console.clear();  */
 
 // npm i pg
-// node ".\src\database\PostgreSQL.js"
+// node ".\data\database\PostgreSQL.js"
 // https://node-postgres.com/features/connecting
 // https://devcenter.heroku.com/articles/connecting-heroku-postgres#connecting-in-node-js
 

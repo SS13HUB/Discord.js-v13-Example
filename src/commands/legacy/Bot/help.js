@@ -31,16 +31,16 @@ module.exports = {
 
             // Get the commands of a Bot category
             const botCommandsList = [];
-            readdirSync(`./commands/Bot`).forEach((file) => {
-                const filen = require(`${client.cwd}/commands/Bot/${file}`);
+            readdirSync(client.cwd + '\\src\\commands\\legacy\\Bot').forEach((file) => {
+                const filen = require(client.cwd + '\\src\\commands\\legacy\\Bot\\' + file);
                 const name = `\`${filen.name}\``
                 botCommandsList.push(name);
             });
 
             // Get the commands of a Utility category
             const utilityCommandsList = [];
-            readdirSync(`./commands/Utility`).forEach((file) => {
-                const filen = require(`${client.cwd}/commands/Utility/${file}`);
+            readdirSync(client.cwd + '\\src\\commands\\legacy\\Utility').forEach((file) => {
+                const filen = require(client.cwd + '\\src\\commands\\legacy\\Utility\\' + file);
                 const name = `\`${filen.name}\``
                 utilityCommandsList.push(name);
             });

@@ -21,8 +21,8 @@ const { MessageButton, Permissions } = require('discord.js');
 const { Formatters } = require('discord.js'); */
 
 /// Declaring custom variables for local developments
-//const handler = require(process.cwd() + '/handler/index');
-//const chalkMy = require(process.cwd() + '/src/chalk');
+//const handler = require(process.cwd() + '\\handler\\index');
+//const chalkMy = require(process.cwd() + '\\src\\chalk');
 //const path    = require('path');
 //const process = require('process');
 //const os      = require('os');
@@ -52,9 +52,22 @@ client.commands = new Collection();
 client.slash    = new Collection();
 
 client.cwd     = require('process').cwd(); // require('path').resolve(``);
-client.config  = require(client.cwd + '/config');
-client.handler = require(client.cwd + '/handler/index');
-client.chalk   = require(client.cwd + '/src/chalk');
+client.config  = require(client.cwd + '\\config');
+client.chalk   = require(client.cwd + '\\src\\chalk');
+client.handlers = {
+    OS: {
+        eventsProcess: require(client.cwd + '\\src\\handlers\\OS\\process\\eventsProcess'),
+    },
+    Discord: {
+        eventsDiscord: require(client.cwd + '\\src\\handlers\\Discord\\eventsDiscord'),
+        cmdsSlash:     require(client.cwd + '\\src\\handlers\\Discord\\cmdsSlash'),
+        cmdsLegacy:    require(client.cwd + '\\src\\handlers\\Discord\\cmdsLegacy')
+    }
+};
+//client.handler = require(client.cwd + '\\handlers\\index');
+
+client.global_verbose = Boolean(0);
+client.global_debug   = Boolean(0);
 
 /// Call .env file to get Token
 require('dotenv').config();
@@ -68,9 +81,10 @@ module.exports = client;
 
 
 /// Records commands and events
-client.handler.loadEvents(client);
-//client.handler.loadCommands(client);
-client.handler.loadSlashCommands(client);
+//client.handlers.OS.eventsProcess.load(client); // ToDo: BROKEN, DO NOT USE
+client.handlers.Discord.eventsDiscord.load(client);
+client.handlers.Discord.cmdsLegacy.load(client);
+client.handlers.Discord.cmdsSlash.load(client);
 
 
 /// Error Handling
@@ -104,15 +118,6 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 
-/// Fancy login
-async function clientLogin() {
-    // Login into Discord via Bot Token
-    console.log(client.chalk.log, `All preparations done, logging in…`);
-    await client.login(process.env.TOKEN);
-}
-clientLogin();
-
-
 /// Fancy shutdown
 process.on('SIGINT', () => {
     console.log(client.chalk.exit, `Caught interrupt signal.`);
@@ -143,3 +148,13 @@ process.on('SIGTERM', () => {
     client.destroy();
     process.exit();
 });
+
+
+/// Fancy login
+async function clientLogin() {
+    // Login into Discord via Bot Token
+    console.log(client.chalk.log, `All preparations done, logging in…`);
+    await client.login(process.env.TOKEN);
+}
+clientLogin();
+
