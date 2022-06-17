@@ -52,32 +52,32 @@ module.exports = {
         console.log(`[CMD] ${interaction.user.id} trigger scan-channel: (${channelInput})`);
 
         if (!isChannel) {
-            const savetodatabaseEmbed = new client.discord.MessageEmbed()
+            const savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Scan channel — status (failure)')
                 .setDescription(`I detect no any channel ID or link.`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         }
         let amImOnServer = await client.guilds.cache.get(isChannel.guild.id) !== undefined;
         if (!amImOnServer) {
-            const savetodatabaseEmbed = new client.discord.MessageEmbed()
+            const savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Scan channel — status (failure)')
                 .setDescription(`I detect channel, but I'm not on the server. Invite me first and retry.`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         }
         if (!isChannel.viewable) {
-            const savetodatabaseEmbed = new client.discord.MessageEmbed()
+            const savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Scan channel — status (failure)')
                 .setDescription(`I detect channel and I'm on the server, but I can not read it. Give me permissions and retry.`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         }
         if (!(isChannel.isText() || isChannel.isThread())) {
-            const savetodatabaseEmbed = new client.discord.MessageEmbed()
+            const savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Scan channel — status (failure)')
                 .setDescription(`I detect channel, I'm on the server, but I can read only text and tread channels. Give me another ID.`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         }
 
@@ -119,11 +119,11 @@ module.exports = {
         for (let i = 0; i < arr.length; i++) {
             _desc += `([M](${arr[i][0]})) ${arr[i][1]}\n`;
         }
-        let savetodatabaseEmbed = new client.discord.MessageEmbed()
+        let savetodatabaseEmbed = new client.g.discord.MessageEmbed()
             .setTitle(`Scan channel — status (${fetchMessages ? "success" : "failure"})`)
             .setDescription(_desc)
             .setFooter({ text: `Warning: Links above detected only by search pattern and not fetched for now. There may be mistakes or some links may not be listed.` })
-            .setColor(client.config.embedColor);
+            .setColor(client.g.config.embedColor);
         /* for (let i = 0; i < arr.length; i++) {
             savetodatabaseEmbed.addField('Invite №' + (i + 1) + '/' + arr.length, `${arr[i]}`);
         } */

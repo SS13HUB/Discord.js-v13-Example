@@ -115,13 +115,13 @@ module.exports = {
             .then((d) => {return d})
             .catch(() => {return false});
 
-        console.log(client.chalk.cmd, `${interaction.user.id} trigger save-to-database: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
+        console.log(client.g.chalk.cmd, `${interaction.user.id} trigger save-to-database: (${(param1 != null ? param1 : null)})`); //${(fetchedWidget !== undefined ? fetchedWidget.id : "widget unknown")}
 
         if (isInvite) {
-            let savetodatabaseEmbed = new client.discord.MessageEmbed()
+            let savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Save to DB — status')
                 .setDescription(`I detect invite. Saving to DB...`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             //const msg = await interaction.reply({ embeds: [savetodatabaseEmbed] });
             let amImOnServer = await client.guilds.cache.get(isInvite.guild.id) !== undefined;
             if (amImOnServer) {
@@ -139,10 +139,10 @@ module.exports = {
                 if (_local_debug) {
                     msg.delete();
                 }
-                savetodatabaseEmbed = new client.discord.MessageEmbed()
+                savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                     .setTitle('Save to DB — status (' + (isSaved[0] ? "success" : "failure") + ')')
                     .setDescription('Alive invite detected and processed.\nSaved server id: ' + isInvite.guild.id + '\n```sql\n' + isSaved[1] + '```')
-                    .setColor(client.config.embedColor);
+                    .setColor(client.g.config.embedColor);
                 if (_local_debug) console.log("isInvite:", isInvite);
                 return interaction.reply({ embeds: [savetodatabaseEmbed] });
             } else {
@@ -160,34 +160,34 @@ module.exports = {
                 if (_local_debug) {
                     msg.delete();
                 }
-                savetodatabaseEmbed = new client.discord.MessageEmbed()
+                savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                     .setTitle('Save to DB — status (' + (isSaved[0] ? "success" : "failure") + ')')
                     .setDescription('Alive invite detected and processed.\nSaved server id: ' + isInvite.guild.id + '\n```sql\n' + isSaved[1] + '```')
                     .setFooter({ text: `Warning: I'm not on target server, so saved information is limited. You can help me, if someone will invite me and repeat this command.` })
-                    .setColor(client.config.embedColor);
+                    .setColor(client.g.config.embedColor);
                 if (_local_debug) console.log("isInvite:", isInvite);
                 return interaction.reply({ embeds: [savetodatabaseEmbed] });
             }
         // no way to search server → https://discord.js.org/#/docs/discord.js/stable/class/Channel
         // ToDO: or has way → https://discord.js.org/#/docs/discord.js/stable/class/TextChannel?scrollTo=guild
         /* } else if (isChannel) {
-            const savetodatabaseEmbed = new client.discord.MessageEmbed()
+            const savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Save to DB')
                 .setDescription(`I detect channel.`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] }); */
         } else if (isServer) {
-            const savetodatabaseEmbed = new client.discord.MessageEmbed()
+            const savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Save to DB')
                 .setDescription(`I detect server.`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             //return interaction.reply({ embeds: [savetodatabaseEmbed] });
             let amImOnServer = await client.guilds.cache.get(isServer.id) !== undefined;
         } else {
-            const savetodatabaseEmbed = new client.discord.MessageEmbed()
+            const savetodatabaseEmbed = new client.g.discord.MessageEmbed()
                 .setTitle('Save to DB')
                 .setDescription(`I detect no invite or server ID.`)
-                .setColor(client.config.embedColor);
+                .setColor(client.g.config.embedColor);
             return interaction.reply({ embeds: [savetodatabaseEmbed] });
         }
 

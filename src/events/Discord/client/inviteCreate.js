@@ -15,11 +15,11 @@ module.exports = {
      * @param {Client} client 
      */
     async execute(interaction, client) {
-        console.log(client.chalk.event, `Event fired: "inviteCreate" (${interaction})`);
+        console.log(client.g.chalk.event, `Event fired: "inviteCreate" (${interaction})`);
 
-        const eventEmbed = new client.discord.MessageEmbed()
+        const eventEmbed = new client.g.discord.MessageEmbed()
             .setTitle(':signal_strength: Invite was created!')
-            .setColor(client.config.embedColor)
+            .setColor(client.g.config.embedColor)
             .addField('Server ID', `${interaction.guild.id}`, true)
             .addField('Server Name', `${interaction.guild.name}`)
             .addField('Invite Code, Expires at',

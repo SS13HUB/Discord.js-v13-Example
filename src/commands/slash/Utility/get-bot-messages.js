@@ -44,7 +44,7 @@ module.exports = {
 
         console.log("_links:\n", _links);
 
-        /* const debugEmbed = new client.discord.MessageEmbed()
+        /* const debugEmbed = new client.g.discord.MessageEmbed()
             .setDescription(_links); */
 
         await interaction.reply({ content: _links });

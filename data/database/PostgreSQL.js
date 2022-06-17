@@ -1,7 +1,7 @@
 
 const { Pool, Client } = require('pg');
 const {sql} = require('@databases/pg');
-require('dotenv').config(); //({ path: client.cwd + '/.env' });
+require('dotenv').config(); //({ path: client.g.cwd + '/.env' });
 const connectionString = process.env.DB_URL;
 
 const base_path =require('process').cwd() + '\\data\\database\\Guilds\\';
@@ -89,7 +89,7 @@ const pool = new Pool({
     ssl: false //{rejectUnauthorized: false}
 }); */
 
-/* require('dotenv').config({ path: client.cwd + '/.env' });
+/* require('dotenv').config({ path: client.g.cwd + '/.env' });
 console.clear();  */
 
 // npm i pg

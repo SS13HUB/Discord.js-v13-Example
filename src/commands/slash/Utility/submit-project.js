@@ -13,7 +13,7 @@ const self = module.exports = {
         'submit-project-check',
     ],
     trigger: async (client, interaction) => {
-        console.log(client.chalk.event, `Command triggered: "submit-project".`);
+        console.log(client.g.chalk.event, `Command triggered: "submit-project".`);
         const _channel = client.channels.cache.get(process.env.MASTER_CHX_POSTING);
         if (interaction.customId == self.triggers[0]) {
             if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {

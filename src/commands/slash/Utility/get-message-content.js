@@ -56,7 +56,7 @@ module.exports = {
             return await interaction.reply({ ephemeral: true, content: `**Error**: Can not find channel.` });
         }
         //console.log('_message[1]:', _message[1]);
-        /* const getEmbedsEmbed = new client.discord.MessageEmbed()
+        /* const getEmbedsEmbed = new client.g.discord.MessageEmbed()
             //.setTitle(`Message "[${messageSplitted[6]}](${messageLink})"`)
             .setDescription(`**Message [${messageSplitted[6]}](${messageLink})**\n\`\`\`json\n${JSON.stringify(_message[1], null, 1)}\`\`\``);
 

@@ -54,17 +54,17 @@ module.exports = {
         });
         if (fetchedInvite.message !== undefined) {
             if (fetchedInvite.message == "Unknown Invite" || fetchedInvite.message.code == 10006 || fetchedInvite.message.httpStatus == 404) {
-                const embedInvite = new client.discord.MessageEmbed()
+                const embedInvite = new client.g.discord.MessageEmbed()
                     .setTitle(':chains: ・ Invite link info')
                     .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
                     .addField('Reason', `[Provided invite link](https://discord.gg/${fetchedInvite.code}) was deleted by human, expired or not been created yet.`)
                     .addField('Possible Solution', `Ask for new one... OR: 
                     Check[WayBack Machine](https://web.archive.org/*/https://discord.gg/${fetchedInvite.code})... (ToDo)`)
-                    .setColor(client.config.embedColor)
+                    .setColor(client.g.config.embedColor)
                 console.log(`[CMD] ${interaction.user.id} asks for invite info: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
-                const embedWidget = new client.discord.MessageEmbed()
-                    .setColor(client.config.embedColor)
+                const embedWidget = new client.g.discord.MessageEmbed()
+                    .setColor(client.g.config.embedColor)
                     .setTitle(':mirror: ・ Widget info') // :anchor:
                     .addField('Widget Status', `N\\A`)
                 return interaction.reply({ embeds: [embedInvite, embedWidget] });
@@ -76,8 +76,8 @@ module.exports = {
             return interaction.reply({ content: `Error: Message: ${e.message}\n${e}` });
         }
         
-        const embedInvite = new client.discord.MessageEmbed()
-            .setColor(client.config.embedColor)
+        const embedInvite = new client.g.discord.MessageEmbed()
+            .setColor(client.g.config.embedColor)
             .setTitle(':chains: ・ Invite link info') // :anchor:
             .setThumbnail(fetchedInvite.guild !== undefined ? fetchedInvite.guild.iconURL() : "https://discord.js.org/static/djs_logo.png")
             .addField('Invite Code, Expires at',
@@ -132,8 +132,8 @@ module.exports = {
         }
 
         /* if (client.guilds.cache.get(fetchedInvite.guild.id) === undefined) {
-            const embedWidget = new client.discord.MessageEmbed()
-                .setColor(client.config.embedColor)
+            const embedWidget = new client.g.discord.MessageEmbed()
+                .setColor(client.g.config.embedColor)
                 .setTitle(':mirror: ・ Widget info') // :anchor:
                 .addField('Widget',
                 `[URL](https://discord.com/widget?id=${fetchedInvite.guild.id}&theme=dark), [API 1](https://discord.com/api/guilds/${fetchedInvite.guild.id}/widget.json), [API 2](https://discord.com/api/guilds/${fetchedInvite.guild.id}/embed.json)`, true)
@@ -154,8 +154,8 @@ module.exports = {
                         console.log(e);
                         return null;
                 });
-                const embedWidget = new client.discord.MessageEmbed()
-                    .setColor(client.config.embedColor)
+                const embedWidget = new client.g.discord.MessageEmbed()
+                    .setColor(client.g.config.embedColor)
                     .setTitle(':mirror: ・ Widget info') // :anchor:
                     .setThumbnail(fetchedInvite.guild.iconURL())
                     .addField('id', `${fetchedWidget.id}`)
@@ -166,15 +166,15 @@ module.exports = {
                 }
                 await interaction.reply({ embeds: [embedInvite, embedWidget] });
             } else {
-                const embedWidget = new client.discord.MessageEmbed()
-                    .setColor(client.config.embedColor)
+                const embedWidget = new client.g.discord.MessageEmbed()
+                    .setColor(client.g.config.embedColor)
                     .setTitle(':mirror: ・ Widget info') // :anchor:
                     .addField('Widget Status', `N\\A`)
                 await interaction.reply({ embeds: [embedInvite, embedWidget] });
             }
         } else {
-            const embedWidget = new client.discord.MessageEmbed()
-                .setColor(client.config.embedColor)
+            const embedWidget = new client.g.discord.MessageEmbed()
+                .setColor(client.g.config.embedColor)
                 .setTitle(':mirror: ・ Widget info') // :anchor:
                 .addField('Widget Status', `No server provided`)
             await interaction.reply({ embeds: [embedInvite, embedWidget] });

@@ -132,7 +132,7 @@ const self = module.exports = {
             if (0) console.log('interaction.message.content:', interaction.message.content);
             if ((interaction.message.content.includes(': **: ')) ||
                 (interaction.message.content.includes('https'))) {
-                console.log(client.chalk.log, 'Message contains some broken columns or data, fixing...');
+                console.log(client.g.chalk.log, 'Message contains some broken columns or data, fixing...');
             }
             let _content = interaction.message.content
                 .replaceAll(': **: ', '**: ')
@@ -171,7 +171,7 @@ const self = module.exports = {
                 await interaction.update({ content: _out });
                 return await interaction.followUp({ ephemeral: true, content: `Some fixing processed.`});
             } else {
-                console.log(client.chalk.log, 'Name escaping not needed, passing.');
+                console.log(client.g.chalk.log, 'Name escaping not needed, passing.');
             }
             return await interaction.reply({ ephemeral: true, content: `Nope. Not now. It's dummy button for now, but in the future all of this will be done better. Sorry.`});
         }

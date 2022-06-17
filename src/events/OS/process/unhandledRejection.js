@@ -7,7 +7,7 @@ module.exports = {
      * @param {ErrorException} error
      */
     async execute(error) {
-        console.error(client.chalk.fatal, `Possibly Unhandled Rejection:`);
+        console.error(client.g.chalk.fatal, `Possibly Unhandled Rejection:`);
         console.error(promise);
         console.error(reason);
         //console.error(`httpStatus: ${reason.httpStatus}, reason: ${reason.message}`);

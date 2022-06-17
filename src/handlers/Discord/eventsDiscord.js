@@ -12,8 +12,8 @@ module.exports = {
      * @param {Client} client 
      */
     async load(client) {
-        console.log(client.chalk.log, `Preparing Discord events…`);
-        const _base_path = client.cwd + '\\src\\events\\Discord\\';
+        console.log(client.g.chalk.log, `Preparing Discord events…`);
+        const _base_path = client.g.cwd + '\\src\\events\\Discord\\';
         const eventFolders = fs.readdirSync(_base_path);
         for (const folder of eventFolders) {
             const eventFiles = fs
@@ -25,25 +25,25 @@ module.exports = {
                 const event = require(_base_path + folder + '\\' + file);
                 
                 if (event.name) {
-                    console.log(client.chalk.load, client.chalk.ok, `Event: "${file}"`); // Event is being loaded:
+                    console.log(client.g.chalk.load, client.g.chalk.ok, `Event: "${file}"`); // Event is being loaded:
                 } else {
-                    console.log(client.chalk.load, client.chalk.err, `Event missing a help.name or help.name is not in string: "${file}"`);
+                    console.log(client.g.chalk.load, client.g.chalk.err, `Event missing a help.name or help.name is not in string: "${file}"`);
                     continue;
                 }
                 
                 if (event.once) {
                     client.once(event.name, (...args) => {
-                        //console.log(client.chalk.event, `Event fired (once): "${event.name}"`); // (${interaction !== null ? interaction : "null"})
+                        //console.log(client.g.chalk.event, `Event fired (once): "${event.name}"`); // (${interaction !== null ? interaction : "null"})
                         event.execute(...args, client);
                     });
                 } else {
                     client.on(event.name, (...args) => {
-                        //console.log(client.chalk.event, `Event fired: "${event.name}"`, ...args.interaction);
+                        //console.log(client.g.chalk.event, `Event fired: "${event.name}"`, ...args.interaction);
                         event.execute(...args, client);
                     });
                 }
             }
         }
-        console.log(client.chalk.log, client.chalk.ok, `Preparing Discord events done.`);
+        console.log(client.g.chalk.log, client.g.chalk.ok, `Preparing Discord events done.`);
     }
 }

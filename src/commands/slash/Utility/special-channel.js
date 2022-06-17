@@ -13,7 +13,7 @@ module.exports = {
             let _channel = await client.channels.fetch(interaction.channelId);
             await _channel.sendTyping();
         }
-        const pingEmbed = new client.discord.MessageEmbed()
+        const pingEmbed = new client.g.discord.MessageEmbed()
             .setTitle('Special message for channel')
             .setDescription(`This channel definitely created/updated specially for me:\n${client.user.toString()}`)
             .setColor('DARK');

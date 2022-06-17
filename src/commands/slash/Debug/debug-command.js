@@ -46,11 +46,11 @@ module.exports = {
         });
         if (fetchedInvite.message !== undefined) {
             if (fetchedInvite.message == "Unknown Invite" || fetchedInvite.message.code == 10006 || fetchedInvite.message.httpStatus == 404) {
-                const inviteToButtonInvite = new client.discord.MessageEmbed()
+                const inviteToButtonInvite = new client.g.discord.MessageEmbed()
                     .setTitle(':chains: ・ Invite link info')
                     .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
                     .addField('Invite Status', `${fetchedInvite.message}`, true) // :coffin:
-                    .setColor(client.config.embedColor)
+                    .setColor(client.g.config.embedColor)
                 console.log(`[CMD] ${interaction.user.id} trigger invitetobutton: ${fetchedInvite.code} (dead, ${fetchedInvite.message})`);
                 return interaction.reply({ embeds: [inviteToButtonInvite] });
                 //return interaction.reply({ content: `Invite link is unknown! (was killed or not created yet)` });
@@ -60,8 +60,8 @@ module.exports = {
             return interaction.reply({ content: `Error: ${e}; message:${e.message}` });
         }
         
-        const inviteToButtonInvite = new client.discord.MessageEmbed()
-            .setColor(client.config.embedColor)
+        const inviteToButtonInvite = new client.g.discord.MessageEmbed()
+            .setColor(client.g.config.embedColor)
             .setTitle(':chains: ・ Invite link to button') // :anchor:
             .addField('Invite Code', `[${fetchedInvite.code}](https://discord.com/api/invite/${fetchedInvite.code}?with_counts=true&with_expiration=true)`, true)
             //.setDescription(`Check button below.`);
@@ -109,8 +109,8 @@ module.exports = {
         //console.log("row:", row);
 
         /* if (client.guilds.cache.get(fetchedInvite.guild.id) === undefined) {
-            const embedWidget = new client.discord.MessageEmbed()
-                .setColor(client.config.embedColor)
+            const embedWidget = new client.g.discord.MessageEmbed()
+                .setColor(client.g.config.embedColor)
                 .setTitle(':mirror: ・ Widget info') // :anchor:
                 .addField('Widget',
                 `[URL](https://discord.com/widget?id=${fetchedInvite.guild.id}&theme=dark), [API 1](https://discord.com/api/guilds/${fetchedInvite.guild.id}/widget.json), [API 2](https://discord.com/api/guilds/${fetchedInvite.guild.id}/embed.json)`, true)

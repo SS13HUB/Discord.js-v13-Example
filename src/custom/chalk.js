@@ -1,4 +1,14 @@
 
+if ((require.main == null) || (!require.main.filename.endsWith('\\index.js'))) {
+    throw `"${__filename}":\nThis file must be imported from index file.`;
+}
+
+/*
+console.log('require.main:', require.main.exports);
+console.log('require.main:', typeof require.main.exports);
+process.exit();
+*/
+
 const chalk = require("chalk");
 
 module.exports = { 

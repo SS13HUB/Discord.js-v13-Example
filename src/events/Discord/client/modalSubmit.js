@@ -93,7 +93,7 @@ module.exports = {
      */
     async execute(modal, interaction, client) {
         //let modal = interaction.fields[0];
-        console.log(client.chalk.event, `Event fired: "modalSubmit".`);
+        console.log(client.g.chalk.event, `Event fired: "modalSubmit".`);
         //console.log(modal);
         if (modal.customId === 'modal-customid') {
             if (interaction.channel) {
@@ -106,7 +106,7 @@ module.exports = {
                     // console.log("client:", client);
                     // console.log("modal:", modal); // ModalSubmitInteraction
                     // console.log("interaction:", interaction); // client
-                    console.error(client.chalk.exct, e);
+                    console.error(client.g.chalk.exct, e);
                 }
             }
             const firstResponse = modal.getTextInputValue('textinput-customid');
@@ -230,7 +230,7 @@ module.exports = {
                 //.addField("Database:", '>', isSaved[1])
                 //.addField("rowCount:", '>', isSaved[1].rowCount)
                 //.addField("rows:", '>', isSaved[1].rows) // "```\n"
-                //.setColor(client.config.embedColor)
+                //.setColor(client.g.config.embedColor)
                 .setTimestamp(timestamp)
                 .setFooter({ text: `Submitter: ${(byAdmin ? isSubmitter.id : modal.user.id)} • Server: ${isInvite.guild.id}`, iconURL: `${(byAdmin ? isSubmitter.displayAvatarURL() : modal.user.displayAvatarURL())}` }); //isInvite.guild.iconURL()
             return modal.reply({ content: isInvite.url.replace('https://', 'http://'), embeds: [embed], components: [row] });

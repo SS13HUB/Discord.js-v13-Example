@@ -14,7 +14,7 @@ module.exports = {
             return;
         } else if (interaction.isCommand()) {
 
-            const command = client.slash.get(interaction.commandName);
+            const command = client.g.cmds.slash.get(interaction.commandName);
             if (!command) return await interaction.reply({ content: 'Error occured, check console.' });
             
             if (command.ownerOnly) {
@@ -47,7 +47,7 @@ module.exports = {
                 if (interaction.user.id != process.env.OWNER_ID) console.log("[Interaction]", interaction);
                 _where = interaction.type;
             }
-            console.log(client.chalk.cmd, `Command: "${command.name}" (user "${interaction.user.id}" in "${_where}")`);
+            console.log(client.g.chalk.cmd, `Command: "${command.name}" (user "${interaction.user.id}" in "${_where}")`);
             try {
                 if (interaction.channel) {
                     await interaction.channel.sendTyping();
@@ -67,18 +67,18 @@ module.exports = {
         } else if (interaction.isButton()) {
             //console.log(interaction);
             let triggerFounded = false;
-            const cmdsArr = [...client.slash.keys()];
+            const cmdsArr = [...client.g.cmds.slash.keys()];
             if (_local_debug) console.log('Button hit, interaction.customId:', interaction.customId);
             for (let i = 0; i < cmdsArr.length; i++) {
-                const element = client.slash.get(cmdsArr[i]);
+                const element = client.g.cmds.slash.get(cmdsArr[i]);
                 //console.log(element);
                 if (!element.triggers) continue;
                 if (_local_debug) console.log(`element: ${element.name}, trigger: ${element.triggers}`);
                 if (element.triggers.includes(interaction.customId)) {
                     if (_local_debug) console.log(`hit`);
-                    console.log(client.chalk.event, `InteractionButton triggered: "${element.name}", "${interaction.customId}", by "${interaction.user.id}", under "${interaction.message.id}".`);
+                    console.log(client.g.chalk.event, `InteractionButton triggered: "${element.name}", "${interaction.customId}", by "${interaction.user.id}", under "${interaction.message.id}".`);
                     triggerFounded = true;
-                    const command = element; //client.slash.get("one-time-button");
+                    const command = element; //client.g.cmds.slash.get("one-time-button");
                     try {
                         return command.trigger(client, interaction); //, args
                     } catch (e) {

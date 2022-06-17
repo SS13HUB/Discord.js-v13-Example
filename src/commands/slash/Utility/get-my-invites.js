@@ -38,8 +38,8 @@ module.exports = {
             .filter(invite => invite.inviterId == interaction.user.id);
         //console.log("guildInvitesFiltered:", guildInvitesFiltered);
 
-        const guildInvitesEmbed = new client.discord.MessageEmbed()
-            .setColor(client.config.embedColor)
+        const guildInvitesEmbed = new client.g.discord.MessageEmbed()
+            .setColor(client.g.config.embedColor)
             .setTitle(':chains: ・ Your invites to this server')
 
         if (guildInvitesFiltered.size > 0) {
