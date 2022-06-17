@@ -8,6 +8,7 @@ const { MessageActionRow, MessageButton, Permissions, Formatters } = require('di
     ],
 } */
 
+
 const self = module.exports = {
     name: "submit-simple",
     usage: '/submit-simple <invite link> <message url (optional)>',
@@ -31,6 +32,7 @@ const self = module.exports = {
     ownerOnly: true,
     triggers: [
         'submit-simple-check',
+        'submit-simple-edit',
         'submit-simple-convert',
     ],
     trigger: async (client, interaction) => {
@@ -43,6 +45,36 @@ const self = module.exports = {
         if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
             return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
         }
+        
+        let standartRow = new MessageActionRow().addComponents(
+            new MessageButton()
+                .setCustomId(self.triggers[0]) // 'submit-simple-check'
+                .setLabel('Check')
+                .setStyle('PRIMARY')
+                .setEmoji('🔬'),
+            new MessageButton()
+                .setCustomId(self.triggers[1]) // 'submit-simple-edit'
+                .setLabel('Edit')
+                .setStyle('SECONDARY')
+                .setEmoji('🖋️'),
+            new MessageButton()
+                .setCustomId(self.triggers[2]) // 'submit-simple-convert'
+                .setLabel('Convert')
+                .setStyle('SECONDARY')
+                .setEmoji('🚧'),
+        );
+        for (let componentIndex = 0; componentIndex < standartRow.components.length; componentIndex++) {
+            for (const [key, value] of Object.entries(standartRow.components[componentIndex])) {
+                //console.log(key, value);
+                if (key == 'emoji') {
+                    //console.log('emoji (before):\n', standartRow.components[componentIndex][key]);
+                    if (!value.animated) delete standartRow.components[componentIndex][key].animated;
+                    if (!value.id) delete standartRow.components[componentIndex][key].id;
+                    //console.log('emoji (after):\n', standartRow.components[componentIndex][key]);
+                }
+            }
+        }
+        
         if (interaction.customId == self.triggers[0]) {
             let messageContentParsed = {};
             let _content = interaction.message.content
@@ -126,7 +158,43 @@ const self = module.exports = {
                 //console.log("inviteFetched:", inviteFetched[1]);
                 return await interaction.reply({ ephemeral: true, content: `**Success**: Invite is alive, refresh is not needed.`});
             }
-        } else if (interaction.customId == self.triggers[1]) {
+        } else if (interaction.customId == self.triggers[2]) {
+            let _MessageActionRow = interaction.message.components[0];
+            for (let componentIndex = 0; componentIndex < _MessageActionRow.components.length; componentIndex++) {
+                for (const [key, value] of Object.entries(_MessageActionRow.components[componentIndex])) {
+                    //console.log(key, value);
+                    if (key == 'emoji') {
+                        //console.log('emoji (before):\n', _MessageActionRow.components[componentIndex][key]);
+                        if (!value.animated) delete _MessageActionRow.components[componentIndex][key].animated;
+                        if (!value.id) delete _MessageActionRow.components[componentIndex][key].id;
+                        //console.log('emoji (after):\n', _MessageActionRow.components[componentIndex][key]);
+                    }
+                }
+            }
+            // console.log('interaction.message:', interaction.message);
+            // console.log('JSON.stringify(data1) == JSON.stringify(data2):', JSON.stringify(_MessageActionRow) == JSON.stringify(standartRow));
+            // console.log('interaction.message:', _MessageActionRow);
+            // console.log('standartRow:', standartRow);
+            // JSON.stringify(standartRow, null, 2));
+            if ((JSON.stringify(_MessageActionRow)) != (JSON.stringify(standartRow))) {
+                console.log('JSON.stringify(_MessageActionRow):\n', JSON.stringify(_MessageActionRow));
+                console.log('JSON.stringify(standartRow):\n', JSON.stringify(standartRow));
+                await interaction.update({ components: [standartRow] });
+                await interaction.followUp({ ephemeral: true, content: `Buttons updated.` }); //reply
+            } else {
+                await interaction.reply({ ephemeral: true, content: `Buttons is up to date.` }); //reply
+            }
+            return;
+
+            /* if (Object.keys(_MessageActionRow).length > 0) {
+                _MessageActionRow[0].spliceComponents(0, 1); // "Post" button
+                // interaction.message.components[0].components
+            } */
+            console.log('interaction.message:', interaction.message);
+            console.log('standartRow:', standartRow);
+            await interaction.update({ components: [row] });
+            return; // await interaction.followUp({ ephemeral: true, content: `Ok.` }); //reply
+        } else if (interaction.customId == self.triggers[2]) {
             // console.log(`dummy button clicked by: "${interaction.user.id}", under "${interaction.message.id}"`);
             let messageContentParsed = {};
             if (0) console.log('interaction.message.content:', interaction.message.content);
@@ -217,18 +285,7 @@ const self = module.exports = {
         if (inviteFetched.temporary) {
             return await interaction.reply({ ephemeral: true, content: `Error occured.\nLink is temporary. I can not accept this.` });
         }
-        const row = new MessageActionRow().addComponents(
-            new MessageButton()
-                .setCustomId(self.triggers[0]) // 'submit-simple-check'
-                .setLabel('Check')
-                .setStyle('PRIMARY')
-                .setEmoji('🔬'),
-            new MessageButton()
-                .setCustomId(self.triggers[1]) // 'submit-simple-convert'
-                .setLabel('Convert')
-                .setStyle('SECONDARY')
-                .setEmoji('🚧'),
-        );
+        const row = standartRow;
 
         await client.channels.cache.get(process.env.MASTER_CHX_POSTING).send({
             content:

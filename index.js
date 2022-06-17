@@ -79,9 +79,9 @@ discordModals(client);
 
 
 /// Exporting client data
-module.exports = client;
 client.g.config = require(client.g.cwd + '\\config');
 client.g.chalk  = require(client.g.cwd + '\\src\\custom\\chalk');
+module.exports = client;
 
 /// Records commands and events
 //client.g.handlers.OS.eventsProcess.load(client); // ToDo: BROKEN, DO NOT USE
@@ -103,10 +103,13 @@ process.on('unhandledRejection', (reason, promise) => {
     //console.error(`httpStatus: ${reason.httpStatus}, reason: ${reason.message}`);
     /// Below - detailing for 'DiscordAPIError: Invalid Form Body'
     if (!reason.requestData) return;
-    if (!reason.requestData['json']) return;
-    if (reason.code == 50035 || reason.message == 'Invalid Form Body') {
+    if (!reason.requestData['json']) return console.error(reason.requestData);
+    return console.error(reason.requestData['json']);
+    /* if (reason.code == 50035 || reason.message == 'Invalid Form Body') {
         if (reason.requestData['json'] == []) return;
-        if (!reason.requestData['json'][0].name || !reason.requestData['json'][0].description) return;
+        if (!reason.requestData['json'][0]) return;
+        if (!reason.requestData['json'][0].name) return;
+        if (!reason.requestData['json'][0].description) return;
         for (let i = 0; i < reason.requestData['json'].length; i++) {
             let cmd  = reason.requestData['json'][i];
             let ii   = i < 10 ? ` ${i}`: i;
@@ -117,7 +120,7 @@ process.on('unhandledRejection', (reason, promise) => {
         //console.error(reason.requestData['json']);
     } else {
         console.error(reason.requestData['json']);
-    }
+    } */
 });
 
 
