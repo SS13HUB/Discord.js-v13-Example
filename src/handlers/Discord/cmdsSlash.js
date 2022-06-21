@@ -28,12 +28,12 @@ module.exports = {
                 if (command.name) {
                     // https://discord.com/developers/docs/interactions/application-commands
                     if (command.name < 1 || command.name > 32) {
-                        console.log(client.g.chalk.err, `Warning: Command name not in range 1-32, skipping:`);
+                        console.log(client.g.chalk.load, client.g.chalk.warn, `Warning: Command name not in range 1-32, skipping:`);
                         console.log(command);
                         continue;
                     }
                     if (command.description < 1 || command.description > 100) {
-                        console.log(client.g.chalk.err, `Warning: Command description not in range 1-100, skipping:`);
+                        console.log(client.g.chalk.load, client.g.chalk.warn, `Warning: Command description not in range 1-100, skipping:`);
                         console.log(command);
                         continue;
                     }
@@ -41,6 +41,12 @@ module.exports = {
                         console.log(client.g.chalk.load, client.g.chalk.warn, `SlashCommand: "${file}" — skipped by it\'s settings`);
                         continue;
                     }
+                    if (command.type) 
+                        if (command.description) {
+                            console.log(client.g.chalk.load, client.g.chalk.warn, `Warning: Context menu commands cannot have description, deleting.`);
+                            //console.log(command);
+                            delete command.description; //continue;
+                        }
                     client.g.cmds.slash.set(command.name, command);
                     slashToRegister.push(command);
                     console.log(client.g.chalk.load, client.g.chalk.ok, `SlashCommand: "${file}"${((command.triggers) ? ('; "' + JSON.stringify(command.triggers) + '"') : (''))}`); // SlashCommand is being loaded:

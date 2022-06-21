@@ -4,7 +4,7 @@ const {sql} = require('@databases/pg');
 require('dotenv').config(); //({ path: client.g.cwd + '/.env' });
 const connectionString = process.env.DB_URL;
 
-const base_path =require('process').cwd() + '\\data\\database\\Guilds\\';
+const base_path = require('process').cwd() + '\\data\\database\\Guilds\\';
 const db_guilds_create = base_path + 'create.sql';
 const db_guilds_drop   = base_path + 'drop.sql';
 const db_guilds_insert = base_path + 'insert.sql';

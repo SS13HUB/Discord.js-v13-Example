@@ -19,6 +19,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders'); // require('disc
     });
 } */
 
+
 module.exports = {
     name: "scan-channel",
     category: "Utility",
