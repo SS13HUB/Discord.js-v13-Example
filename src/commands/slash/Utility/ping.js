@@ -6,6 +6,9 @@ module.exports = {
     description: "Check the bot's ping!",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
+    triggers: [],
+    trigger: async () => {return;},
     run: async (client, interaction) => {
         if (interaction.channel) {
             await interaction.channel.sendTyping();

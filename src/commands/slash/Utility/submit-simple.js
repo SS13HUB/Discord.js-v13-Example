@@ -30,6 +30,7 @@ const self = module.exports = {
     description: "Like submit, but simple.",
     adminOnly: false,
     ownerOnly: true,
+    doNotRegisterSlash: false,
     triggers: [
         'submit-simple-check',
         'submit-simple-edit',
@@ -158,6 +159,24 @@ const self = module.exports = {
                 //console.log("inviteFetched:", inviteFetched[1]);
                 return await interaction.reply({ ephemeral: true, content: `**Success**: Invite is alive, refresh is not needed.`});
             }
+        } else if (interaction.customId == self.triggers[1]) {
+            if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
+                return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
+            }
+            return;
+            let messageContentParsed = {};
+            if (0) console.log('interaction.message.content:', interaction.message.content);
+            let _content = interaction.message.content
+                .replaceAll(': **: ', '**: ')
+                .replaceAll('**:', ':')
+                .replaceAll('**', '')
+                .replaceAll('https', 'http')
+                .split('\n');
+            if (0) console.log('_content:', _content);
+            for (let i = 0; i < _content.length; i++) {
+                const element = _content[i].split(': ');
+                messageContentParsed[element[0]] = element[1]; //messageContentParsed.push(element);
+            }
         } else if (interaction.customId == self.triggers[2]) {
             let _MessageActionRow = interaction.message.components[0];
             for (let componentIndex = 0; componentIndex < _MessageActionRow.components.length; componentIndex++) {
@@ -184,17 +203,7 @@ const self = module.exports = {
             } else {
                 await interaction.reply({ ephemeral: true, content: `Buttons is up to date.` }); //reply
             }
-            return;
-
-            /* if (Object.keys(_MessageActionRow).length > 0) {
-                _MessageActionRow[0].spliceComponents(0, 1); // "Post" button
-                // interaction.message.components[0].components
-            } */
-            console.log('interaction.message:', interaction.message);
-            console.log('standartRow:', standartRow);
-            await interaction.update({ components: [row] });
-            return; // await interaction.followUp({ ephemeral: true, content: `Ok.` }); //reply
-        } else if (interaction.customId == self.triggers[2]) {
+            return await interaction.reply({ ephemeral: true, content: `Nope. Not now. It's dummy button for now, but in the future all of this will be done better. Sorry.`});
             // console.log(`dummy button clicked by: "${interaction.user.id}", under "${interaction.message.id}"`);
             let messageContentParsed = {};
             if (0) console.log('interaction.message.content:', interaction.message.content);

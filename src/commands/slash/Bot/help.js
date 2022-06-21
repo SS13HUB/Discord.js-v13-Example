@@ -17,6 +17,7 @@ module.exports = {
     description: "Return all commands, or one specific command!",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
     run: async (client, interaction) => {
         console.log(interaction);
         if (interaction.channel) {

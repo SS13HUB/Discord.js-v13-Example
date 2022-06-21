@@ -30,6 +30,9 @@ module.exports = {
     description: "I will try to get information about your invite link (few possiable formats avaliable).",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
+    triggers: [],
+    trigger: async () => {return;},
     run: async (client, interaction) => {
         if (interaction.channel) {
             await interaction.channel.sendTyping();

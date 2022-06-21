@@ -87,6 +87,9 @@ module.exports = {
     description: "I will try to fetch it and save information in my database.",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
+    triggers: [],
+    trigger: async () => {return;},
     run: async (client, interaction) => {
         if (interaction.channel) {
             await interaction.channel.sendTyping();

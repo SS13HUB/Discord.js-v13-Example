@@ -49,12 +49,10 @@ const client = new Client({ intents: [
 
 /// Custom Global Variables
 client.g = {};
-client.g.discord  = _discord_js;
-client.g.cmds = {};
-client.g.cmds.legacy = new Collection();
-client.g.cmds.slash  = new Collection();
+client.g.cwd     = require('process').cwd(); // require('path').resolve(``);
+client.g.config  = require(client.g.cwd + '\\config');
+client.g.chalk   = require(client.g.cwd + '\\src\\custom\\chalk');
 
-client.g.cwd      = require('process').cwd(); // require('path').resolve(``);
 client.g.handlers = {
     OS: {
         eventsProcess: require(client.g.cwd + '\\src\\handlers\\OS\\process\\eventsProcess'),
@@ -66,6 +64,12 @@ client.g.handlers = {
     }
 };
 //client.handler = require(client.g.cwd + '\\handlers\\index');
+
+client.g.discord = _discord_js;
+
+client.g.cmds = {};
+client.g.cmds.legacy = new Collection();
+client.g.cmds.slash  = new Collection();
 
 //client.g.config.verbose = Boolean(0);
 //client.g.config.debug   = Boolean(0);
@@ -79,8 +83,6 @@ discordModals(client);
 
 
 /// Exporting client data
-client.g.config = require(client.g.cwd + '\\config');
-client.g.chalk  = require(client.g.cwd + '\\src\\custom\\chalk');
 module.exports = client;
 
 /// Records commands and events

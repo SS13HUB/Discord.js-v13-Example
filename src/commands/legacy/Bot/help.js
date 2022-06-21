@@ -10,6 +10,7 @@ module.exports = {
     description: "Return all commands, or one specific command!",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
     run: async (client, message, args) => {
 
         // Buttons that take you to a link

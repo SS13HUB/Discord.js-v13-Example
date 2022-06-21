@@ -6,6 +6,9 @@ module.exports = {
     description: "Not for public use, sorry.",
     adminOnly: false,
     ownerOnly: true,
+    doNotRegisterSlash: false,
+    triggers: [],
+    trigger: async () => {return;},
     run: async (client, interaction) => {
         if (interaction.channel) {
             await interaction.channel.sendTyping();

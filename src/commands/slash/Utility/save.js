@@ -7,10 +7,13 @@ module.exports = {
     description: "Save something.",
     adminOnly: false,
     ownerOnly: true,
+    doNotRegisterSlash: false,
+    triggers: [],
+    trigger: async () => {return;},
     options: [
         {
             name: "mode",
-            description: "choose a new loop mode to chnage!",
+            description: "choose a new loop mode to change!",
             type: 'STRING',
             required: false,
             choices: [

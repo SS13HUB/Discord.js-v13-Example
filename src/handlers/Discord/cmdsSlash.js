@@ -14,7 +14,7 @@ module.exports = {
     async load(client) {
         console.log(client.g.chalk.log, `Preparing slashes…`);
         const _base_path = client.g.cwd + '\\src\\commands\\slash\\';
-        let slash = [];
+        let slashToRegister = [];
 
         const commandFolders = fs.readdirSync(_base_path);
         for (const folder of commandFolders) {
@@ -37,11 +37,15 @@ module.exports = {
                         console.log(command);
                         continue;
                     }
+                    if (command.doNotRegisterSlash) {
+                        console.log(client.g.chalk.load, client.g.chalk.warn, `SlashCommand: "${file}" — skipped by it\'s settings`);
+                        continue;
+                    }
                     client.g.cmds.slash.set(command.name, command);
-                    slash.push(command);
+                    slashToRegister.push(command);
                     console.log(client.g.chalk.load, client.g.chalk.ok, `SlashCommand: "${file}"${((command.triggers) ? ('; "' + JSON.stringify(command.triggers) + '"') : (''))}`); // SlashCommand is being loaded:
                 } else {
-                    console.log(client.g.chalk.load, client.g.chalk.err, `SlashCommand missing a help.name or help.name is not in string: "${file}"`);
+                    console.log(client.g.chalk.load, client.g.chalk.err, `SlashCommand missing a help.name or help.description is not in string: "${file}"`);
                     continue;
                 }
             }
@@ -52,22 +56,22 @@ module.exports = {
             // Register Slash Commands for a single guild
             // await client.guilds.cache
             //    .get("YOUR_GUILD_ID")
-            //    .commands.set(slash);
+            //    .commands.set(slashToRegister);
 
             const register = 1; // or purge, bool in int
             if (Boolean(register)) {
-                console.log(client.g.chalk.load, `Registering ${slash.length} Slash Commands for all guilds.`);
-                //console.log(slash);
-                /* for (let i = 0; i < slash.length; i++) {
-                    let cmd  = slash[i];
+                console.log(client.g.chalk.load, `Registering ${slashToRegister.length} Slash Commands for all guilds.`);
+                //console.log(slashToRegister);
+                /* for (let i = 0; i < slashToRegister.length; i++) {
+                    let cmd  = slashToRegister[i];
                     let ii   = i < 10 ? ` ${i}`: i;
                     let iii  = cmd.name.length < 10 ? ` ${cmd.name.length}`: cmd.name.length;
                     let iiii = cmd.description.length < 100 ? cmd.description.length < 10 ? `  ${cmd.description.length}`: ` ${cmd.description.length}`: cmd.description.length;
-                    console.log(`[${ii}/${slash.length - 1}] (${iii}/32;${iiii}/100) "${cmd.name}", "${cmd.description}"`);
+                    console.log(`[${ii}/${slashToRegister.length - 1}] (${iii}/32;${iiii}/100) "${cmd.name}", "${cmd.description}"`);
                 } */
-                await client.application.commands.set(slash);
+                await client.application.commands.set(slashToRegister);
                 /* await client.application.commands.fetch()
-                    .then(() => console.log(client.g.chalk.log, client.g.chalk.ok, `Registered Slash Commands for all guilds:\n`, slash.keys())); */
+                    .then(() => console.log(client.g.chalk.log, client.g.chalk.ok, `Registered Slash Commands for all guilds:\n`, slashToRegister.keys())); */
                     //((command) => console.log(command.values()));
             } else {
                 console.log(client.g.chalk.log, client.g.chalk.ok, `Purging all slash commands from old version of bot.`);

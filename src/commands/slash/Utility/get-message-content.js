@@ -16,6 +16,9 @@ module.exports = {
     description: "Get content and embeds from message.",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
+    triggers: [],
+    trigger: async () => {return;},
     run: async (client, interaction) => {
         if (interaction.channel) {
             await interaction.channel.sendTyping();

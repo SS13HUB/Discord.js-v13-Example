@@ -9,6 +9,7 @@ const self = module.exports = {
     description: "A button that will only work once and be destroyed.",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
     triggers: [
         'one-time-button'
     ],

@@ -9,6 +9,7 @@ const self = module.exports = {
     description: "Creates an invite to this guild channel.",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
     /* options: [
         {
             name: 'channel',

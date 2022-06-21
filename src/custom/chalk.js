@@ -14,6 +14,7 @@ const chalk = require("chalk");
 module.exports = { 
     log   : chalk.bgWhiteBright.black(`[LOG]`),
     ok    : chalk.bgGreen.black(`✔️ `),
+    warn  : chalk.bgYellow.black(`⚠️ `),
     err   : chalk.bgRed.black(`❌ `),
     load  : chalk.bgBlue.black(`[LOAD]`),
     exit  : chalk.bgRedBright.black(`[SIGINT]`),

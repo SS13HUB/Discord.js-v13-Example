@@ -1,5 +1,5 @@
 
-const { Modal, TextInputComponent, showModal } = require('discord-modals'); // Now we extract the showModal method
+const { Modal, TextInputComponent, showModal } = require('discord-modals');
 
 module.exports = {
     name: "modal-input",
@@ -7,7 +7,7 @@ module.exports = {
     description: "Text input test!",
     adminOnly: false,
     ownerOnly: false,
-    doNotRegisterSlash: false,
+    doNotRegisterSlash: true,
     triggers: [],
     trigger: async () => {return;},
     run: async (client, interaction) => {

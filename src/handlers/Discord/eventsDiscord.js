@@ -34,11 +34,13 @@ module.exports = {
                 if (event.once) {
                     client.once(event.name, (...args) => {
                         //console.log(client.g.chalk.event, `Event fired (once): "${event.name}"`); // (${interaction !== null ? interaction : "null"})
+                        //console.log(client.g.chalk.event, `Fired (once): "${event.name}".`);
                         event.execute(...args, client);
                     });
                 } else {
                     client.on(event.name, (...args) => {
                         //console.log(client.g.chalk.event, `Event fired: "${event.name}"`, ...args.interaction);
+                        //console.log(client.g.chalk.event, `Fired: "${event.name}".`);
                         event.execute(...args, client);
                     });
                 }

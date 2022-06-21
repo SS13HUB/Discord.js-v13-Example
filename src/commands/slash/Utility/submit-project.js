@@ -8,6 +8,7 @@ const self = module.exports = {
     description: "Call form to input invite with server info to propose to publish.",
     adminOnly: false,
     ownerOnly: true,
+    doNotRegisterSlash: false,
     triggers: [
         'submit-project-post', // submit-modal-form-echo
         'submit-project-check',

@@ -25,6 +25,9 @@ module.exports = {
     description: "I'll scan the channel for invite links and save them.",
     adminOnly: false,
     ownerOnly: false,
+    doNotRegisterSlash: false,
+    triggers: [],
+    trigger: async () => {return;},
     options: [
         {
             name: 'channel',
