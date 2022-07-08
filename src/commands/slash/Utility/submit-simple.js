@@ -201,7 +201,7 @@ const self = module.exports = {
                 await interaction.update({ components: [standartRow] });
                 await interaction.followUp({ ephemeral: true, content: `Buttons updated.` }); //reply
             } else {
-                await interaction.reply({ ephemeral: true, content: `Buttons is up to date.` }); //reply
+                return await interaction.reply({ ephemeral: true, content: `Buttons is up to date.` }); //reply
             }
             return await interaction.reply({ ephemeral: true, content: `Nope. Not now. It's dummy button for now, but in the future all of this will be done better. Sorry.`});
             // console.log(`dummy button clicked by: "${interaction.user.id}", under "${interaction.message.id}"`);
@@ -263,6 +263,25 @@ const self = module.exports = {
         if (!(interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) && !(interaction.member.roles.resolveId(process.env.MASTER_LIBRARIANS_ROLE))) {
             return await interaction.reply({ ephemeral: true, content: `**Access denied**: Only librarian or admin allowed to do this.`});
         }
+
+        let standartRow = new MessageActionRow().addComponents(
+            new MessageButton()
+                .setCustomId(self.triggers[0]) // 'submit-simple-check'
+                .setLabel('Check')
+                .setStyle('PRIMARY')
+                .setEmoji('🔬'),
+            new MessageButton()
+                .setCustomId(self.triggers[1]) // 'submit-simple-edit'
+                .setLabel('Edit')
+                .setStyle('SECONDARY')
+                .setEmoji('🖋️'),
+            new MessageButton()
+                .setCustomId(self.triggers[2]) // 'submit-simple-convert'
+                .setLabel('Convert')
+                .setStyle('SECONDARY')
+                .setEmoji('🚧'),
+        );
+
         //console.log('self:', self);
         //console.log('interaction:', interaction);
         

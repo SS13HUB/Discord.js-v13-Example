@@ -1,6 +1,17 @@
 
 const _local_debug = Boolean(0);
 
+function expecting_interaction(interaction) {
+    if (
+        !interaction.isCommand() &&
+        !interaction.isButton() &&
+        !interaction.isContextMenu()
+    ) {
+        return true
+    }
+    return false
+}
+
 module.exports = {
     name: 'interactionCreate',
 
@@ -11,8 +22,8 @@ module.exports = {
     async execute(interaction, client) {
         //if (!interaction) return; // for fix "Invalid interaction application command" error
         //console.log('interaction:', interaction);
-        if (!interaction.isCommand() && !interaction.isButton() && !interaction.isContextMenu()
-        ) {
+        //if (!interaction.isCommand() && !interaction.isButton() && !interaction.isContextMenu()) {
+        if (expecting_interaction(interaction)) {
             return;
         } else if (interaction.isCommand()) {
 

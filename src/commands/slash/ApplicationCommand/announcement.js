@@ -24,10 +24,10 @@ const self = module.exports = {
     /**
      * @param {Client} client
      * @param {ContextMenuInteraction} interaction
-     * @param {String[]} args
+     * @param String[] args
      */
     run: async (client, interaction, args) => {
-        console.log('interaction:', interaction);
+        if (interaction.user.id == process.env.OWNER_ID) console.log('interaction:', interaction);
         return await interaction.reply({ content: `announcement` }); // ephemeral: true, 
     },
 };

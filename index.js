@@ -49,9 +49,10 @@ const client = new Client({ intents: [
 
 /// Custom Global Variables
 client.g = {};
-client.g.cwd     = require('process').cwd(); // require('path').resolve(``);
-client.g.config  = require(client.g.cwd + '\\config');
-client.g.chalk   = require(client.g.cwd + '\\src\\custom\\chalk');
+client.g.cwd      = require('process').cwd();                        // require('path').resolve(``);
+client.g.config   = require(client.g.cwd + '\\config');
+client.g.chalk    = require(client.g.cwd + '\\src\\custom\\chalk');
+client.g.database = require(client.g.cwd + '\\src\\custom\\database').load(client.g.cwd);
 
 client.g.handlers = {
     OS: {
@@ -75,7 +76,10 @@ client.g.cmds.slash  = new Collection();
 //client.g.config.debug   = Boolean(0);
 
 /// Call .env file to get Token
-const result = dotenv.config({ debug: Boolean( 0 ),  path: path.resolve(client.g.cwd, '.env') });
+const result = dotenv.config({
+    debug: Boolean( 0 ),
+    path: path.resolve(client.g.cwd, '.env')
+});
 if (result.error) throw result.error;
 
 /// Enabling work with Modals
